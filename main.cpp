@@ -9,6 +9,7 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QIcon>
 #include <QVector>
 #include <cmath>
 
@@ -52,7 +53,7 @@ public:
         colsASpinBox->setRange(0, 5);
         colsASpinBox->setValue(2);
 
-        QPushButton *CreateMatrixA = new QPushButton("Создать матрицу A");
+        QPushButton *CreateMatrixA = new QPushButton("Поменять размер");
 
         SizeLayoutA->addWidget(StrokiALabel);
         SizeLayoutA->addWidget(rowsASpinBox);
@@ -96,7 +97,7 @@ public:
         colsBSpinBox->setRange(0, 5);
         colsBSpinBox->setValue(2);
 
-        QPushButton *CreateMatrixB = new QPushButton("Создать матрицу B");
+        QPushButton *CreateMatrixB = new QPushButton("Поменять размер");
 
         SizeLayoutA->addWidget(StrokiBLabel);
         SizeLayoutA->addWidget(rowsBSpinBox);
@@ -124,10 +125,12 @@ public:
         // операции над матрицами
         QWidget* operationsWidget = new QWidget();
         QHBoxLayout* operationsLayout = new QHBoxLayout(operationsWidget);
+        QLabel* operationsLabel = new QLabel("Операции: ");
 
         QPushButton* summButton = new QPushButton("А+B");
         QPushButton* raznButton = new QPushButton("A-B");
 
+        operationsLayout->addWidget(operationsLabel);
         operationsLayout->addWidget(summButton);
         operationsLayout->addWidget(raznButton);
         operationsLayout->addStretch();
@@ -157,7 +160,7 @@ public:
         colsCSpinBox->setRange(1, 5);
         colsCSpinBox->setValue(2);
 
-        QPushButton *CreateMatrixC = new QPushButton("Создать матрицу C");
+        QPushButton *CreateMatrixC = new QPushButton("Поменять размер");
 
         SizeLayoutC->addWidget(StrokiCLabel);
         SizeLayoutC->addWidget(rowsCSpinBox);
@@ -302,7 +305,9 @@ private:
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
     Matrix_Calculator calc;
+    calc.setWindowIcon(QIcon(":/Icons/Icon.png"));
     calc.show();
     return app.exec();
 }
