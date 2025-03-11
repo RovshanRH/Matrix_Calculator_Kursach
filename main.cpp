@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QIcon>
 #include <QVector>
+#include <QFrame>
 #include <cmath>
 
 class Matrix_Calculator : public QMainWindow {
@@ -28,6 +29,23 @@ public:
         // макет матриц
         QWidget *matricesWidget = new QWidget();
         QHBoxLayout *MatricesLayout = new QHBoxLayout(matricesWidget);
+
+        // Название продкута и линия
+        QWidget *vlayoutWidget = new QWidget;
+        QHBoxLayout *hlayout = new QHBoxLayout();
+        QVBoxLayout *vlayout = new QVBoxLayout(vlayoutWidget);
+
+        hlayout->addWidget(new QLabel("Калькулятор матриц"));
+        QLabel *version = new QLabel("v1.0.0");
+        version->setAlignment(Qt::AlignRight);
+        hlayout->addWidget(version);
+        vlayout->addLayout(hlayout);
+        auto lineA = new QFrame;
+        lineA->setFrameShape(QFrame::HLine);
+        lineA->setFrameShadow(QFrame::Sunken);
+        vlayout->addWidget(lineA);
+        vlayout->addStretch();
+        MainLayout->addWidget(vlayoutWidget);
 
         // Матрица А
         QWidget* SizeMatrixA = new QWidget();
@@ -120,7 +138,6 @@ public:
         MatricesLayout->addWidget(matrixAWidget);
         MatricesLayout->addWidget(matrixBWidget);
         MainLayout->addWidget(matricesWidget);
-
 
         // операции над матрицами
         QWidget* operationsWidget = new QWidget();
