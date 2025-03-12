@@ -13,6 +13,8 @@
 #include <QVector>
 #include <QFrame>
 #include <cmath>
+#include <random>
+using namespace std;
 
 class Matrix_Calculator : public QMainWindow {
 public:
@@ -148,12 +150,14 @@ public:
         QPushButton* raznButton = new QPushButton("A-B");
         QPushButton* multiplyButton = new QPushButton("A*B");
         QPushButton* clearButton = new QPushButton("Очистить матрицы");
+        QPushButton* randomButton = new QPushButton("Добавить рандомные числа в матрицы A B");
 
         operationsLayout->addWidget(operationsLabel);
         operationsLayout->addWidget(summButton);
         operationsLayout->addWidget(raznButton);
         operationsLayout->addWidget(multiplyButton);
         operationsLayout->addWidget(clearButton);
+        operationsLayout->addWidget(randomButton);
         operationsLayout->addStretch();
         MainLayout->addWidget(operationsWidget);
 
@@ -208,6 +212,10 @@ public:
         connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixA);
         connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixB);
         connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixC);
+        connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
+        connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
+        // connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
+        // connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
 
 
 
@@ -349,28 +357,29 @@ private slots:
             QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
             return;
         }
-        for (int i {}; i < rows-1; i++) {
-            for (int j {}; j < cols-1; j++) {
+        for (int i {}; i < rows; i++) {
+            for (int j {}; j < cols; j++) {
                 // double valueA = matrixATable->item(i, j)->text().toDouble();
                 // double valueB = matrixBTable->item(i, j)->text().toDouble();
                 // double result = valueA*valueB;
                 // matrixCTable->item(i, j)->setText(QString::number(result));
                 double valueA1 = matrixATable->item(i, j)->text().toDouble();
-                double valueA2 = matrixATable->item(i, j+1)->text().toDouble();
+                double valueA2 = matrixATable->item(i, j)->text().toDouble();
                 double valueB1 = matrixBTable->item(j, i)->text().toDouble();
-                double valueB2 = matrixBTable->item(j, i+1)->text().toDouble();
+                double valueB2 = matrixBTable->item(j, i)->text().toDouble();
                 double result = valueA1*valueB1 + valueA2*valueB2;
                 matrixCTable->item(i, j)->setText(QString::number(result));
             }
         }
     }
 
+    // добавить функцию для обратной матрицы
+
     void transposeMatrix(QTableWidget *matrix)
     {
         int rows = matrix->rowCount();
         int cols = matrix->columnCount();
 
-        // Сохраняем данные исходной матрицы
         QVector<QVector<double>> data(rows, QVector<double>(cols, 0));
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
@@ -378,11 +387,9 @@ private slots:
             }
         }
 
-        // Изменяем размеры матрицы (меняем строки и столбцы местами)
         matrix->setRowCount(cols);
         matrix->setColumnCount(rows);
 
-        // Заполняем матрицу транспонированными значениями
         for (int i = 0; i < cols; ++i) {
             for (int j = 0; j < rows; ++j) {
                 if (!matrix->item(i, j)) {
@@ -398,6 +405,27 @@ private slots:
     }
     void transposeMatrixB() {
         transposeMatrix(matrixBTable);
+    }
+    void randomizeMatrices(QTableWidget *matrix) {
+        random_device rd;
+        mt19937 gen(rd());
+
+        uniform_int_distribution<> number(0, 100);
+
+        int rows = matrix->rowCount();
+        int cols = matrix->columnCount();
+
+        for (int i{}; i < rows; i++) {
+            for (int j{}; j < cols; j++) {
+                matrix->item(i, j)->setText(QString::number(number(gen)));
+            }
+        }
+    }
+    void randomizeMatrixA() {
+        randomizeMatrices(matrixATable);
+    }
+    void randomizeMatrixB() {
+        randomizeMatrices(matrixBTable);
     }
 private:
     QSpinBox *rowsASpinBox;
