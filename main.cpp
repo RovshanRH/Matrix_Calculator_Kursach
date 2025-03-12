@@ -63,13 +63,13 @@ public:
         QLabel *StrokiALabel = new QLabel("Строки A: ");
         rowsASpinBox = new QSpinBox();
         rowsASpinBox->setRange(0, 5);
-        rowsASpinBox->setValue(2);
+        rowsASpinBox->setValue(3);
 
         // Столбцы
         QLabel *StolbciALabel = new QLabel("Столбцы A: ");
         colsASpinBox = new QSpinBox();
         colsASpinBox->setRange(0, 5);
-        colsASpinBox->setValue(2);
+        colsASpinBox->setValue(3);
 
         QPushButton *CreateMatrixA = new QPushButton("Поменять размер");
 
@@ -107,13 +107,13 @@ public:
         QLabel *StrokiBLabel = new QLabel("Строки B: ");
         rowsBSpinBox = new QSpinBox();
         rowsBSpinBox->setRange(0, 5);
-        rowsBSpinBox->setValue(2);
+        rowsBSpinBox->setValue(3);
 
         // Столбцы
         QLabel *StolbciBLabel = new QLabel("Столбцы B: ");
         colsBSpinBox = new QSpinBox();
         colsBSpinBox->setRange(0, 5);
-        colsBSpinBox->setValue(2);
+        colsBSpinBox->setValue(3);
 
         QPushButton *CreateMatrixB = new QPushButton("Поменять размер");
 
@@ -146,10 +146,14 @@ public:
 
         QPushButton* summButton = new QPushButton("А+B");
         QPushButton* raznButton = new QPushButton("A-B");
+        QPushButton* multiplyButton = new QPushButton("A*B");
+        QPushButton* clearButton = new QPushButton("Очистить матрицы");
 
         operationsLayout->addWidget(operationsLabel);
         operationsLayout->addWidget(summButton);
         operationsLayout->addWidget(raznButton);
+        operationsLayout->addWidget(multiplyButton);
+        operationsLayout->addWidget(clearButton);
         operationsLayout->addStretch();
         MainLayout->addWidget(operationsWidget);
 
@@ -169,13 +173,13 @@ public:
         QLabel *StrokiCLabel = new QLabel("Строки С: ");
         rowsCSpinBox = new QSpinBox();
         rowsCSpinBox->setRange(1, 5);
-        rowsCSpinBox->setValue(2);
+        rowsCSpinBox->setValue(3);
 
         // Столбцы
         QLabel *StolbciCLabel = new QLabel("Столбцы С: ");
         colsCSpinBox = new QSpinBox();
         colsCSpinBox->setRange(1, 5);
-        colsCSpinBox->setValue(2);
+        colsCSpinBox->setValue(3);
 
         QPushButton *CreateMatrixC = new QPushButton("Поменять размер");
 
@@ -198,6 +202,14 @@ public:
         connect(CreateMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixC);
         connect(summButton, &QPushButton::clicked, this, &Matrix_Calculator::addMatrices);
         connect(raznButton, &QPushButton::clicked, this, &Matrix_Calculator::subtractMatrices);
+        connect(multiplyButton, &QPushButton::clicked, this, &Matrix_Calculator::multyplyMatrices);
+        connect(transposeAButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixA);
+        connect(transposeBButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixB);
+        connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixA);
+        connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixB);
+        connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixC);
+
+
 
         createMatrices();
 
@@ -230,6 +242,27 @@ private slots:
         matrixATable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     }
+
+    void clearMatrices(QTableWidget* matrix) {
+        int rows = matrix->rowCount();
+        int cols = matrix->columnCount();
+
+        for (int i{}; i < rows; i++) {
+            for (int j{}; j < cols; j++) {
+                matrix->item(i, j)->setText(QString::number(0));
+            }
+        }
+    }
+    void clearMatrixA() {
+        clearMatrices(matrixATable);
+    }
+    void clearMatrixB() {
+        clearMatrices(matrixBTable);
+    }
+    void clearMatrixC() {
+        clearMatrices(matrixCTable);
+    }
+
     void createMatrixB()
     {
         int rows = rowsBSpinBox->value();
@@ -275,7 +308,7 @@ private slots:
         int rows = matrixATable->rowCount();
         int cols = matrixATable->columnCount();
 
-        if (rows != matrixBTable->columnCount() || cols != matrixBTable->rowCount()) {
+        if (rows != matrixBTable->rowCount() || cols != matrixBTable->columnCount()) {
             QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
             return;
         }
@@ -293,7 +326,7 @@ private slots:
         int rows = matrixATable->rowCount();
         int cols = matrixATable->columnCount();
 
-        if (rows != matrixBTable->columnCount() || cols != matrixBTable->rowCount()) {
+        if (rows != matrixBTable->rowCount() || cols != matrixBTable->columnCount()) {
             QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
             return;
         }
@@ -305,6 +338,66 @@ private slots:
                 matrixCTable->item(i, j)->setText(QString::number(result));
             }
         }
+    }
+
+    void multyplyMatrices()
+    {
+        int rows = matrixATable->rowCount();
+        int cols = matrixATable->columnCount();
+
+        if (rows != matrixBTable->columnCount() || cols != matrixBTable->rowCount()) {
+            QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
+            return;
+        }
+        for (int i {}; i < rows-1; i++) {
+            for (int j {}; j < cols-1; j++) {
+                // double valueA = matrixATable->item(i, j)->text().toDouble();
+                // double valueB = matrixBTable->item(i, j)->text().toDouble();
+                // double result = valueA*valueB;
+                // matrixCTable->item(i, j)->setText(QString::number(result));
+                double valueA1 = matrixATable->item(i, j)->text().toDouble();
+                double valueA2 = matrixATable->item(i, j+1)->text().toDouble();
+                double valueB1 = matrixBTable->item(j, i)->text().toDouble();
+                double valueB2 = matrixBTable->item(j, i+1)->text().toDouble();
+                double result = valueA1*valueB1 + valueA2*valueB2;
+                matrixCTable->item(i, j)->setText(QString::number(result));
+            }
+        }
+    }
+
+    void transposeMatrix(QTableWidget *matrix)
+    {
+        int rows = matrix->rowCount();
+        int cols = matrix->columnCount();
+
+        // Сохраняем данные исходной матрицы
+        QVector<QVector<double>> data(rows, QVector<double>(cols, 0));
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                data[i][j] = matrix->item(i, j)->text().toDouble();
+            }
+        }
+
+        // Изменяем размеры матрицы (меняем строки и столбцы местами)
+        matrix->setRowCount(cols);
+        matrix->setColumnCount(rows);
+
+        // Заполняем матрицу транспонированными значениями
+        for (int i = 0; i < cols; ++i) {
+            for (int j = 0; j < rows; ++j) {
+                if (!matrix->item(i, j)) {
+                    QTableWidgetItem *item = new QTableWidgetItem();
+                    matrix->setItem(i, j, item);
+                }
+                matrix->item(i, j)->setText(QString::number(data[j][i]));
+            }
+        }
+    }
+    void transposeMatrixA() {
+        transposeMatrix(matrixATable);
+    }
+    void transposeMatrixB() {
+        transposeMatrix(matrixBTable);
     }
 private:
     QSpinBox *rowsASpinBox;
