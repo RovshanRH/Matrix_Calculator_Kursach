@@ -47,6 +47,10 @@ public:
         lineA->setFrameShadow(QFrame::Sunken);
         vlayout->addWidget(lineA);
         vlayout->addStretch();
+        QPushButton* sizeButton = new QPushButton("Установить одинаковый размер для матриц A и B");
+        sizeButton->setFixedSize(500, 30);
+        vlayout->addWidget(sizeButton, 0, Qt::AlignCenter);
+
         MainLayout->addWidget(vlayoutWidget);
 
         // Матрица А
@@ -150,7 +154,8 @@ public:
         QPushButton* raznButton = new QPushButton("A-B");
         QPushButton* multiplyButton = new QPushButton("A*B");
         QPushButton* clearButton = new QPushButton("Очистить матрицы");
-        QPushButton* randomButton = new QPushButton("Добавить рандомные числа в матрицы A B");
+        QPushButton* randomButton = new QPushButton("Добавить рандомные числа в матрицы A и B");
+
 
         operationsLayout->addWidget(operationsLabel);
         operationsLayout->addWidget(summButton);
@@ -214,6 +219,7 @@ public:
         connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixC);
         connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
         connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
+        connect(sizeButton, &QPushButton::clicked, this, &Matrix_Calculator::createMatricesAB);
         // connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
         // connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
 
@@ -227,6 +233,10 @@ private slots:
         createMatrixA();
         createMatrixB();
         createMatrixC();
+    }
+    void createMatricesAB() {
+        createMatrixA();
+        createMatrixB();
     }
     void createMatrixA()
     {
@@ -313,15 +323,22 @@ private slots:
     }
     void addMatrices()
     {
-        int rows = matrixATable->rowCount();
-        int cols = matrixATable->columnCount();
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
 
-        if (rows != matrixBTable->rowCount() || cols != matrixBTable->columnCount()) {
+        if (rowsA != rowsB || colsA != colsB) {
             QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
             return;
         }
-        for (int i {}; i < rows; i++) {
-            for (int j {}; j < cols; j++) {
+
+        rowsCSpinBox->setValue(rowsA);
+        colsCSpinBox->setValue(colsB);
+        createMatrixC();
+
+        for (int i {}; i < rowsA; i++) {
+            for (int j {}; j < colsA; j++) {
                 double valueA = matrixATable->item(i, j)->text().toDouble();
                 double valueB = matrixBTable->item(i, j)->text().toDouble();
                 double result = valueA + valueB;
@@ -331,15 +348,22 @@ private slots:
     }
     void subtractMatrices()
     {
-        int rows = matrixATable->rowCount();
-        int cols = matrixATable->columnCount();
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
 
-        if (rows != matrixBTable->rowCount() || cols != matrixBTable->columnCount()) {
+        if (rowsA != rowsB || colsA != colsB) {
             QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
             return;
         }
-        for (int i {}; i < rows; i++) {
-            for (int j {}; j < cols; j++) {
+
+        rowsCSpinBox->setValue(rowsA);
+        colsCSpinBox->setValue(colsB);
+        createMatrixC();
+
+        for (int i {}; i < rowsA; i++) {
+            for (int j {}; j < colsA; j++) {
                 double valueA = matrixATable->item(i, j)->text().toDouble();
                 double valueB = matrixBTable->item(i, j)->text().toDouble();
                 double result = valueA - valueB;
@@ -350,30 +374,34 @@ private slots:
 
     void multyplyMatrices()
     {
-        int rows = matrixATable->rowCount();
-        int cols = matrixATable->columnCount();
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
 
-        if (rows != matrixBTable->columnCount() || cols != matrixBTable->rowCount()) {
-            QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
+        if (colsA != rowsB) {
+            QMessageBox::warning(this, "Ошибка", "Кол-во строк матрицы A должно совпадать с кол-во столбцов матрицы B");
             return;
         }
-        for (int i {}; i < rows; i++) {
-            for (int j {}; j < cols; j++) {
-                // double valueA = matrixATable->item(i, j)->text().toDouble();
-                // double valueB = matrixBTable->item(i, j)->text().toDouble();
-                // double result = valueA*valueB;
-                // matrixCTable->item(i, j)->setText(QString::number(result));
-                double valueA1 = matrixATable->item(i, j)->text().toDouble();
-                double valueA2 = matrixATable->item(i, j)->text().toDouble();
-                double valueB1 = matrixBTable->item(j, i)->text().toDouble();
-                double valueB2 = matrixBTable->item(j, i)->text().toDouble();
-                double result = valueA1*valueB1 + valueA2*valueB2;
+
+        rowsCSpinBox->setValue(rowsA);
+        colsCSpinBox->setValue(colsB);
+        createMatrixC();
+
+        for (int i {}; i < rowsA; i++) {
+            for (int j {}; j < colsB; j++) {
+                double result = 0;
+                for (int x{}; x < colsA; x++) {
+                    double valueA = matrixATable->item(i, x)->text().toDouble();
+                    double valueB = matrixBTable->item(x, j)->text().toDouble();
+                    result = result + (valueA*valueB);
+                }
                 matrixCTable->item(i, j)->setText(QString::number(result));
             }
         }
     }
 
-    // добавить функцию для обратной матрицы
+
 
     void transposeMatrix(QTableWidget *matrix)
     {
