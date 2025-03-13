@@ -47,11 +47,27 @@ public:
         lineA->setFrameShadow(QFrame::Sunken);
         vlayout->addWidget(lineA);
         vlayout->addStretch();
-        QPushButton* sizeButton = new QPushButton("Установить одинаковый размер для матриц A и B");
+
+        QWidget *razmerButtonWidget = new QWidget();
+        QHBoxLayout *razmerButtonLayout = new QHBoxLayout(razmerButtonWidget);
+
+        QPushButton* sizeButton = new QPushButton("Установить одинаковый размер X для матриц");
+        QLabel *razmer = new QLabel("X :");
+        razmerSpinBox = new QSpinBox();
+        razmerSpinBox->setRange(1,10);
+        razmerSpinBox->setValue(3);
         sizeButton->setFixedSize(500, 30);
-        vlayout->addWidget(sizeButton, 0, Qt::AlignCenter);
+        razmerButtonLayout->setAlignment(Qt::AlignHCenter);
+        razmerButtonLayout->addWidget(sizeButton);
+        razmerButtonLayout->addWidget(razmer);
+        razmerButtonLayout->addWidget(razmerSpinBox);
+        // razmerButtonLayout->addStretch();
+        // sizeButtonLayout->addWidget(razmer);
+        // sizeButtonLayout->addWidget(razmerSpinBox);
+        // sizeButtonLayout->addStretch();
 
         MainLayout->addWidget(vlayoutWidget);
+        MainLayout->addWidget(razmerButtonWidget);
 
         // Матрица А
         QWidget* SizeMatrixA = new QWidget();
@@ -68,13 +84,13 @@ public:
         // Строки
         QLabel *StrokiALabel = new QLabel("Строки A: ");
         rowsASpinBox = new QSpinBox();
-        rowsASpinBox->setRange(0, 5);
+        rowsASpinBox->setRange(1, 10);
         rowsASpinBox->setValue(3);
 
         // Столбцы
         QLabel *StolbciALabel = new QLabel("Столбцы A: ");
         colsASpinBox = new QSpinBox();
-        colsASpinBox->setRange(0, 5);
+        colsASpinBox->setRange(1, 10);
         colsASpinBox->setValue(3);
 
         QPushButton *CreateMatrixA = new QPushButton("Поменять размер");
@@ -168,36 +184,23 @@ public:
 
         // Результирующая матрица C
         QWidget* SizeMatrixC = new QWidget();
-        QHBoxLayout* SizeLayoutC = new QHBoxLayout(SizeMatrixC);
-
         QWidget* matrixCWidget = new QWidget();
         QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
-        QLabel* matrixCLabel = new QLabel("Матрица С:");
+        QLabel* matrixCLabel = new QLabel("Результирующая матрица:");
         matrixCTable = new QTableWidget();
         matrixCLayout->addWidget(matrixCLabel);
         matrixCLayout->addWidget(matrixCTable);
 
         // Кнопки для настройки размера матрицы С
         // Строки
-        QLabel *StrokiCLabel = new QLabel("Строки С: ");
         rowsCSpinBox = new QSpinBox();
-        rowsCSpinBox->setRange(1, 5);
         rowsCSpinBox->setValue(3);
 
         // Столбцы
-        QLabel *StolbciCLabel = new QLabel("Столбцы С: ");
         colsCSpinBox = new QSpinBox();
-        colsCSpinBox->setRange(1, 5);
         colsCSpinBox->setValue(3);
 
-        QPushButton *CreateMatrixC = new QPushButton("Поменять размер");
 
-        SizeLayoutC->addWidget(StrokiCLabel);
-        SizeLayoutC->addWidget(rowsCSpinBox);
-        SizeLayoutC->addWidget(StolbciCLabel);
-        SizeLayoutC->addWidget(colsCSpinBox);
-        SizeLayoutC->addWidget(CreateMatrixC);
-        SizeLayoutC->addStretch();
         MainLayout->addWidget(SizeMatrixC);
 
         MainLayout->addWidget(matrixCWidget);
@@ -208,7 +211,6 @@ public:
         //...
         connect(CreateMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixA);
         connect(CreateMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixB);
-        connect(CreateMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixC);
         connect(summButton, &QPushButton::clicked, this, &Matrix_Calculator::addMatrices);
         connect(raznButton, &QPushButton::clicked, this, &Matrix_Calculator::subtractMatrices);
         connect(multiplyButton, &QPushButton::clicked, this, &Matrix_Calculator::multyplyMatrices);
@@ -220,8 +222,8 @@ public:
         connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
         connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
         connect(sizeButton, &QPushButton::clicked, this, &Matrix_Calculator::createMatricesAB);
-        // connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
-        // connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
+        connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
+        connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
 
 
 
@@ -235,8 +237,32 @@ private slots:
         createMatrixC();
     }
     void createMatricesAB() {
-        createMatrixA();
-        createMatrixB();
+        int rows = razmerSpinBox->value();
+        int cols = razmerSpinBox->value();
+
+        // настройка
+        matrixATable->setRowCount(rows);
+        matrixATable->setColumnCount(cols);
+        matrixBTable->setRowCount(rows);
+        matrixBTable->setColumnCount(cols);
+
+        for (int i {}; i < rows; i++) {
+            for (int j {}; j < cols; j++) {
+                if (!matrixATable->item(i, j)) {
+                    QTableWidgetItem *item = new QTableWidgetItem("0");
+                    matrixATable->setItem(i, j, item);
+                }
+                if (!matrixBTable->item(i, j)) {
+                    QTableWidgetItem *item = new QTableWidgetItem("0");
+                    matrixBTable->setItem(i, j, item);
+                }
+            }
+        }
+
+        matrixATable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        matrixATable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        matrixBTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        matrixBTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     }
     void createMatrixA()
     {
@@ -271,15 +297,7 @@ private slots:
             }
         }
     }
-    void clearMatrixA() {
-        clearMatrices(matrixATable);
-    }
-    void clearMatrixB() {
-        clearMatrices(matrixBTable);
-    }
-    void clearMatrixC() {
-        clearMatrices(matrixCTable);
-    }
+
 
     void createMatrixB()
     {
@@ -320,6 +338,15 @@ private slots:
 
         matrixCTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         matrixCTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    }
+    void clearMatrixA() {
+        clearMatrices(matrixATable);
+    }
+    void clearMatrixB() {
+        clearMatrices(matrixBTable);
+    }
+    void clearMatrixC() {
+        clearMatrices(matrixCTable);
     }
     void addMatrices()
     {
@@ -455,6 +482,178 @@ private slots:
     void randomizeMatrixB() {
         randomizeMatrices(matrixBTable);
     }
+    QVector<QVector<double>> getMatrixFromTable(QTableWidget *table)
+    {
+        int rows = table->rowCount();
+        int cols = table->columnCount();
+
+        QVector<QVector<double>> matrix(rows, QVector<double>(cols, 0));
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                matrix[i][j] = table->item(i, j)->text().toDouble();
+            }
+        }
+
+        return matrix;
+    }
+
+    void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matrix)
+    {
+        int rows = matrix.size();
+        int cols = rows > 0 ? matrix[0].size() : 0;
+
+        table->setRowCount(rows);
+        table->setColumnCount(cols);
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                if (!table->item(i, j)) {
+                    QTableWidgetItem *item = new QTableWidgetItem();
+                    table->setItem(i, j, item);
+                }
+                table->item(i, j)->setText(QString::number(matrix[i][j], 'f', 4));
+            }
+        }
+    }
+
+    double determinant(const QVector<QVector<double>> &matrix)
+    {
+        int n = matrix.size();
+
+        if (n == 1) {
+            return matrix[0][0];
+        }
+
+        if (n == 2) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+
+        QVector<QVector<double>> mat = matrix;
+        double det = 1.0;
+
+        for (int i = 0; i < n; i++) {
+            int maxRow = i;
+            for (int j = i + 1; j < n; j++) {
+                if (std::abs(mat[j][i]) > std::abs(mat[maxRow][i])) {
+                    maxRow = j;
+                }
+            }
+
+            if (std::abs(mat[maxRow][i]) < 1e-10) {
+                return 0.0;
+            }
+
+            if (maxRow != i) {
+                for (int j = i; j < n; j++) {
+                    std::swap(mat[i][j], mat[maxRow][j]);
+                }
+                det *= -1.0;
+            }
+
+            double pivot = mat[i][i];
+            det *= pivot;
+
+            for (int j = i; j < n; j++) {
+                mat[i][j] /= pivot;
+            }
+
+            for (int j = i + 1; j < n; j++) {
+                double factor = mat[j][i];
+                for (int k = i; k < n; k++) {
+                    mat[j][k] -= factor * mat[i][k];
+                }
+            }
+        }
+
+        return det;
+    }
+
+    QVector<QVector<double>> inverseMatrix(const QVector<QVector<double>> &matrix)
+    {
+        int n = matrix.size();
+
+        QVector<QVector<double>> adj(n, QVector<double>(n, 0));
+
+        if (n == 1) {
+            adj[0][0] = 1.0;
+            return adj;
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+
+                QVector<QVector<double>> minor(n - 1, QVector<double>(n - 1, 0));
+                for (int r = 0, row = 0; r < n; r++) {
+                    if (r == i) continue;
+                    for (int c = 0, col = 0; c < n; c++) {
+                        if (c == j) continue;
+                        minor[row][col] = matrix[r][c];
+                        col++;
+                    }
+                    row++;
+                }
+
+
+                double minorDet = determinant(minor);
+
+
+                adj[j][i] = ((i + j) % 2 == 0 ? 1 : -1) * minorDet;
+            }
+        }
+
+
+        double det = determinant(matrix);
+
+        if (std::abs(det) < 1e-10) {
+            throw std::runtime_error("Матрица вырожденная, обратной не существует!");
+        }
+
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                adj[i][j] /= det;
+            }
+        }
+
+        return adj;
+    }
+
+    void invertMatrix(QTableWidget *table)
+    {
+        int rows = table->rowCount();
+        int cols = table->columnCount();
+
+
+        if (rows != cols) {
+            QMessageBox::warning(this, "Ошибка", "Обратная матрица существует только для квадратных матриц");
+            return;
+        }
+
+
+        QVector<QVector<double>> matrix = getMatrixFromTable(table);
+
+        try {
+
+            QVector<QVector<double>> inverse = inverseMatrix(matrix);
+
+
+            setMatrixToTable(table, inverse);
+        }
+        catch (const std::exception &e) {
+            QMessageBox::warning(this, "Ошибка", e.what());
+        }
+    }
+
+    void invertMatrixA()
+    {
+        invertMatrix(matrixATable);
+    }
+
+    void invertMatrixB()
+    {
+        invertMatrix(matrixBTable);
+    }
 private:
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;
@@ -462,6 +661,7 @@ private:
     QSpinBox *colsBSpinBox;
     QSpinBox *rowsCSpinBox;
     QSpinBox *colsCSpinBox;
+    QSpinBox *razmerSpinBox;
     QTableWidget *matrixATable;
     QTableWidget *matrixBTable;
     QTableWidget *matrixCTable;
