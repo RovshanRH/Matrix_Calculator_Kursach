@@ -49,7 +49,8 @@ public:
         vlayout->addStretch();
 
         QWidget *razmerButtonWidget = new QWidget();
-        QHBoxLayout *razmerButtonLayout = new QHBoxLayout(razmerButtonWidget);
+        QHBoxLayout *razmerHButtonLayout = new QHBoxLayout();
+        QVBoxLayout *razmerVLayout = new QVBoxLayout(razmerButtonWidget);
 
         QPushButton* sizeButton = new QPushButton("Установить одинаковый размер X для матриц");
         QLabel *razmer = new QLabel("X :");
@@ -57,14 +58,15 @@ public:
         razmerSpinBox->setRange(1,10);
         razmerSpinBox->setValue(3);
         sizeButton->setFixedSize(500, 30);
-        razmerButtonLayout->setAlignment(Qt::AlignHCenter);
-        razmerButtonLayout->addWidget(sizeButton);
-        razmerButtonLayout->addWidget(razmer);
-        razmerButtonLayout->addWidget(razmerSpinBox);
-        // razmerButtonLayout->addStretch();
-        // sizeButtonLayout->addWidget(razmer);
-        // sizeButtonLayout->addWidget(razmerSpinBox);
-        // sizeButtonLayout->addStretch();
+        razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
+        razmerHButtonLayout->addWidget(sizeButton);
+        razmerHButtonLayout->addWidget(razmer);
+        razmerHButtonLayout->addWidget(razmerSpinBox);
+        razmerVLayout->addLayout(razmerHButtonLayout);
+        QPushButton *swapmatrixAB = new QPushButton("Поменять местами матрицы");
+        swapmatrixAB->setFixedSize(594, 30);
+        razmerVLayout->addWidget(swapmatrixAB, 0, Qt::AlignHCenter);
+        razmerVLayout->addStretch();
 
         MainLayout->addWidget(vlayoutWidget);
         MainLayout->addWidget(razmerButtonWidget);
@@ -75,7 +77,7 @@ public:
 
         QWidget *matrixAWidget = new QWidget();
         QVBoxLayout *matrixALayout = new QVBoxLayout(matrixAWidget);
-        QLabel *matrixALabel = new QLabel("Матрица A:");
+        QLabel *matrixALabel = new QLabel("Матрица A");
         matrixATable = new QTableWidget();
         matrixALayout->addWidget(matrixALabel);
         matrixALayout->addWidget(matrixATable);
@@ -108,8 +110,14 @@ public:
         QHBoxLayout *matrixAButtonsLayout = new QHBoxLayout(matrixAButtonsWidget);
         QPushButton *transposeAButton = new QPushButton("Транспонировать A");
         QPushButton *inverseAButton = new QPushButton("Обратная A⁻¹");
+        QPushButton *multyplyConstantA = new QPushButton("Домножить на константу");
+        constantA = new QSpinBox();
+        constantA->setRange(0, 100);
+        constantA->setValue(1);
         matrixAButtonsLayout->addWidget(transposeAButton);
         matrixAButtonsLayout->addWidget(inverseAButton);
+        matrixAButtonsLayout->addWidget(multyplyConstantA);
+        matrixAButtonsLayout->addWidget(constantA);
         matrixAButtonsLayout->addStretch();
         matrixALayout->addWidget(matrixAButtonsWidget);
 
@@ -119,7 +127,7 @@ public:
 
         QWidget *matrixBWidget = new QWidget();
         QVBoxLayout *matrixBLayout = new QVBoxLayout(matrixBWidget);
-        QLabel *matrixBLabel = new QLabel("Матрица B:");
+        QLabel *matrixBLabel = new QLabel("Матрица B");
         matrixBTable = new QTableWidget();
         matrixBLayout->addWidget(matrixBLabel);
         matrixBLayout->addWidget(matrixBTable);
@@ -128,13 +136,13 @@ public:
         // Строки
         QLabel *StrokiBLabel = new QLabel("Строки B: ");
         rowsBSpinBox = new QSpinBox();
-        rowsBSpinBox->setRange(0, 5);
+        rowsBSpinBox->setRange(1, 10);
         rowsBSpinBox->setValue(3);
 
         // Столбцы
         QLabel *StolbciBLabel = new QLabel("Столбцы B: ");
         colsBSpinBox = new QSpinBox();
-        colsBSpinBox->setRange(0, 5);
+        colsBSpinBox->setRange(1, 10);
         colsBSpinBox->setValue(3);
 
         QPushButton *CreateMatrixB = new QPushButton("Поменять размер");
@@ -152,8 +160,14 @@ public:
         QHBoxLayout *matrixBButtonsLayout = new QHBoxLayout(matrixBButtonsWidget);
         QPushButton *transposeBButton = new QPushButton("Транспонировать B");
         QPushButton *inverseBButton = new QPushButton("Обратная B⁻¹");
+        QPushButton *multyplyConstantB = new QPushButton("Домножить на константу");
+        constantB = new QSpinBox();
+        constantB->setRange(0, 100);
+        constantB->setValue(1);
         matrixBButtonsLayout->addWidget(transposeBButton);
         matrixBButtonsLayout->addWidget(inverseBButton);
+        matrixBButtonsLayout->addWidget(multyplyConstantB);
+        matrixBButtonsLayout->addWidget(constantB);
         matrixBButtonsLayout->addStretch();
         matrixBLayout->addWidget(matrixBButtonsWidget);
 
@@ -186,7 +200,7 @@ public:
         QWidget* SizeMatrixC = new QWidget();
         QWidget* matrixCWidget = new QWidget();
         QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
-        QLabel* matrixCLabel = new QLabel("Результирующая матрица:");
+        QLabel* matrixCLabel = new QLabel("Результирующая матрица");
         matrixCTable = new QTableWidget();
         matrixCLayout->addWidget(matrixCLabel);
         matrixCLayout->addWidget(matrixCTable);
@@ -224,7 +238,10 @@ public:
         connect(sizeButton, &QPushButton::clicked, this, &Matrix_Calculator::createMatricesAB);
         connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
         connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
+        connect(swapmatrixAB, &QPushButton::clicked, this, &Matrix_Calculator::swapMatrices);
 
+        connect(multyplyConstantB, &QPushButton::clicked, this, &Matrix_Calculator::multyconstantB);
+        connect(multyplyConstantA, &QPushButton::clicked, this, &Matrix_Calculator::multyconstantA);
 
 
         createMatrices();
@@ -654,6 +671,85 @@ private slots:
     {
         invertMatrix(matrixBTable);
     }
+    void swapMatrices() {
+        // Сохраняем размеры матриц
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
+
+        // Сохраняем значения матрицы A во временный массив
+        QVector<QVector<double>> tempA(rowsA, QVector<double>(colsA));
+        for (int i = 0; i < rowsA; ++i) {
+            for (int j = 0; j < colsA; ++j) {
+                tempA[i][j] = matrixATable->item(i, j)->text().toDouble();
+            }
+        }
+
+        // Сохраняем значения матрицы B во временный массив
+        QVector<QVector<double>> tempB(rowsB, QVector<double>(colsB));
+        for (int i = 0; i < rowsB; ++i) {
+            for (int j = 0; j < colsB; ++j) {
+                tempB[i][j] = matrixBTable->item(i, j)->text().toDouble();
+            }
+        }
+
+        // Обновляем размеры SpinBox
+        rowsASpinBox->setValue(rowsB);
+        colsASpinBox->setValue(colsB);
+        rowsBSpinBox->setValue(rowsA);
+        colsBSpinBox->setValue(colsA);
+
+        // Пересоздаем матрицы с новыми размерами
+        createMatrixA();
+        createMatrixB();
+
+        // Заполняем матрицу A данными из B
+        for (int i = 0; i < rowsB; ++i) {
+            for (int j = 0; j < colsB; ++j) {
+                matrixATable->item(i, j)->setText(QString::number(tempB[i][j]));
+            }
+        }
+
+        // Заполняем матрицу B данными из A
+        for (int i = 0; i < rowsA; ++i) {
+            for (int j = 0; j < colsA; ++j) {
+                matrixBTable->item(i, j)->setText(QString::number(tempA[i][j]));
+            }
+        }
+    }
+    void multyconstantA()
+    {
+        int rows = matrixATable->rowCount();
+        int cols = matrixATable->columnCount();
+        int cnst = constantA->value();
+
+        for(int i{}; i < rows; i++) {
+            for (int j{}; j < cols; j++) {
+                if (!matrixATable->item(i, j)) {
+                    double value = matrixATable->item(i, j)->text().toDouble();
+                    double result = cnst*value;
+                    matrixATable->item(i, j)->setText(QString::number(result));
+                }
+            }
+        }
+    }
+
+    void multyconstantB() {
+        int rows = matrixBTable->rowCount();
+        int cols = matrixBTable->columnCount();
+        int cnst = constantB->value();
+
+        for(int i{}; i < rows; i++) {
+            for (int j{}; j < cols; j++) {
+                if (!matrixBTable->item(i, j)) {
+                    double value = matrixBTable->item(i, j)->text().toDouble();
+                    double result = cnst*value;
+                    matrixBTable->item(i, j)->setText(QString::number(result));
+                }
+            }
+        }
+    }
 private:
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;
@@ -662,6 +758,8 @@ private:
     QSpinBox *rowsCSpinBox;
     QSpinBox *colsCSpinBox;
     QSpinBox *razmerSpinBox;
+    QSpinBox *constantA;
+    QSpinBox *constantB;
     QTableWidget *matrixATable;
     QTableWidget *matrixBTable;
     QTableWidget *matrixCTable;
