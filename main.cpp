@@ -12,6 +12,7 @@
 #include <QIcon>
 #include <QVector>
 #include <QFrame>
+#include <QSize>
 #include <cmath>
 #include <random>
 using namespace std;
@@ -37,10 +38,20 @@ public:
         QHBoxLayout *hlayout = new QHBoxLayout();
         QVBoxLayout *vlayout = new QVBoxLayout(vlayoutWidget);
 
-        hlayout->addWidget(new QLabel("Калькулятор матриц"));
+        QLabel *iconlabel = new QLabel();
+        iconlabel->setAlignment(Qt::AlignLeft);
+        QIcon *icon = new QIcon(":/Icons/Icon.png");
+        iconlabel->setPixmap(icon->pixmap(50, 50));
+        hlayout->addWidget(iconlabel);
+
+        QLabel *labeltext = new QLabel("Калькулятор матриц");
+        QFont font = labeltext->font();
+        font.setPointSize(20);
+        labeltext->setFont(font);
+        hlayout->addWidget(labeltext);
         QLabel *version = new QLabel("v1.0.0");
-        version->setAlignment(Qt::AlignRight);
         hlayout->addWidget(version);
+        hlayout->addStretch();
         vlayout->addLayout(hlayout);
         auto lineA = new QFrame;
         lineA->setFrameShape(QFrame::HLine);
@@ -112,7 +123,7 @@ public:
         QPushButton *inverseAButton = new QPushButton("Обратная A⁻¹");
         QPushButton *multyplyConstantA = new QPushButton("Домножить на константу");
         constantA = new QSpinBox();
-        constantA->setRange(0, 100);
+        constantA->setRange(0, 1000);
         constantA->setValue(1);
         matrixAButtonsLayout->addWidget(transposeAButton);
         matrixAButtonsLayout->addWidget(inverseAButton);
@@ -162,7 +173,7 @@ public:
         QPushButton *inverseBButton = new QPushButton("Обратная B⁻¹");
         QPushButton *multyplyConstantB = new QPushButton("Домножить на константу");
         constantB = new QSpinBox();
-        constantB->setRange(0, 100);
+        constantB->setRange(0, 1000);
         constantB->setValue(1);
         matrixBButtonsLayout->addWidget(transposeBButton);
         matrixBButtonsLayout->addWidget(inverseBButton);
@@ -672,13 +683,11 @@ private slots:
         invertMatrix(matrixBTable);
     }
     void swapMatrices() {
-        // Сохраняем размеры матриц
         int rowsA = matrixATable->rowCount();
         int colsA = matrixATable->columnCount();
         int rowsB = matrixBTable->rowCount();
         int colsB = matrixBTable->columnCount();
 
-        // Сохраняем значения матрицы A во временный массив
         QVector<QVector<double>> tempA(rowsA, QVector<double>(colsA));
         for (int i = 0; i < rowsA; ++i) {
             for (int j = 0; j < colsA; ++j) {
@@ -686,7 +695,6 @@ private slots:
             }
         }
 
-        // Сохраняем значения матрицы B во временный массив
         QVector<QVector<double>> tempB(rowsB, QVector<double>(colsB));
         for (int i = 0; i < rowsB; ++i) {
             for (int j = 0; j < colsB; ++j) {
@@ -694,24 +702,21 @@ private slots:
             }
         }
 
-        // Обновляем размеры SpinBox
         rowsASpinBox->setValue(rowsB);
         colsASpinBox->setValue(colsB);
         rowsBSpinBox->setValue(rowsA);
         colsBSpinBox->setValue(colsA);
 
-        // Пересоздаем матрицы с новыми размерами
+
         createMatrixA();
         createMatrixB();
 
-        // Заполняем матрицу A данными из B
         for (int i = 0; i < rowsB; ++i) {
             for (int j = 0; j < colsB; ++j) {
                 matrixATable->item(i, j)->setText(QString::number(tempB[i][j]));
             }
         }
 
-        // Заполняем матрицу B данными из A
         for (int i = 0; i < rowsA; ++i) {
             for (int j = 0; j < colsA; ++j) {
                 matrixBTable->item(i, j)->setText(QString::number(tempA[i][j]));
@@ -722,15 +727,13 @@ private slots:
     {
         int rows = matrixATable->rowCount();
         int cols = matrixATable->columnCount();
-        int cnst = constantA->value();
+        double cnst = constantA->value();
 
         for(int i{}; i < rows; i++) {
             for (int j{}; j < cols; j++) {
-                if (!matrixATable->item(i, j)) {
-                    double value = matrixATable->item(i, j)->text().toDouble();
-                    double result = cnst*value;
-                    matrixATable->item(i, j)->setText(QString::number(result));
-                }
+                double value = matrixATable->item(i, j)->text().toDouble();
+                double result = cnst*value;
+                matrixATable->item(i, j)->setText(QString::number(result));
             }
         }
     }
@@ -738,15 +741,13 @@ private slots:
     void multyconstantB() {
         int rows = matrixBTable->rowCount();
         int cols = matrixBTable->columnCount();
-        int cnst = constantB->value();
+        double cnst = constantB->value();
 
         for(int i{}; i < rows; i++) {
             for (int j{}; j < cols; j++) {
-                if (!matrixBTable->item(i, j)) {
-                    double value = matrixBTable->item(i, j)->text().toDouble();
-                    double result = cnst*value;
-                    matrixBTable->item(i, j)->setText(QString::number(result));
-                }
+                double value = matrixBTable->item(i, j)->text().toDouble();
+                double result = cnst*value;
+                matrixBTable->item(i, j)->setText(QString::number(result));
             }
         }
     }
