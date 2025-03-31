@@ -10,7 +10,7 @@ class Matrix_Calculator : public QMainWindow {
     Q_OBJECT
 public:
     Matrix_Calculator(QWidget* parent = nullptr);
-private slots:
+protected slots:
     void createMatrices();
     void createMatrixA();
     void createMatrixB();
@@ -30,7 +30,7 @@ private slots:
     void transposeMatrixA();
     void transposeMatrixB();
 
-    void randomizeMatrices(QTableWidget *matrix);
+    void randomizeMatrices();
     void randomizeMatrixA();
     void randomizeMatrixB();
 
@@ -46,6 +46,14 @@ private slots:
 
     void multyconstantA();
     void multyconstantB();
+
+    void set_CSpinBox(int rows, int cols);
+    double set_double_value(QTableWidget *matrix, int i, int j);
+    void set_text_value(QTableWidget *matrix, int i, int j, double result);
+
+    double set_double_value_A(int i, int j);
+    double set_double_value_B(int i, int j);
+    void set_text_value_C(int i, int j, double result);
 
 private:
     QSpinBox *rowsASpinBox;

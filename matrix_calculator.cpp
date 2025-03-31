@@ -1,4 +1,7 @@
 #include "matrix_calculator.h"
+#include "randomizer.h"
+#include "cleaner.h"
+#include "operations.h"
 #include <QApplication>
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -15,7 +18,7 @@
 #include <QFrame>
 #include <QSize>
 #include <cmath>
-#include <random>
+// #include <random>
 #include <stdexcept>
 
 using namespace std;
@@ -245,8 +248,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixA);
     connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixB);
     connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixC);
-    connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
-    connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
+
+    connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrices);
+
     connect(sizeButton, &QPushButton::clicked, this, &Matrix_Calculator::createMatricesAB);
     connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
     connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
@@ -359,104 +363,121 @@ void Matrix_Calculator::createMatrixC()
 }
 void Matrix_Calculator::addMatrices()
 {
-    int rowsA = matrixATable->rowCount();
-    int colsA = matrixATable->columnCount();
-    int rowsB = matrixBTable->rowCount();
-    int colsB = matrixBTable->columnCount();
+    // int rowsA = matrixATable->rowCount();
+    // int colsA = matrixATable->columnCount();
+    // int rowsB = matrixBTable->rowCount();
+    // int colsB = matrixBTable->columnCount();
 
-    if (rowsA != rowsB || colsA != colsB) {
-        QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
-        return;
-    }
+    // if (rowsA != rowsB || colsA != colsB) {
+    //     QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
+    //     return;
+    // }
 
-    rowsCSpinBox->setValue(rowsA);
-    colsCSpinBox->setValue(colsB);
-    createMatrixC();
+    // rowsCSpinBox->setValue(rowsA);
+    // colsCSpinBox->setValue(colsB);
+    // createMatrixC();
 
-    for (int i {}; i < rowsA; i++) {
-        for (int j {}; j < colsA; j++) {
-            double valueA = matrixATable->item(i, j)->text().toDouble();
-            double valueB = matrixBTable->item(i, j)->text().toDouble();
-            double result = valueA + valueB;
-            matrixCTable->item(i, j)->setText(QString::number(result));
-        }
-    }
+    // for (int i {}; i < rowsA; i++) {
+    //     for (int j {}; j < colsA; j++) {
+    //         double valueA = matrixATable->item(i, j)->text().toDouble();
+    //         double valueB = matrixBTable->item(i, j)->text().toDouble();
+    //         double result = valueA + valueB;
+    //         matrixCTable->item(i, j)->setText(QString::number(result));
+    //     }
+    // }
+    Operations op;
+    op.addMatrices(matrixATable, matrixBTable);
 }
 void Matrix_Calculator::subtractMatrices() {
-    int rowsA = matrixATable->rowCount();
-    int colsA = matrixATable->columnCount();
-    int rowsB = matrixBTable->rowCount();
-    int colsB = matrixBTable->columnCount();
+    // int rowsA = matrixATable->rowCount();
+    // int colsA = matrixATable->columnCount();
+    // int rowsB = matrixBTable->rowCount();
+    // int colsB = matrixBTable->columnCount();
 
-    if (rowsA != rowsB || colsA != colsB) {
-        QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
-        return;
-    }
+    // if (rowsA != rowsB || colsA != colsB) {
+    //     QMessageBox::warning(this, "Ошибка", "Размеры матриц должны совпадать!");
+    //     return;
+    // }
 
-    rowsCSpinBox->setValue(rowsA);
-    colsCSpinBox->setValue(colsB);
-    createMatrixC();
+    // rowsCSpinBox->setValue(rowsA);
+    // colsCSpinBox->setValue(colsB);
+    // createMatrixC();
 
-    for (int i {}; i < rowsA; i++) {
-        for (int j {}; j < colsA; j++) {
-            double valueA = matrixATable->item(i, j)->text().toDouble();
-            double valueB = matrixBTable->item(i, j)->text().toDouble();
-            double result = valueA - valueB;
-            matrixCTable->item(i, j)->setText(QString::number(result));
-        }
-    }
+    // for (int i {}; i < rowsA; i++) {
+    //     for (int j {}; j < colsA; j++) {
+    //         double valueA = matrixATable->item(i, j)->text().toDouble();
+    //         double valueB = matrixBTable->item(i, j)->text().toDouble();
+    //         double result = valueA - valueB;
+    //         matrixCTable->item(i, j)->setText(QString::number(result));
+    //     }
+    // }
+    Operations op;
+    op.subtractMatrices(matrixATable, matrixBTable);
 }
 
 void Matrix_Calculator::multyplyMatrices() {
-    int rowsA = matrixATable->rowCount();
-    int colsA = matrixATable->columnCount();
-    int rowsB = matrixBTable->rowCount();
-    int colsB = matrixBTable->columnCount();
+    // int rowsA = matrixATable->rowCount();
+    // int colsA = matrixATable->columnCount();
+    // int rowsB = matrixBTable->rowCount();
+    // int colsB = matrixBTable->columnCount();
 
-    if (colsA != rowsB) {
-        QMessageBox::warning(this, "Ошибка", "Кол-во строк матрицы A должно совпадать с кол-во столбцов матрицы B");
-        return;
-    }
+    // if (colsA != rowsB) {
+    //     QMessageBox::warning(this, "Ошибка", "Кол-во строк матрицы A должно совпадать с кол-во столбцов матрицы B");
+    //     return;
+    // }
 
-    rowsCSpinBox->setValue(rowsA);
-    colsCSpinBox->setValue(colsB);
-    createMatrixC();
+    // rowsCSpinBox->setValue(rowsA);
+    // colsCSpinBox->setValue(colsB);
+    // createMatrixC();
 
-    for (int i {}; i < rowsA; i++) {
-        for (int j {}; j < colsB; j++) {
-            double result = 0;
-            for (int x{}; x < colsA; x++) {
-                double valueA = matrixATable->item(i, x)->text().toDouble();
-                double valueB = matrixBTable->item(x, j)->text().toDouble();
-                result = result + (valueA*valueB);
-            }
-            matrixCTable->item(i, j)->setText(QString::number(result));
-        }
-    }
+    // for (int i {}; i < rowsA; i++) {
+    //     for (int j {}; j < colsB; j++) {
+    //         double result = 0;
+    //         for (int x{}; x < colsA; x++) {
+    //             double valueA = matrixATable->item(i, x)->text().toDouble();
+    //             double valueB = matrixBTable->item(x, j)->text().toDouble();
+    //             result = result + (valueA*valueB);
+    //         }
+    //         matrixCTable->item(i, j)->setText(QString::number(result));
+    //     }
+    // }
+    Operations op;
+    op.multyplyMatrices(matrixATable, matrixBTable);
 }
 
 void Matrix_Calculator::clearMatrices(QTableWidget* matrix) {
-    int rows = matrix->rowCount();
-    int cols = matrix->columnCount();
-
-    for (int i{}; i < rows; i++) {
-        for (int j{}; j < cols; j++) {
-            matrix->item(i, j)->setText(QString::number(0));
-        }
-    }
+    Cleaner clean;
+    clean.clearMatrices(matrix);
 }
 
 void Matrix_Calculator::clearMatrixA() {
-    clearMatrices(matrixATable);
+    Cleaner clean;
+    clean.clearMatrices(matrixATable);
 }
 void Matrix_Calculator::clearMatrixB() {
-    clearMatrices(matrixBTable);
+    Cleaner clean;
+    clean.clearMatrices(matrixBTable);
 }
 void Matrix_Calculator::clearMatrixC() {
-    clearMatrices(matrixCTable);
+    Cleaner clean;
+    clean.clearMatrices(matrixCTable);
 }
 
+void Matrix_Calculator::randomizeMatrices() {
+    Randomizer random;
+    random.randomizeMatrices(matrixATable);
+    random.randomizeMatrices(matrixBTable);
+}
 
+void Matrix_Calculator::randomizeMatrixA() {
+    Randomizer random;
+    random.randomizeMatrices(matrixATable);
+}
+
+void Matrix_Calculator::randomizeMatrixB() {
+    Randomizer random;
+    random.randomizeMatrices(matrixBTable);
+}
 
 void Matrix_Calculator::transposeMatrix(QTableWidget *matrix) {
     int rows = matrix->rowCount();
@@ -488,28 +509,6 @@ void Matrix_Calculator::transposeMatrixA() {
 }
 void Matrix_Calculator::transposeMatrixB() {
     transposeMatrix(matrixBTable);
-}
-
-void Matrix_Calculator::randomizeMatrices(QTableWidget *matrix) {
-    random_device rd;
-    mt19937 gen(rd());
-
-    uniform_int_distribution<> number(0, 100);
-
-    int rows = matrix->rowCount();
-    int cols = matrix->columnCount();
-
-    for (int i{}; i < rows; i++) {
-        for (int j{}; j < cols; j++) {
-            matrix->item(i, j)->setText(QString::number(number(gen)));
-        }
-    }
-}
-void Matrix_Calculator::randomizeMatrixA() {
-    randomizeMatrices(matrixATable);
-}
-void Matrix_Calculator::randomizeMatrixB() {
-    randomizeMatrices(matrixBTable);
 }
 
 QVector<QVector<double>> Matrix_Calculator::getMatrixFromTable(QTableWidget *table)
@@ -727,29 +726,51 @@ void Matrix_Calculator::swapMatrices() {
 }
 void Matrix_Calculator::multyconstantA()
 {
-    int rows = matrixATable->rowCount();
-    int cols = matrixATable->columnCount();
-    double cnst = constantA->value();
+    // int rows = matrixATable->rowCount();
+    // int cols = matrixATable->columnCount();
+    // double cnst = constantA->value();
 
-    for(int i{}; i < rows; i++) {
-        for (int j{}; j < cols; j++) {
-            double value = matrixATable->item(i, j)->text().toDouble();
-            double result = cnst*value;
-            matrixATable->item(i, j)->setText(QString::number(result));
-        }
-    }
+    // for(int i{}; i < rows; i++) {
+    //     for (int j{}; j < cols; j++) {
+    //         double value = matrixATable->item(i, j)->text().toDouble();
+    //         double result = cnst*value;
+    //         matrixATable->item(i, j)->setText(QString::number(result));
+    //     }
+    // }
+    Operations op;
+    op.multyplyconstant(matrixATable, constantA->value());
 }
 
 void Matrix_Calculator::multyconstantB() {
-    int rows = matrixBTable->rowCount();
-    int cols = matrixBTable->columnCount();
-    double cnst = constantB->value();
+    // int rows = matrixBTable->rowCount();
+    // int cols = matrixBTable->columnCount();
+    // double cnst = constantB->value();
 
-    for(int i{}; i < rows; i++) {
-        for (int j{}; j < cols; j++) {
-            double value = matrixBTable->item(i, j)->text().toDouble();
-            double result = cnst*value;
-            matrixBTable->item(i, j)->setText(QString::number(result));
-        }
-    }
+    // for(int i{}; i < rows; i++) {
+    //     for (int j{}; j < cols; j++) {
+    //         double value = matrixBTable->item(i, j)->text().toDouble();
+    //         double result = cnst*value;
+    //         matrixBTable->item(i, j)->setText(QString::number(result));
+    //     }
+    // }
+    Operations op;
+    op.multyplyconstant(matrixBTable, constantB->value());
+}
+
+void Matrix_Calculator::set_CSpinBox(int rows, int cols) {
+    rowsCSpinBox->setValue(rows);
+    colsCSpinBox->setValue(cols);
+}
+
+double Matrix_Calculator::set_double_value(QTableWidget *matrix, int i, int j) {return matrix->item(i, j)->text().toDouble();}
+void Matrix_Calculator::set_text_value(QTableWidget *matrix, int i, int j, double result) {matrix->item(i, j)->setText(QString::number(result)); }
+
+double Matrix_Calculator::set_double_value_A(int i, int j) {
+    return set_double_value(matrixATable, i, j);
+}
+double Matrix_Calculator::set_double_value_B(int i, int j) {
+    return set_double_value(matrixBTable, i, j);
+}
+void Matrix_Calculator::set_text_value_C(int i, int j, double result) {
+    set_text_value(matrixCTable, i, j, result);
 }
