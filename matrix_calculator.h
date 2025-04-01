@@ -17,7 +17,6 @@ protected slots:
     void createMatrixC();
     void createMatricesAB();
 
-    void clearMatrices(QTableWidget* matrix);
     void clearMatrixA();
     void clearMatrixB();
     void clearMatrixC();
@@ -25,35 +24,36 @@ protected slots:
     void addMatrices();
     void subtractMatrices();
     void multyplyMatrices();
+    void multyplyconstant(QTableWidget *matrix, QString cnst);
+    void multyplyconstantA();
+    void multyplyconstantB();
 
-    void transposeMatrix(QTableWidget *matrix);
     void transposeMatrixA();
     void transposeMatrixB();
 
-    void randomizeMatrices();
     void randomizeMatrixA();
     void randomizeMatrixB();
 
-    QVector<QVector<double>> getMatrixFromTable(QTableWidget *table);
-    void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matrix);
-    double determinant(const QVector<QVector<double>> &matrix);
-    QVector<QVector<double>> inverseMatrix(const QVector<QVector<double>> &matrix);
-    void invertMatrix(QTableWidget *table);
+    // QVector<QVector<double>> getMatrixFromTable(QTableWidget *table);
+    // void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matrix);
+    // double determinant(const QVector<QVector<double>> &matrix);
+    // QVector<QVector<double>> inverseMatrix(const QVector<QVector<double>> &matrix);
+    // void invertMatrix(QTableWidget *table);
     void invertMatrixA();
     void invertMatrixB();
 
     void swapMatrices();
 
-    void multyconstantA();
-    void multyconstantB();
+    // void multyconstantA();
+    // void multyconstantB();
 
-    void set_CSpinBox(int rows, int cols);
-    double set_double_value(QTableWidget *matrix, int i, int j);
-    void set_text_value(QTableWidget *matrix, int i, int j, double result);
+    // void set_CSpinBox(int rows, int cols);
+    // double set_double_value(QTableWidget *matrix, int i, int j);
+    // void set_text_value(QTableWidget *matrix, int i, int j, double result);
 
-    double set_double_value_A(int i, int j);
-    double set_double_value_B(int i, int j);
-    void set_text_value_C(int i, int j, double result);
+    // double set_double_value_A(int i, int j);
+    // double set_double_value_B(int i, int j);
+    // void set_text_value_C(int i, int j, double result);
 
 private:
     QSpinBox *rowsASpinBox;
@@ -63,8 +63,8 @@ private:
     QSpinBox *rowsCSpinBox;
     QSpinBox *colsCSpinBox;
     QSpinBox *razmerSpinBox;
-    QSpinBox *constantA;
-    QSpinBox *constantB;
+    QLineEdit *constantA;
+    QLineEdit *constantB;
     QTableWidget *matrixATable;
     QTableWidget *matrixBTable;
     QTableWidget *matrixCTable;

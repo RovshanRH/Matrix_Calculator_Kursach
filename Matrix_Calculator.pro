@@ -8,10 +8,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     cleaner.cpp \
+    inverse.cpp \
     matrix_calculator.cpp \
     operations.cpp \
-    randomizer.cpp \
-    stabilizingcsize.cpp
+    randomizer.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -20,10 +20,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     cleaner.h \
+    inverse.h \
     matrix_calculator.h \
     operations.h \
-    randomizer.h \
-    stabilizingcsize.h
+    randomizer.h
 
 RESOURCES += \
     resources.qrc
