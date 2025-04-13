@@ -26,6 +26,8 @@ protected slots:
     void multyplyMatrices();
     void multyplyconstantA();
     void multyplyconstantB();
+    void divisionconstantA();
+    void divisionconstantB();
 
     void transposeMatrixA();
     void transposeMatrixB();
@@ -37,6 +39,9 @@ protected slots:
     void invertMatrixB();
 
     void swapMatrices();
+
+    void ChangeSize();
+    bool AutoSizeCheck();
 
 private:
     QSpinBox *rowsASpinBox;
@@ -51,6 +56,7 @@ private:
     QTableWidget *matrixATable;
     QTableWidget *matrixBTable;
     QTableWidget *matrixCTable;
+    bool autoSizeEnabled = false;
 };
 
 #endif // MATRIX_CALCULATOR_H

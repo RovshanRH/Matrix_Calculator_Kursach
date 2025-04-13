@@ -73,14 +73,18 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerSpinBox = new QSpinBox();
     razmerSpinBox->setRange(1,10);
     razmerSpinBox->setValue(3);
-    sizeButton->setFixedSize(500, 30);
+    QPushButton *automatSize = new QPushButton("Автом. изменять размер окна");
+    sizeButton->setFixedSize(320, 30);
+    automatSize->setFixedSize(230, 30);
+    automatSize->setStyleSheet("background-color: white");
     razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
     razmerHButtonLayout->addWidget(sizeButton);
     razmerHButtonLayout->addWidget(razmer);
     razmerHButtonLayout->addWidget(razmerSpinBox);
+    razmerHButtonLayout->addWidget(automatSize);
     razmerVLayout->addLayout(razmerHButtonLayout);
     QPushButton *swapmatrixAB = new QPushButton("Поменять местами матрицы");
-    swapmatrixAB->setFixedSize(594, 30);
+    swapmatrixAB->setFixedSize(650, 30);
     razmerVLayout->addWidget(swapmatrixAB, 0, Qt::AlignHCenter);
     razmerVLayout->addStretch();
 
@@ -126,26 +130,19 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *matrixAButtonsLayout = new QHBoxLayout(matrixAButtonsWidget);
     QPushButton *transposeAButton = new QPushButton("Транспонировать A");
     QPushButton *inverseAButton = new QPushButton("Обратная A⁻¹");
-    QPushButton *multyplyConstantA = new QPushButton("Домножить на константу");
-
-    // constantA = new QLineEdit();
-    // constantA->setRange(0, 1000);
-    // constantA->setValue(1);
-
-    // QLineEdit *constantA = new QLineEdit();
-    // QDoubleValidator *validatorA = new QDoubleValidator(0.0, 1000.0, 1, constantA);
-    // constantA->setValidator(validatorA);
+    QPushButton *multyplyConstantA = new QPushButton("* на c");
+    QPushButton *divideConstantA = new QPushButton("/ на c");
 
     constantA = new QLineEdit();
     QDoubleValidator *validatorA = new QDoubleValidator(-1000.0, 1000.0, 2, constantA);
     constantA->setValidator(validatorA);
-    constantA->setPlaceholderText("Введите константу (например, 2.5)");
-    constantA->setText("1.0");
+    constantA->setPlaceholderText("c");
     matrixAButtonsLayout->addWidget(constantA);
 
     matrixAButtonsLayout->addWidget(transposeAButton);
     matrixAButtonsLayout->addWidget(inverseAButton);
     matrixAButtonsLayout->addWidget(multyplyConstantA);
+    matrixAButtonsLayout->addWidget(divideConstantA);
     matrixAButtonsLayout->addWidget(constantA);
     matrixAButtonsLayout->addStretch();
     matrixALayout->addWidget(matrixAButtonsWidget);
@@ -189,25 +186,19 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *matrixBButtonsLayout = new QHBoxLayout(matrixBButtonsWidget);
     QPushButton *transposeBButton = new QPushButton("Транспонировать B");
     QPushButton *inverseBButton = new QPushButton("Обратная B⁻¹");
-    QPushButton *multyplyConstantB = new QPushButton("Домножить на константу");
-    // constantB = new QLineEdit();
-    // constantB->setRange(0, 1000);
-    // constantB->setValue(1);
-
-    // QLineEdit *constantB = new QLineEdit();
-    // QDoubleValidator *validatorB = new QDoubleValidator(0.0, 1000.0, 1, constantB);
-    // constantA->setValidator(validatorB);
+    QPushButton *multyplyConstantB = new QPushButton("* на c");
+    QPushButton *divideConstantB = new QPushButton("/ на c");
 
     constantB = new QLineEdit();
     QDoubleValidator *validatorB = new QDoubleValidator(-1000.0, 1000.0, 2, constantB);
     constantB->setValidator(validatorB);
-    constantB->setPlaceholderText("Введите константу (например, 2.5)");
-    constantB->setText("1.0");
+    constantB->setPlaceholderText("c");
     matrixBButtonsLayout->addWidget(constantB);
 
     matrixBButtonsLayout->addWidget(transposeBButton);
     matrixBButtonsLayout->addWidget(inverseBButton);
     matrixBButtonsLayout->addWidget(multyplyConstantB);
+    matrixBButtonsLayout->addWidget(divideConstantB);
     matrixBButtonsLayout->addWidget(constantB);
     matrixBButtonsLayout->addStretch();
     matrixBLayout->addWidget(matrixBButtonsWidget);
@@ -288,6 +279,22 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     connect(multyplyConstantA, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantA);
     connect(multyplyConstantB, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantB);
+
+    connect(divideConstantA, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantA);
+    connect(divideConstantB, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantB);
+
+    connect(automatSize, &QPushButton::clicked, [automatSize]() {
+        static bool isEnabled = false;
+        if (!isEnabled){
+            automatSize->setText("Отключить авто-размер");
+            automatSize->setStyleSheet("background-color: yellow");
+            isEnabled = true;
+        } else {
+            automatSize->setText("Автом. изменять размер окна");
+            automatSize->setStyleSheet("background-color: white");
+            isEnabled = false;
+        }
+    });
 
 
     createMatrices();
@@ -390,6 +397,7 @@ void Matrix_Calculator::createMatrixC()
 
     matrixCTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     matrixCTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
 }
 
 void Matrix_Calculator::clearMatrixA() {
@@ -439,13 +447,13 @@ void Matrix_Calculator::invertMatrixB()
 void Matrix_Calculator::swapMatrices() {
     Operations op;
 
-    QVector<QVector<double>> tempA = op.settempA(op.rowsA_getter(matrixATable), op.colsA_getter(matrixATable), matrixATable);
-    QVector<QVector<double>> tempB = op.settempB(op.rowsB_getter(matrixBTable), op.colsB_getter(matrixBTable), matrixBTable);
+    QVector<QVector<double>> tempA = op.settempA(op.rows_getter(matrixATable), op.cols_getter(matrixATable), matrixATable);
+    QVector<QVector<double>> tempB = op.settempB(op.rows_getter(matrixBTable), op.cols_getter(matrixBTable), matrixBTable);
 
-    rowsASpinBox->setValue(op.rowsA_getter(matrixBTable));
-    colsASpinBox->setValue(op.colsA_getter(matrixBTable));
-    rowsBSpinBox->setValue(op.rowsB_getter(matrixATable));
-    colsBSpinBox->setValue(op.colsB_getter(matrixATable));
+    rowsASpinBox->setValue(op.rows_getter(matrixBTable));
+    colsASpinBox->setValue(op.cols_getter(matrixBTable));
+    rowsBSpinBox->setValue(op.rows_getter(matrixATable));
+    colsBSpinBox->setValue(op.cols_getter(matrixATable));
 
     createMatrixA();
     createMatrixB();
@@ -456,26 +464,30 @@ void Matrix_Calculator::swapMatrices() {
 
 void Matrix_Calculator::addMatrices() {
     Operations op;
-    rowsCSpinBox->setValue(op.rowsA_getter(matrixATable));
-    colsCSpinBox->setValue(op.colsB_getter(matrixBTable));
+    rowsCSpinBox->setValue(op.rows_getter(matrixATable));
+    colsCSpinBox->setValue(op.cols_getter(matrixBTable));
     createMatrixC();
     op.addMatrices(matrixATable, matrixBTable, matrixCTable);
+
+    if (AutoSizeCheck() == true){
+        ChangeSize();
+    }
 }
 
 
 void Matrix_Calculator::subtractMatrices() {
 
     Operations op;
-    rowsCSpinBox->setValue(op.rowsA_getter(matrixATable));
-    colsCSpinBox->setValue(op.colsB_getter(matrixBTable));
+    rowsCSpinBox->setValue(op.rows_getter(matrixATable));
+    colsCSpinBox->setValue(op.cols_getter(matrixBTable));
     createMatrixC();
     op.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
 
 }
 void Matrix_Calculator::multyplyMatrices() {
     Operations op;
-    rowsCSpinBox->setValue(op.rowsA_getter(matrixATable));
-    colsCSpinBox->setValue(op.colsB_getter(matrixBTable));
+    rowsCSpinBox->setValue(op.rows_getter(matrixATable));
+    colsCSpinBox->setValue(op.cols_getter(matrixBTable));
     createMatrixC();
     op.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
 }
@@ -484,10 +496,10 @@ void Matrix_Calculator::multyplyMatrices() {
 void Matrix_Calculator::multyplyconstantA() {
     bool ok;
     double constant = constantA->text().toDouble(&ok);
-    // if (!ok || constantA->text().isEmpty()) {
-    //     QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A!");
-    //     return;
-    // }
+    if (!ok || constantA->text().isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
+        return;
+    }
 
     Operations op;
     op.multyplyconstant(matrixATable, constant);
@@ -496,11 +508,53 @@ void Matrix_Calculator::multyplyconstantA() {
 void Matrix_Calculator::multyplyconstantB() {
     bool ok;
     double constant = constantB->text().toDouble(&ok);
-    // if (!ok || constantB->text().isEmpty()) {
-    //     QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B!");
-    //     return;
-    // }
+    if (!ok || constantB->text().isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
+        return;
+    }
 
     Operations op;
     op.multyplyconstant(matrixBTable, constant);
+}
+
+void Matrix_Calculator::divisionconstantA() {
+    bool ok;
+    double constant = constantA->text().toDouble(&ok);
+    if (!ok || constantA->text().isEmpty() || constantA->text().toDouble() == 0) {
+        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
+        return;
+    }
+
+    Operations op;
+    op.divisionconstant(matrixATable, constant);
+}
+
+void Matrix_Calculator::divisionconstantB() {
+    bool ok;
+    double constant = constantB->text().toDouble(&ok);
+    if (!ok || constantB->text().isEmpty() || constantB->text().toDouble() == 0) {
+        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
+        return;
+    }
+
+    Operations op;
+    op.divisionconstant(matrixBTable, constant);
+}
+
+void Matrix_Calculator::ChangeSize() {
+    int rows = matrixCTable->rowCount();
+
+    int baseWidth = 1068;
+    int baseHeight = 620;
+
+    int additionalHeight = rows * 30;
+
+    resize(baseWidth, baseHeight + additionalHeight);
+
+}
+
+bool Matrix_Calculator::AutoSizeCheck() {
+    autoSizeEnabled = !autoSizeEnabled;
+
+    return autoSizeEnabled;
 }

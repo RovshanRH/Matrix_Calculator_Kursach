@@ -102,6 +102,33 @@ void Operations::multyplyconstant(QTableWidget *matrix, double cnst) {
     }
 }
 
+void Operations::divisionconstant(QTableWidget *matrix, double cnst) {
+    int rows = matrix->rowCount();
+    int cols = matrix->columnCount();
+
+    for(int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            QTableWidgetItem *item = matrix->item(i, j);
+            if (!item) {
+                item = new QTableWidgetItem("0");
+                matrix->setItem(i, j, item);
+            }
+
+            bool ok;
+            double value = item->text().toDouble(&ok);
+            if (!ok) {
+                // Handle case when cell doesn't contain a valid number
+                value = 0.0;
+            }
+
+            double result = value / cnst;
+
+            // Format with precision to avoid too many decimal places
+            matrix->item(i, j)->setText(QString::number(result, 'g', 10));
+        }
+    }
+}
+
 QVector<QVector<double>> settemp(int rows, int cols, QTableWidget *matrix) {
     QVector<QVector<double>> temp(rows, QVector<double>(cols));
     for (int i = 0; i < rows; ++i) {
@@ -173,7 +200,5 @@ void Operations::transposeMatrix(QTableWidget *matrix) {
     }
 }
 
-int Operations::rowsA_getter(QTableWidget *matrix) {return matrix->rowCount();}
-int Operations::colsB_getter(QTableWidget *matrix) {return matrix->columnCount();}
-int Operations::rowsB_getter(QTableWidget *matrix) {return matrix->rowCount();}
-int Operations::colsA_getter(QTableWidget *matrix) {return matrix->columnCount();}
+int Operations::rows_getter(QTableWidget *matrix) {return matrix->rowCount();}
+int Operations::cols_getter(QTableWidget *matrix) {return matrix->columnCount();}
