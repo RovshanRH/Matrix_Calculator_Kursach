@@ -483,6 +483,10 @@ void Matrix_Calculator::subtractMatrices() {
     createMatrixC();
     op.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
 
+    if (AutoSizeCheck() == true){
+        ChangeSize();
+    }
+
 }
 void Matrix_Calculator::multyplyMatrices() {
     Operations op;
@@ -490,6 +494,10 @@ void Matrix_Calculator::multyplyMatrices() {
     colsCSpinBox->setValue(op.cols_getter(matrixBTable));
     createMatrixC();
     op.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
+
+    if (AutoSizeCheck() == true){
+        ChangeSize();
+    }
 }
 
 
