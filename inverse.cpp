@@ -19,6 +19,7 @@ QVector<QVector<double>> getMatrixFromTable(QTableWidget *table)
     return matrix;
 }
 
+
 void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matrix)
 {
     int rows = matrix.size();
@@ -33,12 +34,30 @@ void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matri
                 QTableWidgetItem *item = new QTableWidgetItem();
                 table->setItem(i, j, item);
             }
-            // table->item(i, j)->setText(QString::number(matrix[i][j], 'f', 4));
-            if (table->item(i, j)->text().toInt() == int(getMatrixFromTable(table)[i][j])) {
-                table->item(i, j)->setText(QString::number(matrix[i][j]));
-            } else {
-                table->item(i, j)->setText(QString::number(matrix[i][j], 'f', 4));
+
+            double value = matrix[i][j];
+            QString text;
+
+            // Для очень маленьких значений, близких к нулю
+            if (std::abs(value) < 1e-10) {
+                text = "0";
             }
+            // Для почти целых чисел
+            else if (std::abs(value - round(value)) < 1e-10) {
+                text = QString::number(static_cast<int>(round(value)));
+            }
+            // Для обычных дробных чисел
+            else {
+                // Используем специальное форматирование для улучшения точности
+                text = QString::number(value, 'g', 10);
+
+                // Если число слишком длинное, переключаемся на компактное представление
+                if (text.length() > 10) {
+                    text = QString::number(value, 'g', 6);
+                }
+            }
+
+            table->item(i, j)->setText(text);
         }
     }
 }

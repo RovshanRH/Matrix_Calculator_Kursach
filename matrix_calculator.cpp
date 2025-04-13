@@ -71,7 +71,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QPushButton* sizeButton = new QPushButton("Установить одинаковый размер X для матриц");
     QLabel *razmer = new QLabel("X :");
     razmerSpinBox = new QSpinBox();
-    razmerSpinBox->setRange(1,10);
+    razmerSpinBox->setRange(1,100);
     razmerSpinBox->setValue(3);
     QPushButton *automatSize = new QPushButton("Автом. изменять размер окна");
     sizeButton->setFixedSize(320, 30);
