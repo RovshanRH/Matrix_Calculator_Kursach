@@ -75,18 +75,29 @@ void Operations::subtractMatrices(QTableWidget *matrix1, QTableWidget *matrix2, 
     }
 }
 
-void Operations::multyplyconstant(QTableWidget *matrix, QString cnst) {
+void Operations::multyplyconstant(QTableWidget *matrix, double cnst) {
     int rows = matrix->rowCount();
     int cols = matrix->columnCount();
-    // double cnst = constant->value();
 
-    double cnsta = cnst.toDouble();
+    for(int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            QTableWidgetItem *item = matrix->item(i, j);
+            if (!item) {
+                item = new QTableWidgetItem("0");
+                matrix->setItem(i, j, item);
+            }
 
-    for(int i{}; i < rows; i++) {
-        for (int j{}; j < cols; j++) {
-            double value = matrix->item(i, j)->text().toDouble();
-            double result = cnsta*value;
-            matrix->item(i, j)->setText(QString::number(result));
+            bool ok;
+            double value = item->text().toDouble(&ok);
+            if (!ok) {
+                // Handle case when cell doesn't contain a valid number
+                value = 0.0;
+            }
+
+            double result = value * cnst;
+
+            // Format with precision to avoid too many decimal places
+            matrix->item(i, j)->setText(QString::number(result, 'g', 10));
         }
     }
 }
@@ -124,14 +135,14 @@ void Operations::swapMatrices(QTableWidget *matrix1, QTableWidget *matrix2, QVec
     //     }
     // }
 
-    for (int i = 0; i < rowsB; ++i) {
-        for (int j = 0; j < colsB; ++j) {
+    for (int i = 0; i < rowsA; ++i) {
+        for (int j = 0; j < colsA; ++j) {
             matrix1->item(i, j)->setText(QString::number(tempB[i][j]));
         }
     }
 
-    for (int i = 0; i < rowsA; ++i) {
-        for (int j = 0; j < colsA; ++j) {
+    for (int i = 0; i < rowsB; ++i) {
+        for (int j = 0; j < colsB; ++j) {
             matrix2->item(i, j)->setText(QString::number(tempA[i][j]));
         }
     }

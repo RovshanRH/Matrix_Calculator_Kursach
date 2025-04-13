@@ -136,7 +136,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // QDoubleValidator *validatorA = new QDoubleValidator(0.0, 1000.0, 1, constantA);
     // constantA->setValidator(validatorA);
 
-    QLineEdit *constantA = new QLineEdit();
+    constantA = new QLineEdit();
     QDoubleValidator *validatorA = new QDoubleValidator(-1000.0, 1000.0, 2, constantA);
     constantA->setValidator(validatorA);
     constantA->setPlaceholderText("Введите константу (например, 2.5)");
@@ -198,7 +198,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // QDoubleValidator *validatorB = new QDoubleValidator(0.0, 1000.0, 1, constantB);
     // constantA->setValidator(validatorB);
 
-    QLineEdit *constantB = new QLineEdit();
+    constantB = new QLineEdit();
     QDoubleValidator *validatorB = new QDoubleValidator(-1000.0, 1000.0, 2, constantB);
     constantB->setValidator(validatorB);
     constantB->setPlaceholderText("Введите константу (например, 2.5)");
@@ -442,16 +442,15 @@ void Matrix_Calculator::swapMatrices() {
     QVector<QVector<double>> tempA = op.settempA(op.rowsA_getter(matrixATable), op.colsA_getter(matrixATable), matrixATable);
     QVector<QVector<double>> tempB = op.settempB(op.rowsB_getter(matrixBTable), op.colsB_getter(matrixBTable), matrixBTable);
 
-    rowsASpinBox->setValue(op.rowsA_getter(matrixATable));
-    colsASpinBox->setValue(op.colsA_getter(matrixATable));
-    rowsBSpinBox->setValue(op.rowsB_getter(matrixBTable));
-    colsBSpinBox->setValue(op.colsB_getter(matrixBTable));
+    rowsASpinBox->setValue(op.rowsA_getter(matrixBTable));
+    colsASpinBox->setValue(op.colsA_getter(matrixBTable));
+    rowsBSpinBox->setValue(op.rowsB_getter(matrixATable));
+    colsBSpinBox->setValue(op.colsB_getter(matrixATable));
 
     createMatrixA();
     createMatrixB();
 
     op.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
-
 
 }
 
@@ -481,30 +480,27 @@ void Matrix_Calculator::multyplyMatrices() {
     op.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
 }
 
-void Matrix_Calculator::multyplyconstant(QTableWidget *matrix, QString cnst) {
-    Operations op;
-    op.multyplyconstant(matrix, cnst);
-}
 
 void Matrix_Calculator::multyplyconstantA() {
-    // bool ok;
-    // double constant = constantA->text().toDouble(&ok);
+    bool ok;
+    double constant = constantA->text().toDouble(&ok);
     // if (!ok || constantA->text().isEmpty()) {
     //     QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A!");
     //     return;
     // }
+
     Operations op;
-    op.multyplyconstant(matrixATable, constantA->text());
+    op.multyplyconstant(matrixATable, constant);
 }
 
 void Matrix_Calculator::multyplyconstantB() {
-    // bool ok;
-    // double constant = constantB->text().toDouble(&ok);
+    bool ok;
+    double constant = constantB->text().toDouble(&ok);
     // if (!ok || constantB->text().isEmpty()) {
     //     QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B!");
     //     return;
     // }
 
     Operations op;
-    op.multyplyconstant(matrixBTable, constantB->text());
+    op.multyplyconstant(matrixBTable, constant);
 }

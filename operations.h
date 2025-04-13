@@ -16,7 +16,7 @@ public slots:
     void subtractMatrices(QTableWidget *matrix1, QTableWidget *matrix2, QTableWidget *matrix3);
     void multyplyMatrices(QTableWidget *matrix1, QTableWidget *matrix2, QTableWidget *matrix3);
     void swapMatrices(QTableWidget *matrix1, QTableWidget *matrix2, QVector<QVector<double>> tempB, QVector<QVector<double>> tempA);
-    void multyplyconstant(QTableWidget *matrix, QString cnst);
+    void multyplyconstant(QTableWidget *matrix, double cnst);
 
     int rowsA_getter(QTableWidget *matrix);
     int rowsB_getter(QTableWidget *matrix);
