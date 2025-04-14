@@ -1,5 +1,6 @@
 #include "inverse.h"
-
+#include <string>
+#include <cmath>
 
 inverse::inverse(QObject *parent) : QObject(parent) {}
 
@@ -36,22 +37,22 @@ void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matri
             }
 
             double value = matrix[i][j];
+            double integer_part;
             QString text;
+            std::string s = std::to_string(std::modf(value, &integer_part));
 
             // Для очень маленьких значений, близких к нулю
             if (std::abs(value) < 1e-10) {
                 text = "0";
             }
             // Для почти целых чисел
-            else if (std::abs(value - round(value)) < 1e-10) {
+            else if ((std::abs(value - round(value)) < 1e-10) || (s.substr(0, 3) == "000" || s.substr(0, 3) == "999")) {
                 text = QString::number(static_cast<int>(round(value)));
             }
             // Для обычных дробных чисел
             else {
-                // Используем специальное форматирование для улучшения точности
                 text = QString::number(value, 'g', 10);
 
-                // Если число слишком длинное, переключаемся на компактное представление
                 if (text.length() > 10) {
                     text = QString::number(value, 'g', 6);
                 }

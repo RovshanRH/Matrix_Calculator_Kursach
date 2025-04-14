@@ -74,9 +74,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerSpinBox->setRange(1,100);
     razmerSpinBox->setValue(3);
     QPushButton *automatSize = new QPushButton("Автом. изменять размер окна");
+    automatSize->setObjectName("automatSize");
     sizeButton->setFixedSize(320, 30);
     automatSize->setFixedSize(230, 30);
-    automatSize->setStyleSheet("background-color: white");
     razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
     razmerHButtonLayout->addWidget(sizeButton);
     razmerHButtonLayout->addWidget(razmer);
@@ -287,11 +287,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         static bool isEnabled = false;
         if (!isEnabled){
             automatSize->setText("Отключить авто-размер");
-            automatSize->setStyleSheet("background-color: yellow");
+            automatSize->setStyleSheet("background-color: yellow; color: black");
             isEnabled = true;
         } else {
             automatSize->setText("Автом. изменять размер окна");
-            automatSize->setStyleSheet("background-color: white");
+            automatSize->setStyleSheet("");
             isEnabled = false;
         }
     });
@@ -562,7 +562,9 @@ void Matrix_Calculator::ChangeSize() {
 }
 
 bool Matrix_Calculator::AutoSizeCheck() {
-    autoSizeEnabled = !autoSizeEnabled;
-
-    return autoSizeEnabled;
+    QPushButton* automatSize = findChild<QPushButton*>("automatSize");
+    if (automatSize) {
+        return automatSize->text() == "Отключить авто-размер";
+    }
+    return false;
 }
