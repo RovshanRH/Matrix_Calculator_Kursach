@@ -51,6 +51,7 @@ protected slots:
     void insertmatrixA();
     void insertmatrixB();
     void insertmatrixC();
+    void pasteallmatrices();
 
 private:
     QSpinBox *rowsASpinBox;

@@ -77,6 +77,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerSpinBox->setValue(3);
     QPushButton *automatSize = new QPushButton("Автом. изменять размер окна");
     QPushButton *copymatrices = new QPushButton("Скопировать 3 матрицы");
+    QPushButton *insertmatrices = new QPushButton("Вставить 3 матрицы");
     automatSize->setObjectName("automatSize");
     sizeButton->setFixedSize(320, 30);
     automatSize->setFixedSize(230, 30);
@@ -86,6 +87,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerHButtonLayout->addWidget(razmerSpinBox);
     razmerHButtonLayout->addWidget(automatSize);
     razmerHButtonLayout->addWidget(copymatrices);
+    razmerHButtonLayout->addWidget(insertmatrices);
     razmerVLayout->addLayout(razmerHButtonLayout);
     QPushButton *swapmatrixAB = new QPushButton("Поменять местами матрицы");
     swapmatrixAB->setFixedSize(650, 30);
@@ -327,6 +329,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(InsertMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixA);
     connect(InsertMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixB);
     connect(InsertMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixC);
+    connect(insertmatrices, &QPushButton::clicked, this, &Matrix_Calculator::pasteallmatrices);
 
     createMatrices();
 
@@ -630,4 +633,8 @@ void Matrix_Calculator::insertmatrixB() {
 void Matrix_Calculator::insertmatrixC() {
     insertmatrix coop;
     coop.insert(matrixCTable);
+}
+void Matrix_Calculator::pasteallmatrices() {
+    insertmatrix coop;
+    coop.insertThreeMatrices(matrixATable, matrixBTable, matrixCTable);
 }

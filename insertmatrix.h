@@ -14,6 +14,7 @@ public:
     insertmatrix(QObject *parent = nullptr);
 public slots:
     void insert(QTableWidget* matrix);
+    void insertThreeMatrices(QTableWidget *table1, QTableWidget *table2, QTableWidget *table3);
 };
 
 #endif // INSERTMATRIX_H
