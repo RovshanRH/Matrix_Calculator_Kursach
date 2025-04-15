@@ -43,6 +43,15 @@ protected slots:
     void ChangeSize();
     bool AutoSizeCheck();
 
+    void copymatrixA();
+    void copymatrixB();
+    void copymatrixC();
+    void copyallmatrices();
+
+    void insertmatrixA();
+    void insertmatrixB();
+    void insertmatrixC();
+
 private:
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;

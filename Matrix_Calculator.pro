@@ -8,6 +8,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     cleaner.cpp \
+    copymatrix.cpp \
+    insertmatrix.cpp \
     inverse.cpp \
     matrix_calculator.cpp \
     operations.cpp \
@@ -20,6 +22,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     cleaner.h \
+    copymatrix.h \
+    insertmatrix.h \
     inverse.h \
     matrix_calculator.h \
     operations.h \

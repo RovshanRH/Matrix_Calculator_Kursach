@@ -3,6 +3,8 @@
 #include "cleaner.h"
 #include "operations.h"
 #include "inverse.h"
+#include "copymatrix.h"
+#include "insertmatrix.h"
 #include <QApplication>
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -74,6 +76,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerSpinBox->setRange(1,100);
     razmerSpinBox->setValue(3);
     QPushButton *automatSize = new QPushButton("Автом. изменять размер окна");
+    QPushButton *copymatrices = new QPushButton("Скопировать 3 матрицы");
     automatSize->setObjectName("automatSize");
     sizeButton->setFixedSize(320, 30);
     automatSize->setFixedSize(230, 30);
@@ -82,6 +85,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerHButtonLayout->addWidget(razmer);
     razmerHButtonLayout->addWidget(razmerSpinBox);
     razmerHButtonLayout->addWidget(automatSize);
+    razmerHButtonLayout->addWidget(copymatrices);
     razmerVLayout->addLayout(razmerHButtonLayout);
     QPushButton *swapmatrixAB = new QPushButton("Поменять местами матрицы");
     swapmatrixAB->setFixedSize(650, 30);
@@ -117,11 +121,16 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     QPushButton *CreateMatrixA = new QPushButton("Поменять размер");
 
+    QPushButton *CopyMatrixA = new QPushButton("Скопировать");
+    QPushButton *InsertMatrixA = new QPushButton("Вставить");
+
     SIzeLayout->addWidget(StrokiALabel);
     SIzeLayout->addWidget(rowsASpinBox);
     SIzeLayout->addWidget(StolbciALabel);
     SIzeLayout->addWidget(colsASpinBox);
     SIzeLayout->addWidget(CreateMatrixA);
+    SIzeLayout->addWidget(CopyMatrixA);
+    SIzeLayout->addWidget(InsertMatrixA);
     SIzeLayout->addStretch();
     MainLayout->addWidget(SizeMatrixA);
 
@@ -173,11 +182,16 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     QPushButton *CreateMatrixB = new QPushButton("Поменять размер");
 
+    QPushButton *CopyMatrixB = new QPushButton("Скопировать");
+    QPushButton *InsertMatrixB = new QPushButton("Вставить");
+
     SIzeLayout->addWidget(StrokiBLabel);
     SIzeLayout->addWidget(rowsBSpinBox);
     SIzeLayout->addWidget(StolbciBLabel);
     SIzeLayout->addWidget(colsBSpinBox);
     SIzeLayout->addWidget(CreateMatrixB);
+    SIzeLayout->addWidget(CopyMatrixB);
+    SIzeLayout->addWidget(InsertMatrixB);
     SIzeLayout->addStretch();
     MainLayout->addWidget(SizeMatrixB);
 
@@ -231,11 +245,19 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // Результирующая матрица C
     QWidget* SizeMatrixC = new QWidget();
     QWidget* matrixCWidget = new QWidget();
+    QHBoxLayout* matrixc = new QHBoxLayout();
     QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
     QLabel* matrixCLabel = new QLabel("Результирующая матрица");
+    QPushButton *CopyMatrixC = new QPushButton("Скопировать");
+    QPushButton *InsertMatrixC = new QPushButton("Вставить");
+    matrixc->setAlignment(Qt::AlignLeft);
     matrixCTable = new QTableWidget();
-    matrixCLayout->addWidget(matrixCLabel);
+    matrixc->addWidget(matrixCLabel);
+    matrixc->addWidget(CopyMatrixC);
+    matrixc->addWidget(InsertMatrixC);
+    matrixCLayout->addLayout(matrixc);
     matrixCLayout->addWidget(matrixCTable);
+
 
     // Кнопки для настройки размера матрицы С
     // Строки
@@ -283,6 +305,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(divideConstantA, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantA);
     connect(divideConstantB, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantB);
 
+
     connect(automatSize, &QPushButton::clicked, [automatSize]() {
         static bool isEnabled = false;
         if (!isEnabled){
@@ -296,6 +319,14 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         }
     });
 
+    connect(CopyMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::copymatrixA);
+    connect(CopyMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::copymatrixB);
+    connect(CopyMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::copymatrixC);
+    connect(copymatrices, &QPushButton::clicked, this, &Matrix_Calculator::copyallmatrices);
+
+    connect(InsertMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixA);
+    connect(InsertMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixB);
+    connect(InsertMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixC);
 
     createMatrices();
 
@@ -567,4 +598,36 @@ bool Matrix_Calculator::AutoSizeCheck() {
         return automatSize->text() == "Отключить авто-размер";
     }
     return false;
+}
+
+
+void Matrix_Calculator::copymatrixA() {
+    copymatrix coop;
+    coop.copy(matrixATable);
+}
+void Matrix_Calculator::copymatrixB() {
+    copymatrix coop;
+    coop.copy(matrixBTable);
+}
+void Matrix_Calculator::copymatrixC() {
+    copymatrix coop;
+    coop.copy(matrixCTable);
+}
+
+void Matrix_Calculator::copyallmatrices() {
+    copymatrix coop;
+    coop.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
+}
+
+void Matrix_Calculator::insertmatrixA() {
+    insertmatrix coop;
+    coop.insert(matrixATable);
+}
+void Matrix_Calculator::insertmatrixB() {
+    insertmatrix coop;
+    coop.insert(matrixBTable);
+}
+void Matrix_Calculator::insertmatrixC() {
+    insertmatrix coop;
+    coop.insert(matrixCTable);
 }
