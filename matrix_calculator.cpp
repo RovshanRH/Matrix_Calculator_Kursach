@@ -251,12 +251,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
     QLabel* matrixCLabel = new QLabel("Результирующая матрица");
     QPushButton *CopyMatrixC = new QPushButton("Скопировать");
-    QPushButton *InsertMatrixC = new QPushButton("Вставить");
     matrixc->setAlignment(Qt::AlignLeft);
     matrixCTable = new QTableWidget();
     matrixc->addWidget(matrixCLabel);
     matrixc->addWidget(CopyMatrixC);
-    matrixc->addWidget(InsertMatrixC);
     matrixCLayout->addLayout(matrixc);
     matrixCLayout->addWidget(matrixCTable);
 
@@ -328,7 +326,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     connect(InsertMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixA);
     connect(InsertMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixB);
-    connect(InsertMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixC);
     connect(insertmatrices, &QPushButton::clicked, this, &Matrix_Calculator::pasteallmatrices);
 
     createMatrices();
@@ -629,10 +626,6 @@ void Matrix_Calculator::insertmatrixA() {
 void Matrix_Calculator::insertmatrixB() {
     insertmatrix coop;
     coop.insert(matrixBTable);
-}
-void Matrix_Calculator::insertmatrixC() {
-    insertmatrix coop;
-    coop.insert(matrixCTable);
 }
 void Matrix_Calculator::pasteallmatrices() {
     insertmatrix coop;
