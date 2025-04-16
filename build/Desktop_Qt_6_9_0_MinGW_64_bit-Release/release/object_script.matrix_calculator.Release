@@ -1,0 +1,16 @@
+release/main.o
+release/cleaner.o
+release/copymatrix.o
+release/insertmatrix.o
+release/inverse.o
+release/matrix_calculator.o
+release/operations.o
+release/randomizer.o
+release/qrc_resources.o
+release/moc_cleaner.o
+release/moc_copymatrix.o
+release/moc_insertmatrix.o
+release/moc_inverse.o
+release/moc_matrix_calculator.o
+release/moc_operations.o
+release/moc_randomizer.o
