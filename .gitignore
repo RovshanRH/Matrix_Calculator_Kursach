@@ -71,6 +71,7 @@ CMakeLists.txt.user*
 # Binaries
 # --------
 *.dll
+!importlib.dll
 *.exe
 
 # Directories with generated files
