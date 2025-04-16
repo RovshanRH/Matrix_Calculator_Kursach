@@ -51,10 +51,10 @@ void setMatrixToTable(QTableWidget *table, const QVector<QVector<double>> &matri
             }
             // Для обычных дробных чисел
             else {
-                text = QString::number(value, 'g', 10);
+                text = QString::number(value, 'g', 3);
 
                 if (text.length() > 10) {
-                    text = QString::number(value, 'g', 6);
+                    text = QString::number(value, 'g', 3);
                 }
             }
 

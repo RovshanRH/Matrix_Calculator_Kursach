@@ -15,7 +15,7 @@ void insertmatrix::insert(QTableWidget *matrix) {
 
     // Функция для определения лучшего разделителя
     auto findBestDelimiter = [](const QString &line) {
-        QStringList delimiters = {"\t", ",", " "};
+        QStringList delimiters = {"\t", ",", " ", ";"};
         QString bestDelimiter = "\t";
         int maxColumns = 0;
 
@@ -62,7 +62,7 @@ void insertmatrix::insertThreeMatrices(QTableWidget *table1, QTableWidget *table
 
         // Функция для определения лучшего разделителя
         auto findBestDelimiter = [](const QString &line) {
-            QStringList delimiters = {"\t", ", ", " "};
+            QStringList delimiters = {"\t", ", ", " ", ";"};
             QString bestDelimiter = "\t";
             int maxColumns = 0;
 
@@ -127,3 +127,5 @@ void insertmatrix::insertThreeMatrices(QTableWidget *table1, QTableWidget *table
     insertTable(table2, table2Lines);
     insertTable(table3, table3Lines);
 }
+
+

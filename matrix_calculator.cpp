@@ -5,24 +5,7 @@
 #include "inverse.h"
 #include "copymatrix.h"
 #include "insertmatrix.h"
-#include <QApplication>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QString>
-#include <QTableWidget>
-#include <QMessageBox>
-#include <QSpinBox>
-#include <QPushButton>
-#include <QHeaderView>
-#include <QMessageBox>
-#include <QIcon>
-#include <QFrame>
-#include <QSize>
-#include <QLineEdit>
-#include <QDoubleValidator>
-#include <cmath>
+
 
 using namespace std;
 
@@ -139,8 +122,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // Кнопки для матрицы А
     QWidget *matrixAButtonsWidget = new QWidget();
     QHBoxLayout *matrixAButtonsLayout = new QHBoxLayout(matrixAButtonsWidget);
-    QPushButton *transposeAButton = new QPushButton("Транспонировать A");
-    QPushButton *inverseAButton = new QPushButton("Обратная A⁻¹");
+    QPushButton *transposeAButton = new QPushButton("Aᵀ");
+    QPushButton *inverseAButton = new QPushButton("A⁻¹");
     QPushButton *multyplyConstantA = new QPushButton("* на c");
     QPushButton *divideConstantA = new QPushButton("/ на c");
 
@@ -200,8 +183,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // Кнопки для матрицы B
     QWidget *matrixBButtonsWidget = new QWidget();
     QHBoxLayout *matrixBButtonsLayout = new QHBoxLayout(matrixBButtonsWidget);
-    QPushButton *transposeBButton = new QPushButton("Транспонировать B");
-    QPushButton *inverseBButton = new QPushButton("Обратная B⁻¹");
+    QPushButton *transposeBButton = new QPushButton("Bᵀ");
+    QPushButton *inverseBButton = new QPushButton("B⁻¹");
     QPushButton *multyplyConstantB = new QPushButton("* на c");
     QPushButton *divideConstantB = new QPushButton("/ на c");
 
@@ -280,30 +263,146 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(CreateMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixA);
     connect(CreateMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixB);
 
-    connect(summButton, &QPushButton::clicked, this, &Matrix_Calculator::addMatrices);
-    connect(raznButton, &QPushButton::clicked, this, &Matrix_Calculator::subtractMatrices);
-    connect(multiplyButton, &QPushButton::clicked, this, &Matrix_Calculator::multyplyMatrices);
-    connect(transposeAButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixA);
-    connect(transposeBButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixB);
+    // connect(summButton, &QPushButton::clicked, this, &Matrix_Calculator::addMatrices);
+    connect(summButton, &QPushButton::clicked, this, [this]() {
+        rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
+        colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
+        createMatrixC();
+        oper.addMatrices(matrixATable, matrixBTable, matrixCTable);
 
-    connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixA);
-    connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixB);
-    connect(clearButton, &QPushButton::clicked, this, &Matrix_Calculator::clearMatrixC);
+        if (AutoSizeCheck() == true){
+            ChangeSize();
+        }
+    });
 
-    connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
-    connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
+    // connect(raznButton, &QPushButton::clicked, this, &Matrix_Calculator::subtractMatrices);
+    connect(raznButton, &QPushButton::clicked, this, [this](){
+        rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
+        colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
+        createMatrixC();
+        oper.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
+
+        if (AutoSizeCheck() == true){
+            ChangeSize();
+        }
+
+    });
+
+    // connect(multiplyButton, &QPushButton::clicked, this, &Matrix_Calculator::multyplyMatrices);
+    connect(multiplyButton, &QPushButton::clicked, this, [this](){
+        rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
+        colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
+        createMatrixC();
+        oper.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
+
+        if (AutoSizeCheck() == true){
+            ChangeSize();
+        }
+    });
+
+    // connect(transposeAButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixA);
+    // connect(transposeBButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixB);
+
+    connect(transposeAButton, &QPushButton::clicked, this, [this]() {
+        oper.transposeMatrix(matrixATable);
+    });
+    connect(transposeBButton, &QPushButton::clicked, this, [this]() {
+        oper.transposeMatrix(matrixBTable);
+    });
+
+    // Cleaner clean;
+    connect(clearButton, &QPushButton::clicked, this, [this]() {
+        clean.clearMatrices(matrixATable);
+        clean.clearMatrices(matrixBTable);
+        clean.clearMatrices(matrixCTable);
+
+    });
+
+    // connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
+    // connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
+
+    connect(randomButton, &QPushButton::clicked, this, [this]() {
+        randomizer.randomizeMatrices(matrixATable);
+        randomizer.randomizeMatrices(matrixBTable);
+
+    });
 
 
     connect(sizeButton, &QPushButton::clicked, this, &Matrix_Calculator::createMatricesAB);
-    connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
-    connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
-    connect(swapmatrixAB, &QPushButton::clicked, this, &Matrix_Calculator::swapMatrices);
 
-    connect(multyplyConstantA, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantA);
-    connect(multyplyConstantB, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantB);
+    // connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
+    // connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
 
-    connect(divideConstantA, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantA);
-    connect(divideConstantB, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantB);
+    connect(inverseAButton, &QPushButton::clicked, this, [this]() {
+        inverter.invertMatrix(matrixATable);
+    });
+
+    connect(inverseBButton, &QPushButton::clicked, this, [this]() {
+        inverter.invertMatrix(matrixBTable);
+    });
+
+    // connect(swapmatrixAB, &QPushButton::clicked, this, &Matrix_Calculator::swapMatrices);
+
+    connect(swapmatrixAB, &QPushButton::clicked, this, [this]() {
+
+        QVector<QVector<double>> tempA = oper.settempA(oper.rows_getter(matrixATable), oper.cols_getter(matrixATable), matrixATable);
+        QVector<QVector<double>> tempB = oper.settempB(oper.rows_getter(matrixBTable), oper.cols_getter(matrixBTable), matrixBTable);
+
+        rowsASpinBox->setValue(oper.rows_getter(matrixBTable));
+        colsASpinBox->setValue(oper.cols_getter(matrixBTable));
+        rowsBSpinBox->setValue(oper.rows_getter(matrixATable));
+        colsBSpinBox->setValue(oper.cols_getter(matrixATable));
+
+        createMatrixA();
+        createMatrixB();
+
+        oper.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
+    });
+
+    // connect(multyplyConstantA, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantA);
+    // connect(multyplyConstantB, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantB);
+
+    // connect(divideConstantA, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantA);
+    // connect(divideConstantB, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantB);
+
+    connect(multyplyConstantA, &QPushButton::clicked, this, [this]() {
+        bool ok;
+        double constant = constantA->text().toDouble(&ok);
+        if (!ok || constantA->text().isEmpty()) {
+            QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
+            return;
+        }
+        oper.multyplyconstant(matrixATable, constant);
+    });
+
+    connect(multyplyConstantB, &QPushButton::clicked, this, [this]() {
+        bool ok;
+        double constant = constantB->text().toDouble(&ok);
+        if (!ok || constantB->text().isEmpty()) {
+            QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
+            return;
+        }
+        oper.multyplyconstant(matrixBTable, constant);
+    });
+
+    connect(divideConstantA, &QPushButton::clicked, this, [this]() {
+        bool ok;
+        double constant = constantA->text().toDouble(&ok);
+        if (!ok || constantA->text().isEmpty() || constantA->text().toDouble() == 0) {
+            QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
+            return;
+        }
+        oper.divisionconstant(matrixATable, constant);
+    });
+    connect(divideConstantB, &QPushButton::clicked, this, [this]() {
+        bool ok;
+        double constant = constantB->text().toDouble(&ok);
+        if (!ok || constantB->text().isEmpty() || constantB->text().toDouble() == 0) {
+            QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
+            return;
+        }
+        oper.divisionconstant(matrixBTable, constant);
+    });
 
 
     connect(automatSize, &QPushButton::clicked, [automatSize]() {
@@ -327,6 +426,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(InsertMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixA);
     connect(InsertMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixB);
     connect(insertmatrices, &QPushButton::clicked, this, &Matrix_Calculator::pasteallmatrices);
+
 
     createMatrices();
 
@@ -431,154 +531,140 @@ void Matrix_Calculator::createMatrixC()
 
 }
 
-void Matrix_Calculator::clearMatrixA() {
-    Cleaner clean;
-    clean.clearMatrices(matrixATable);
-}
-void Matrix_Calculator::clearMatrixB() {
-    Cleaner clean;
-    clean.clearMatrices(matrixBTable);
-}
-void Matrix_Calculator::clearMatrixC() {
-    Cleaner clean;
-    clean.clearMatrices(matrixCTable);
-}
+// void Matrix_Calculator::randomizeMatrixA() {
+//     Randomizer random;
+//     random.randomizeMatrices(matrixATable);
+// }
 
-void Matrix_Calculator::randomizeMatrixA() {
-    Randomizer random;
-    random.randomizeMatrices(matrixATable);
-}
+// void Matrix_Calculator::randomizeMatrixB() {
+//     Randomizer random;
+//     random.randomizeMatrices(matrixBTable);
+// }
 
-void Matrix_Calculator::randomizeMatrixB() {
-    Randomizer random;
-    random.randomizeMatrices(matrixBTable);
-}
+// void Matrix_Calculator::transposeMatrixA() {
+//     Operations op;
+//     op.transposeMatrix(matrixATable);
+// }
+// void Matrix_Calculator::transposeMatrixB() {
+//     Operations op;
+//     op.transposeMatrix(matrixBTable);
+// }
 
-void Matrix_Calculator::transposeMatrixA() {
-    Operations op;
-    op.transposeMatrix(matrixATable);
-}
-void Matrix_Calculator::transposeMatrixB() {
-    Operations op;
-    op.transposeMatrix(matrixBTable);
-}
+// void Matrix_Calculator::invertMatrixA()
+// {
+//     inverse invert;
+//     invert.invertMatrix(matrixATable);
+// }
 
+// void Matrix_Calculator::invertMatrixB()
+// {
+//     inverse invert;
+//     invert.invertMatrix(matrixBTable);
+// }
+// void Matrix_Calculator::swapMatrices() {
+//     Operations op;
 
-void Matrix_Calculator::invertMatrixA()
-{
-    inverse invert;
-    invert.invertMatrix(matrixATable);
-}
+//     QVector<QVector<double>> tempA = op.settempA(op.rows_getter(matrixATable), op.cols_getter(matrixATable), matrixATable);
+//     QVector<QVector<double>> tempB = op.settempB(op.rows_getter(matrixBTable), op.cols_getter(matrixBTable), matrixBTable);
 
-void Matrix_Calculator::invertMatrixB()
-{
-    inverse invert;
-    invert.invertMatrix(matrixBTable);
-}
-void Matrix_Calculator::swapMatrices() {
-    Operations op;
+//     rowsASpinBox->setValue(op.rows_getter(matrixBTable));
+//     colsASpinBox->setValue(op.cols_getter(matrixBTable));
+//     rowsBSpinBox->setValue(op.rows_getter(matrixATable));
+//     colsBSpinBox->setValue(op.cols_getter(matrixATable));
 
-    QVector<QVector<double>> tempA = op.settempA(op.rows_getter(matrixATable), op.cols_getter(matrixATable), matrixATable);
-    QVector<QVector<double>> tempB = op.settempB(op.rows_getter(matrixBTable), op.cols_getter(matrixBTable), matrixBTable);
+//     createMatrixA();
+//     createMatrixB();
 
-    rowsASpinBox->setValue(op.rows_getter(matrixBTable));
-    colsASpinBox->setValue(op.cols_getter(matrixBTable));
-    rowsBSpinBox->setValue(op.rows_getter(matrixATable));
-    colsBSpinBox->setValue(op.cols_getter(matrixATable));
+//     op.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
 
-    createMatrixA();
-    createMatrixB();
+// }
 
-    op.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
+// void Matrix_Calculator::addMatrices() {
+//     Operations op;
+    // rowsCSpinBox->setValue(op.rows_getter(matrixATable));
+    // colsCSpinBox->setValue(op.cols_getter(matrixBTable));
+//     createMatrixC();
+//     op.addMatrices(matrixATable, matrixBTable, matrixCTable);
 
-}
-
-void Matrix_Calculator::addMatrices() {
-    Operations op;
-    rowsCSpinBox->setValue(op.rows_getter(matrixATable));
-    colsCSpinBox->setValue(op.cols_getter(matrixBTable));
-    createMatrixC();
-    op.addMatrices(matrixATable, matrixBTable, matrixCTable);
-
-    if (AutoSizeCheck() == true){
-        ChangeSize();
-    }
-}
+//     if (AutoSizeCheck() == true){
+//         ChangeSize();
+//     }
+// }
 
 
-void Matrix_Calculator::subtractMatrices() {
+// void Matrix_Calculator::subtractMatrices() {
 
-    Operations op;
-    rowsCSpinBox->setValue(op.rows_getter(matrixATable));
-    colsCSpinBox->setValue(op.cols_getter(matrixBTable));
-    createMatrixC();
-    op.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
+//     Operations op;
+//     rowsCSpinBox->setValue(op.rows_getter(matrixATable));
+//     colsCSpinBox->setValue(op.cols_getter(matrixBTable));
+//     createMatrixC();
+//     op.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
 
-    if (AutoSizeCheck() == true){
-        ChangeSize();
-    }
+//     if (AutoSizeCheck() == true){
+//         ChangeSize();
+//     }
 
-}
-void Matrix_Calculator::multyplyMatrices() {
-    Operations op;
-    rowsCSpinBox->setValue(op.rows_getter(matrixATable));
-    colsCSpinBox->setValue(op.cols_getter(matrixBTable));
-    createMatrixC();
-    op.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
+// }
+// void Matrix_Calculator::multyplyMatrices() {
+//     Operations op;
+//     rowsCSpinBox->setValue(op.rows_getter(matrixATable));
+//     colsCSpinBox->setValue(op.cols_getter(matrixBTable));
+//     createMatrixC();
+//     op.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
 
-    if (AutoSizeCheck() == true){
-        ChangeSize();
-    }
-}
+//     if (AutoSizeCheck() == true){
+//         ChangeSize();
+//     }
+// }
 
 
-void Matrix_Calculator::multyplyconstantA() {
-    bool ok;
-    double constant = constantA->text().toDouble(&ok);
-    if (!ok || constantA->text().isEmpty()) {
-        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
-        return;
-    }
+// void Matrix_Calculator::multyplyconstantA() {
+//     bool ok;
+//     double constant = constantA->text().toDouble(&ok);
+//     if (!ok || constantA->text().isEmpty()) {
+//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
+//         return;
+//     }
 
-    Operations op;
-    op.multyplyconstant(matrixATable, constant);
-}
+//     Operations op;
+//     op.multyplyconstant(matrixATable, constant);
+// }
 
-void Matrix_Calculator::multyplyconstantB() {
-    bool ok;
-    double constant = constantB->text().toDouble(&ok);
-    if (!ok || constantB->text().isEmpty()) {
-        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
-        return;
-    }
+// void Matrix_Calculator::multyplyconstantB() {
+//     bool ok;
+//     double constant = constantB->text().toDouble(&ok);
+//     if (!ok || constantB->text().isEmpty()) {
+//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
+//         return;
+//     }
 
-    Operations op;
-    op.multyplyconstant(matrixBTable, constant);
-}
+//     Operations op;
+//     op.multyplyconstant(matrixBTable, constant);
+// }
 
-void Matrix_Calculator::divisionconstantA() {
-    bool ok;
-    double constant = constantA->text().toDouble(&ok);
-    if (!ok || constantA->text().isEmpty() || constantA->text().toDouble() == 0) {
-        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
-        return;
-    }
+// void Matrix_Calculator::divisionconstantA() {
+//     bool ok;
+//     double constant = constantA->text().toDouble(&ok);
+//     if (!ok || constantA->text().isEmpty() || constantA->text().toDouble() == 0) {
+//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
+//         return;
+//     }
 
-    Operations op;
-    op.divisionconstant(matrixATable, constant);
-}
+//     Operations op;
+//     op.divisionconstant(matrixATable, constant);
+// }
 
-void Matrix_Calculator::divisionconstantB() {
-    bool ok;
-    double constant = constantB->text().toDouble(&ok);
-    if (!ok || constantB->text().isEmpty() || constantB->text().toDouble() == 0) {
-        QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
-        return;
-    }
+// void Matrix_Calculator::divisionconstantB() {
+//     bool ok;
+//     double constant = constantB->text().toDouble(&ok);
+//     if (!ok || constantB->text().isEmpty() || constantB->text().toDouble() == 0) {
+//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
+//         return;
+//     }
 
-    Operations op;
-    op.divisionconstant(matrixBTable, constant);
-}
+//     Operations op;
+//     op.divisionconstant(matrixBTable, constant);
+// }
 
 void Matrix_Calculator::ChangeSize() {
     int rows = matrixCTable->rowCount();
@@ -619,15 +705,39 @@ void Matrix_Calculator::copyallmatrices() {
     coop.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
 }
 
+void checkNullParameters(QTableWidget *matrix);
+
 void Matrix_Calculator::insertmatrixA() {
     insertmatrix coop;
     coop.insert(matrixATable);
+    checkNullParameters(matrixATable);
 }
 void Matrix_Calculator::insertmatrixB() {
     insertmatrix coop;
     coop.insert(matrixBTable);
+    checkNullParameters(matrixBTable);
 }
+
+
+
 void Matrix_Calculator::pasteallmatrices() {
     insertmatrix coop;
     coop.insertThreeMatrices(matrixATable, matrixBTable, matrixCTable);
+    checkNullParameters(matrixATable);
+    checkNullParameters(matrixBTable);
+    checkNullParameters(matrixCTable);
+}
+
+void checkNullParameters(QTableWidget *matrix) {
+    int rows = matrix->rowCount();
+    int cols = matrix->columnCount();
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (matrix->item(i, j) == nullptr) {
+                QTableWidgetItem *item = new QTableWidgetItem(QString::number(0));
+                matrix->setItem(i, j, item);
+            }
+        }
+    }
 }

@@ -12,9 +12,9 @@ void copymatrix::copy(QTableWidget *matrix) {
         QStringList rowData;
         for (int col = 0; col < cols; ++col) {
             QTableWidgetItem* item = matrix->item(row, col);
-            rowData << (item ? item->text() : "");
+            rowData << (item ? item->text() : "\t");
         }
-        lines << rowData.join(" ");
+        lines << rowData.join("\t");
     }
 
     // Объединяем строки с переносом
@@ -28,9 +28,10 @@ void copymatrix::copyThreeMatricesToClipboard(QTableWidget* table1, QTableWidget
     QStringList result;
 
     // Функция для преобразования таблицы в строки
-    auto tableToString = [&result](QTableWidget* table) {
+    auto tableToString = [&result](QTableWidget* table, const QString& label) {
         if (!table || table->rowCount() == 0 || table->columnCount() == 0) return;
 
+        result << label;
         for (int row = 0; row < table->rowCount(); ++row) {
             QStringList rowData;
             for (int col = 0; col < table->columnCount(); ++col) {
@@ -43,9 +44,9 @@ void copymatrix::copyThreeMatricesToClipboard(QTableWidget* table1, QTableWidget
     };
 
     // Преобразуем каждую таблицу
-    tableToString(table1);
-    tableToString(table2);
-    tableToString(table3);
+    tableToString(table1, "#Table1");
+    tableToString(table2, "#Table2");
+    tableToString(table3, "#Table3");
 
     // Копируем в буфер обмена
     QString text = result.join("\n");
