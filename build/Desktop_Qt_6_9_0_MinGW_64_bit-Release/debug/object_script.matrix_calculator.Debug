@@ -3,6 +3,7 @@ debug/cleaner.o
 debug/copymatrix.o
 debug/insertmatrix.o
 debug/inverse.o
+debug/matrix.o
 debug/matrix_calculator.o
 debug/operations.o
 debug/randomizer.o
@@ -11,6 +12,7 @@ debug/moc_cleaner.o
 debug/moc_copymatrix.o
 debug/moc_insertmatrix.o
 debug/moc_inverse.o
+debug/moc_matrix.o
 debug/moc_matrix_calculator.o
 debug/moc_operations.o
 debug/moc_randomizer.o

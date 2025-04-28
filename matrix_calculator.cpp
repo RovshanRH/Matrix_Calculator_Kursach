@@ -58,17 +58,13 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerSpinBox = new QSpinBox();
     razmerSpinBox->setRange(1,100);
     razmerSpinBox->setValue(3);
-    QPushButton *automatSize = new QPushButton("Автом. изменять размер окна");
     QPushButton *copymatrices = new QPushButton("Скопировать 3 матрицы");
     QPushButton *insertmatrices = new QPushButton("Вставить 3 матрицы");
-    automatSize->setObjectName("automatSize");
     sizeButton->setFixedSize(320, 30);
-    automatSize->setFixedSize(230, 30);
     razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
     razmerHButtonLayout->addWidget(sizeButton);
     razmerHButtonLayout->addWidget(razmer);
     razmerHButtonLayout->addWidget(razmerSpinBox);
-    razmerHButtonLayout->addWidget(automatSize);
     razmerHButtonLayout->addWidget(copymatrices);
     razmerHButtonLayout->addWidget(insertmatrices);
     razmerVLayout->addLayout(razmerHButtonLayout);
@@ -242,12 +238,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     matrixCLayout->addWidget(matrixCTable);
 
 
-    // Кнопки для настройки размера матрицы С
-    // Строки
+
     rowsCSpinBox = new QSpinBox();
     rowsCSpinBox->setValue(3);
 
-    // Столбцы
     colsCSpinBox = new QSpinBox();
     colsCSpinBox->setValue(3);
 
@@ -256,52 +250,76 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     MainLayout->addWidget(matrixCWidget);
 
+    connect(CreateMatrixA, &QPushButton::clicked, this, [this]() {
+        matr.createMatrix(matrixATable, rowsASpinBox->value(), colsASpinBox->value());
+    });
+    connect(CreateMatrixB, &QPushButton::clicked, this, [this]() {
+        matr.createMatrix(matrixBTable, rowsBSpinBox->value(), colsBSpinBox->value());
+    });
 
-
-    // соединение сигналов и слотов
-    //...
-    connect(CreateMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixA);
-    connect(CreateMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::createMatrixB);
-
-    // connect(summButton, &QPushButton::clicked, this, &Matrix_Calculator::addMatrices);
     connect(summButton, &QPushButton::clicked, this, [this]() {
+
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
+
         rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
         colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
-        createMatrixC();
+
+        if (rowsA != rowsB || colsA != colsB) {
+            QMessageBox::warning(nullptr, "Ошибка", "Размеры матриц должны совпадать!");
+            return;
+        }
+
+        matr.createMatrix(matrixCTable, rowsA, colsA);
         oper.addMatrices(matrixATable, matrixBTable, matrixCTable);
 
-        if (AutoSizeCheck() == true){
-            ChangeSize();
-        }
+
     });
 
-    // connect(raznButton, &QPushButton::clicked, this, &Matrix_Calculator::subtractMatrices);
     connect(raznButton, &QPushButton::clicked, this, [this](){
+
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
+
         rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
         colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
-        createMatrixC();
+
+        if (rowsA != rowsB || colsA != colsB) {
+            QMessageBox::warning(nullptr, "Ошибка", "Размеры матриц должны совпадать!");
+            return;
+        }
+
+        matr.createMatrix(matrixCTable, rowsA, colsA);
         oper.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
 
-        if (AutoSizeCheck() == true){
-            ChangeSize();
-        }
+
 
     });
 
-    // connect(multiplyButton, &QPushButton::clicked, this, &Matrix_Calculator::multyplyMatrices);
     connect(multiplyButton, &QPushButton::clicked, this, [this](){
+
+        int rowsA = matrixATable->rowCount();
+        int colsA = matrixATable->columnCount();
+        int rowsB = matrixBTable->rowCount();
+        int colsB = matrixBTable->columnCount();
+
         rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
         colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
-        createMatrixC();
+
+        if (colsA != rowsB) {
+            QMessageBox::warning(nullptr, "Ошибка", "Кол-во строк матрицы A должно совпадать с кол-во столбцов матрицы B");
+            return;
+        }
+
+        matr.createMatrix(matrixCTable, rowsA, colsB);
         oper.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
 
-        if (AutoSizeCheck() == true){
-            ChangeSize();
-        }
-    });
 
-    // connect(transposeAButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixA);
-    // connect(transposeBButton, &QPushButton::clicked, this, &Matrix_Calculator::transposeMatrixB);
+    });
 
     connect(transposeAButton, &QPushButton::clicked, this, [this]() {
         oper.transposeMatrix(matrixATable);
@@ -310,16 +328,12 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         oper.transposeMatrix(matrixBTable);
     });
 
-    // Cleaner clean;
     connect(clearButton, &QPushButton::clicked, this, [this]() {
         clean.clearMatrices(matrixATable);
         clean.clearMatrices(matrixBTable);
         clean.clearMatrices(matrixCTable);
 
     });
-
-    // connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixA);
-    // connect(randomButton, &QPushButton::clicked, this, &Matrix_Calculator::randomizeMatrixB);
 
     connect(randomButton, &QPushButton::clicked, this, [this]() {
         randomizer.randomizeMatrices(matrixATable);
@@ -328,10 +342,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     });
 
 
-    connect(sizeButton, &QPushButton::clicked, this, &Matrix_Calculator::createMatricesAB);
-
-    // connect(inverseAButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixA);
-    // connect(inverseBButton, &QPushButton::clicked, this, &Matrix_Calculator::invertMatrixB);
+    connect(sizeButton, &QPushButton::clicked, this, [this](){
+        int size = razmerSpinBox->value();
+        matr.create2Matrices(matrixATable, matrixBTable, size, size);
+    });
 
     connect(inverseAButton, &QPushButton::clicked, this, [this]() {
         inverter.invertMatrix(matrixATable);
@@ -340,8 +354,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(inverseBButton, &QPushButton::clicked, this, [this]() {
         inverter.invertMatrix(matrixBTable);
     });
-
-    // connect(swapmatrixAB, &QPushButton::clicked, this, &Matrix_Calculator::swapMatrices);
 
     connect(swapmatrixAB, &QPushButton::clicked, this, [this]() {
 
@@ -353,17 +365,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         rowsBSpinBox->setValue(oper.rows_getter(matrixATable));
         colsBSpinBox->setValue(oper.cols_getter(matrixATable));
 
-        createMatrixA();
-        createMatrixB();
+        matr.createMatrix(matrixATable, matrixBTable->rowCount(), matrixBTable->columnCount());
+        matr.createMatrix(matrixBTable, matrixATable->rowCount(), matrixATable->columnCount());
 
         oper.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
     });
-
-    // connect(multyplyConstantA, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantA);
-    // connect(multyplyConstantB, &QPushButton::clicked, this, &Matrix_Calculator::multyplyconstantB);
-
-    // connect(divideConstantA, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantA);
-    // connect(divideConstantB, &QPushButton::clicked, this, &Matrix_Calculator::divisionconstantB);
 
     connect(multyplyConstantA, &QPushButton::clicked, this, [this]() {
         bool ok;
@@ -405,339 +411,29 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     });
 
 
-    connect(automatSize, &QPushButton::clicked, [automatSize]() {
-        static bool isEnabled = false;
-        if (!isEnabled){
-            automatSize->setText("Отключить авто-размер");
-            automatSize->setStyleSheet("background-color: yellow; color: black");
-            isEnabled = true;
-        } else {
-            automatSize->setText("Автом. изменять размер окна");
-            automatSize->setStyleSheet("");
-            isEnabled = false;
-        }
+    connect(CopyMatrixA, &QPushButton::clicked, this, [this]() {
+        copy.copy(matrixATable);
+    });
+    connect(CopyMatrixB, &QPushButton::clicked, this, [this]() {
+        copy.copy(matrixBTable);
+    });
+    connect(CopyMatrixC, &QPushButton::clicked, this, [this]() {
+        copy.copy(matrixCTable);
+    });
+    connect(copymatrices, &QPushButton::clicked, this, [this]() {
+        copy.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
     });
 
-    connect(CopyMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::copymatrixA);
-    connect(CopyMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::copymatrixB);
-    connect(CopyMatrixC, &QPushButton::clicked, this, &Matrix_Calculator::copymatrixC);
-    connect(copymatrices, &QPushButton::clicked, this, &Matrix_Calculator::copyallmatrices);
+    connect(InsertMatrixA, &QPushButton::clicked, this, [this]() {
+        insert.insert(matrixATable);
+    });
+    connect(InsertMatrixB, &QPushButton::clicked, this, [this]() {
+        insert.insert(matrixBTable);
+    });
+    connect(insertmatrices, &QPushButton::clicked, this, [this]() {
+        insert.insertThreeMatrices(matrixATable, matrixBTable, matrixCTable);
+    });
+
+    matr.create3Matrices(matrixATable, matrixBTable, matrixCTable, 3, 3);
 
-    connect(InsertMatrixA, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixA);
-    connect(InsertMatrixB, &QPushButton::clicked, this, &Matrix_Calculator::insertmatrixB);
-    connect(insertmatrices, &QPushButton::clicked, this, &Matrix_Calculator::pasteallmatrices);
-
-
-    createMatrices();
-
-}
-
-void Matrix_Calculator::createMatrices() {
-    createMatrixA();
-    createMatrixB();
-    createMatrixC();
-}
-void Matrix_Calculator::createMatricesAB() {
-    int rows = razmerSpinBox->value();
-    int cols = razmerSpinBox->value();
-
-    // настройка
-    matrixATable->setRowCount(rows);
-    matrixATable->setColumnCount(cols);
-    matrixBTable->setRowCount(rows);
-    matrixBTable->setColumnCount(cols);
-
-    for (int i {}; i < rows; i++) {
-        for (int j {}; j < cols; j++) {
-            if (!matrixATable->item(i, j)) {
-                QTableWidgetItem *item = new QTableWidgetItem("0");
-                matrixATable->setItem(i, j, item);
-            }
-            if (!matrixBTable->item(i, j)) {
-                QTableWidgetItem *item = new QTableWidgetItem("0");
-                matrixBTable->setItem(i, j, item);
-            }
-        }
-    }
-
-    matrixATable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    matrixATable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    matrixBTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    matrixBTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-}
-
-void Matrix_Calculator::createMatrixA() {
-
-    int rows = rowsASpinBox->value();
-    int cols = colsASpinBox->value();
-
-    // настройка
-    matrixATable->setRowCount(rows);
-    matrixATable->setColumnCount(cols);
-
-    for (int i {}; i < rows; i++) {
-        for (int j {}; j < cols; j++) {
-            if (!matrixATable->item(i, j)) {
-                QTableWidgetItem *item = new QTableWidgetItem("0");
-                matrixATable->setItem(i, j, item);
-            }
-        }
-    }
-
-    matrixATable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    matrixATable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-}
-
-
-void Matrix_Calculator::createMatrixB() {
-    int rows = rowsBSpinBox->value();
-    int cols = colsBSpinBox->value();
-
-    matrixBTable->setRowCount(rows);
-    matrixBTable->setColumnCount(cols);
-
-    for (int i {}; i < rows; i++) {
-        for (int j {}; j < cols; j++) {
-            if (!matrixBTable->item(i, j)) {
-                QTableWidgetItem *item = new QTableWidgetItem("0");
-                matrixBTable->setItem(i, j, item);
-            }
-        }
-    }
-
-    matrixBTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    matrixBTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-}
-void Matrix_Calculator::createMatrixC()
-{
-    int rows = rowsCSpinBox->value();
-    int cols = colsCSpinBox->value();
-
-    matrixCTable->setRowCount(rows);
-    matrixCTable->setColumnCount(cols);
-
-    for (int i {}; i < rows; i++) {
-        for (int j {}; j < cols; j++) {
-            if (!matrixCTable->item(i, j)) {
-                QTableWidgetItem *item = new QTableWidgetItem("0");
-                matrixCTable->setItem(i, j, item);
-            }
-        }
-    }
-
-    matrixCTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    matrixCTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-}
-
-// void Matrix_Calculator::randomizeMatrixA() {
-//     Randomizer random;
-//     random.randomizeMatrices(matrixATable);
-// }
-
-// void Matrix_Calculator::randomizeMatrixB() {
-//     Randomizer random;
-//     random.randomizeMatrices(matrixBTable);
-// }
-
-// void Matrix_Calculator::transposeMatrixA() {
-//     Operations op;
-//     op.transposeMatrix(matrixATable);
-// }
-// void Matrix_Calculator::transposeMatrixB() {
-//     Operations op;
-//     op.transposeMatrix(matrixBTable);
-// }
-
-// void Matrix_Calculator::invertMatrixA()
-// {
-//     inverse invert;
-//     invert.invertMatrix(matrixATable);
-// }
-
-// void Matrix_Calculator::invertMatrixB()
-// {
-//     inverse invert;
-//     invert.invertMatrix(matrixBTable);
-// }
-// void Matrix_Calculator::swapMatrices() {
-//     Operations op;
-
-//     QVector<QVector<double>> tempA = op.settempA(op.rows_getter(matrixATable), op.cols_getter(matrixATable), matrixATable);
-//     QVector<QVector<double>> tempB = op.settempB(op.rows_getter(matrixBTable), op.cols_getter(matrixBTable), matrixBTable);
-
-//     rowsASpinBox->setValue(op.rows_getter(matrixBTable));
-//     colsASpinBox->setValue(op.cols_getter(matrixBTable));
-//     rowsBSpinBox->setValue(op.rows_getter(matrixATable));
-//     colsBSpinBox->setValue(op.cols_getter(matrixATable));
-
-//     createMatrixA();
-//     createMatrixB();
-
-//     op.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
-
-// }
-
-// void Matrix_Calculator::addMatrices() {
-//     Operations op;
-    // rowsCSpinBox->setValue(op.rows_getter(matrixATable));
-    // colsCSpinBox->setValue(op.cols_getter(matrixBTable));
-//     createMatrixC();
-//     op.addMatrices(matrixATable, matrixBTable, matrixCTable);
-
-//     if (AutoSizeCheck() == true){
-//         ChangeSize();
-//     }
-// }
-
-
-// void Matrix_Calculator::subtractMatrices() {
-
-//     Operations op;
-//     rowsCSpinBox->setValue(op.rows_getter(matrixATable));
-//     colsCSpinBox->setValue(op.cols_getter(matrixBTable));
-//     createMatrixC();
-//     op.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
-
-//     if (AutoSizeCheck() == true){
-//         ChangeSize();
-//     }
-
-// }
-// void Matrix_Calculator::multyplyMatrices() {
-//     Operations op;
-//     rowsCSpinBox->setValue(op.rows_getter(matrixATable));
-//     colsCSpinBox->setValue(op.cols_getter(matrixBTable));
-//     createMatrixC();
-//     op.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
-
-//     if (AutoSizeCheck() == true){
-//         ChangeSize();
-//     }
-// }
-
-
-// void Matrix_Calculator::multyplyconstantA() {
-//     bool ok;
-//     double constant = constantA->text().toDouble(&ok);
-//     if (!ok || constantA->text().isEmpty()) {
-//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
-//         return;
-//     }
-
-//     Operations op;
-//     op.multyplyconstant(matrixATable, constant);
-// }
-
-// void Matrix_Calculator::multyplyconstantB() {
-//     bool ok;
-//     double constant = constantB->text().toDouble(&ok);
-//     if (!ok || constantB->text().isEmpty()) {
-//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
-//         return;
-//     }
-
-//     Operations op;
-//     op.multyplyconstant(matrixBTable, constant);
-// }
-
-// void Matrix_Calculator::divisionconstantA() {
-//     bool ok;
-//     double constant = constantA->text().toDouble(&ok);
-//     if (!ok || constantA->text().isEmpty() || constantA->text().toDouble() == 0) {
-//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы A");
-//         return;
-//     }
-
-//     Operations op;
-//     op.divisionconstant(matrixATable, constant);
-// }
-
-// void Matrix_Calculator::divisionconstantB() {
-//     bool ok;
-//     double constant = constantB->text().toDouble(&ok);
-//     if (!ok || constantB->text().isEmpty() || constantB->text().toDouble() == 0) {
-//         QMessageBox::warning(this, "Ошибка", "Введите корректное число для константы B");
-//         return;
-//     }
-
-//     Operations op;
-//     op.divisionconstant(matrixBTable, constant);
-// }
-
-void Matrix_Calculator::ChangeSize() {
-    int rows = matrixCTable->rowCount();
-
-    int baseWidth = 1068;
-    int baseHeight = 620;
-
-    int additionalHeight = rows * 30;
-
-    resize(baseWidth, baseHeight + additionalHeight);
-
-}
-
-bool Matrix_Calculator::AutoSizeCheck() {
-    QPushButton* automatSize = findChild<QPushButton*>("automatSize");
-    if (automatSize) {
-        return automatSize->text() == "Отключить авто-размер";
-    }
-    return false;
-}
-
-
-void Matrix_Calculator::copymatrixA() {
-    copymatrix coop;
-    coop.copy(matrixATable);
-}
-void Matrix_Calculator::copymatrixB() {
-    copymatrix coop;
-    coop.copy(matrixBTable);
-}
-void Matrix_Calculator::copymatrixC() {
-    copymatrix coop;
-    coop.copy(matrixCTable);
-}
-
-void Matrix_Calculator::copyallmatrices() {
-    copymatrix coop;
-    coop.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
-}
-
-void checkNullParameters(QTableWidget *matrix);
-
-void Matrix_Calculator::insertmatrixA() {
-    insertmatrix coop;
-    coop.insert(matrixATable);
-    checkNullParameters(matrixATable);
-}
-void Matrix_Calculator::insertmatrixB() {
-    insertmatrix coop;
-    coop.insert(matrixBTable);
-    checkNullParameters(matrixBTable);
-}
-
-
-
-void Matrix_Calculator::pasteallmatrices() {
-    insertmatrix coop;
-    coop.insertThreeMatrices(matrixATable, matrixBTable, matrixCTable);
-    checkNullParameters(matrixATable);
-    checkNullParameters(matrixBTable);
-    checkNullParameters(matrixCTable);
-}
-
-void checkNullParameters(QTableWidget *matrix) {
-    int rows = matrix->rowCount();
-    int cols = matrix->columnCount();
-
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            if (matrix->item(i, j) == nullptr) {
-                QTableWidgetItem *item = new QTableWidgetItem(QString::number(0));
-                matrix->setItem(i, j, item);
-            }
-        }
-    }
 }

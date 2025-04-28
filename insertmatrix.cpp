@@ -5,6 +5,8 @@
 
 insertmatrix::insertmatrix(QObject *parent) : QObject(parent) {}
 
+void checkNullParameters(QTableWidget *matrix);
+
 void insertmatrix::insert(QTableWidget *matrix) {
     QString text = QApplication::clipboard()->text();
     if (text.isEmpty()) return;
@@ -47,6 +49,8 @@ void insertmatrix::insert(QTableWidget *matrix) {
             matrix->setItem(row, col, new QTableWidgetItem(rowData[col]));
         }
     }
+
+    checkNullParameters(matrix);
 }
 
 void insertmatrix::insertThreeMatrices(QTableWidget *table1, QTableWidget *table2, QTableWidget *table3) {
@@ -126,6 +130,25 @@ void insertmatrix::insertThreeMatrices(QTableWidget *table1, QTableWidget *table
     insertTable(table1, table1Lines);
     insertTable(table2, table2Lines);
     insertTable(table3, table3Lines);
+
+
+    checkNullParameters(table1);
+    checkNullParameters(table2);
+    checkNullParameters(table3);
+}
+
+void checkNullParameters(QTableWidget *matrix) {
+    int rows = matrix->rowCount();
+    int cols = matrix->columnCount();
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (matrix->item(i, j) == nullptr) {
+                QTableWidgetItem *item = new QTableWidgetItem(QString::number(0));
+                matrix->setItem(i, j, item);
+            }
+        }
+    }
 }
 
 

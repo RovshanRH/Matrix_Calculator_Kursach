@@ -11,6 +11,7 @@ SOURCES += main.cpp \
     copymatrix.cpp \
     insertmatrix.cpp \
     inverse.cpp \
+    matrix.cpp \
     matrix_calculator.cpp \
     operations.cpp \
     randomizer.cpp
@@ -25,6 +26,7 @@ HEADERS += \
     copymatrix.h \
     insertmatrix.h \
     inverse.h \
+    matrix.h \
     matrix_calculator.h \
     operations.h \
     randomizer.h
@@ -35,3 +37,5 @@ RESOURCES += \
 RC_ICONS = myappico.ico
 
 DISTFILES +=
+
+# LIBS += -lgtest -lgtest_main
