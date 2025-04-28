@@ -30,8 +30,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     QLabel *iconlabel = new QLabel();
     iconlabel->setAlignment(Qt::AlignLeft);
-    QIcon *icon = new QIcon(":/Icons/Icon.png");
-    iconlabel->setPixmap(icon->pixmap(50, 50));
+    appIcon = new QIcon(":/Icons/Icon.png");
+    iconlabel->setPixmap(appIcon->pixmap(50, 50));
     hlayout->addWidget(iconlabel);
 
     QLabel *labeltext = new QLabel("Калькулятор матриц");
@@ -39,8 +39,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     font.setPointSize(20);
     labeltext->setFont(font);
     hlayout->addWidget(labeltext);
-    QLabel *version = new QLabel("v1.0.0");
-    hlayout->addWidget(version);
     hlayout->addStretch();
     vlayout->addLayout(hlayout);
     auto lineA = new QFrame;
@@ -237,14 +235,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     matrixCLayout->addLayout(matrixc);
     matrixCLayout->addWidget(matrixCTable);
 
-
-
     rowsCSpinBox = new QSpinBox();
     rowsCSpinBox->setValue(3);
 
     colsCSpinBox = new QSpinBox();
     colsCSpinBox->setValue(3);
-
 
     MainLayout->addWidget(SizeMatrixC);
 
@@ -264,9 +259,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         int rowsB = matrixBTable->rowCount();
         int colsB = matrixBTable->columnCount();
 
-        rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
-        colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
-
         if (rowsA != rowsB || colsA != colsB) {
             QMessageBox::warning(nullptr, "Ошибка", "Размеры матриц должны совпадать!");
             return;
@@ -285,9 +277,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         int rowsB = matrixBTable->rowCount();
         int colsB = matrixBTable->columnCount();
 
-        rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
-        colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
-
         if (rowsA != rowsB || colsA != colsB) {
             QMessageBox::warning(nullptr, "Ошибка", "Размеры матриц должны совпадать!");
             return;
@@ -295,8 +284,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
         matr.createMatrix(matrixCTable, rowsA, colsA);
         oper.subtractMatrices(matrixATable, matrixBTable, matrixCTable);
-
-
 
     });
 
@@ -306,9 +293,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         int colsA = matrixATable->columnCount();
         int rowsB = matrixBTable->rowCount();
         int colsB = matrixBTable->columnCount();
-
-        rowsCSpinBox->setValue(oper.rows_getter(matrixATable));
-        colsCSpinBox->setValue(oper.cols_getter(matrixBTable));
 
         if (colsA != rowsB) {
             QMessageBox::warning(nullptr, "Ошибка", "Кол-во строк матрицы A должно совпадать с кол-во столбцов матрицы B");
@@ -338,7 +322,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(randomButton, &QPushButton::clicked, this, [this]() {
         randomizer.randomizeMatrices(matrixATable);
         randomizer.randomizeMatrices(matrixBTable);
-
     });
 
 
@@ -436,4 +419,25 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     matr.create3Matrices(matrixATable, matrixBTable, matrixCTable, 3, 3);
 
+}
+
+Matrix_Calculator::~Matrix_Calculator()
+{
+    delete appIcon;
+
+    // Qt автоматически освобождает память для виджетов, которые являются
+    // дочерними (имеют родителя) благодаря системе родитель-потомок.
+    // Поскольку все виджеты имеют родителя (this или другой виджет),
+    // дополнительное освобождение памяти для них не требуется.
+
+    // Если бы были другие объекты, созданные с помощью new и не являющиеся
+    // дочерними объектами (без родителя), их нужно было бы освободить здесь.
+
+    // Удаляем валидаторы, если они не привязаны к родительским объектам
+    QList<QValidator*> validators = findChildren<QValidator*>();
+    for (QValidator* validator : std::as_const(validators)) {
+        if (!validator->parent()) {
+            delete validator;
+        }
+    }
 }

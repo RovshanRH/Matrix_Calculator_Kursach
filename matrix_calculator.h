@@ -35,6 +35,7 @@ class Matrix_Calculator : public QMainWindow {
     Q_OBJECT
 public:
     Matrix_Calculator(QWidget* parent = nullptr);
+    ~Matrix_Calculator();
 private:
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;
@@ -55,6 +56,7 @@ private:
     Operations oper;
     copymatrix copy;
     insertmatrix insert;
+    QIcon *appIcon;
 };
 
 #endif // MATRIX_CALCULATOR_H

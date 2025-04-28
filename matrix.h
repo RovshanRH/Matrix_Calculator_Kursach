@@ -2,6 +2,12 @@
 #define MATRIX_H
 
 
+#include "cleaner.h"
+#include "copymatrix.h"
+#include "insertmatrix.h"
+#include "inverse.h"
+#include "operations.h"
+#include "randomizer.h"
 #include <QObject>
 #include <QSpinBox>
 #include <QLineEdit>
@@ -24,6 +30,12 @@ private:
     QLineEdit* constant;
     QSpinBox* razmerSpinBox;
     QTableWidget* matrixTable;
+    Cleaner clean;
+    Randomizer randomizer;
+    inverse inverter;
+    Operations oper;
+    copymatrix copy;
+    insertmatrix insert;
 
 };
 
