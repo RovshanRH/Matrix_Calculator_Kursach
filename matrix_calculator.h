@@ -36,7 +36,12 @@ class Matrix_Calculator : public QMainWindow {
 public:
     Matrix_Calculator(QWidget* parent = nullptr);
     ~Matrix_Calculator();
+
 private:
+    bool isDarkTheme();
+    QIcon createColoredIcon(const QString &iconPath, const QColor &color);
+    void updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath);
+
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;
     QSpinBox *rowsBSpinBox;
@@ -68,6 +73,10 @@ private:
     QIcon *swapIcon;
     QIcon *transposeAIcon, *transposeBIcon, *inverseAIcon, *inverseBIcon, *AmultyplybyC, *AsubstractbyC, *BmultyplybyC, *BsubstractbyC;
     QIcon *multiply, *summarize, *substract;
+    QPushButton *CopyMatrixA, * InsertMatrixA, * CopyMatrixB, * InsertMatrixB, * CopyMatrixC,  * sizeButton, * copymatrices, * insertmatrices, * swapmatrixAB, * CreateMatrixA, * CreateMatrixB,
+        * summButton, * raznButton, * multiplyButton, * clearButton, * randomButton;
+private slots:
+    void onPaletteChanged();
 };
 
 #endif // MATRIX_CALCULATOR_H

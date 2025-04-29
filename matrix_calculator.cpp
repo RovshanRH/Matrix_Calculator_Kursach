@@ -19,6 +19,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(CentralWidget);
     QVBoxLayout* MainLayout = new QVBoxLayout(CentralWidget);
 
+    QColor iconColor = isDarkTheme() ? Qt::white : Qt::black;
+    connect(qApp, &QApplication::paletteChanged, this, &Matrix_Calculator::onPaletteChanged);
+
     // макет матриц
     QWidget *matricesWidget = new QWidget();
     QHBoxLayout *MatricesLayout = new QHBoxLayout(matricesWidget);
@@ -51,14 +54,24 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *razmerHButtonLayout = new QHBoxLayout();
     QVBoxLayout *razmerVLayout = new QVBoxLayout(razmerButtonWidget);
 
-    QPushButton* sizeButton = new QPushButton("Установить одинаковый размер X для матриц");
+    change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
+    sizeButton = new QPushButton;
+    sizeButton->setIcon(*change3SizeIcon);
+
     QLabel *razmer = new QLabel("X :");
     razmerSpinBox = new QSpinBox();
     razmerSpinBox->setRange(1,100);
     razmerSpinBox->setValue(3);
-    QPushButton *copymatrices = new QPushButton("Скопировать 3 матрицы");
-    QPushButton *insertmatrices = new QPushButton("Вставить 3 матрицы");
-    sizeButton->setFixedSize(320, 30);
+
+    copy3Icon = new QIcon(createColoredIcon(":/Icons/iconmonstr-copy-lined-nigga_3.svg", iconColor));
+    copymatrices = new QPushButton;
+    copymatrices->setIcon(*copy3Icon);
+
+    insert3Icon = new QIcon(createColoredIcon(":/Icons/iconmonstr-paste-clipboard-filled_3.svg", iconColor));
+    insertmatrices = new QPushButton;
+    insertmatrices->setIcon(*insert3Icon);
+
+    // sizeButton->setFixedSize(320, 30);
     razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
     razmerHButtonLayout->addWidget(sizeButton);
     razmerHButtonLayout->addWidget(razmer);
@@ -66,8 +79,12 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerHButtonLayout->addWidget(copymatrices);
     razmerHButtonLayout->addWidget(insertmatrices);
     razmerVLayout->addLayout(razmerHButtonLayout);
-    QPushButton *swapmatrixAB = new QPushButton("Поменять местами матрицы");
-    swapmatrixAB->setFixedSize(650, 30);
+
+    swapIcon = new QIcon(createColoredIcon(":/Icons/arrow-goes-left-right-icon.svg", iconColor));
+    swapmatrixAB = new QPushButton;
+    swapmatrixAB->setIcon(*swapIcon);
+
+    // swapmatrixAB->setFixedSize(650, 30);
     razmerVLayout->addWidget(swapmatrixAB, 0, Qt::AlignHCenter);
     razmerVLayout->addStretch();
 
@@ -98,10 +115,17 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     colsASpinBox->setRange(1, 10);
     colsASpinBox->setValue(3);
 
-    QPushButton *CreateMatrixA = new QPushButton("Поменять размер");
+    changeSizeIcon = new QIcon(createColoredIcon(":/Icons/four-corners-arrows-line-icon.svg", iconColor));
+    CreateMatrixA = new QPushButton;
+    CreateMatrixA->setIcon(*changeSizeIcon);
 
-    QPushButton *CopyMatrixA = new QPushButton("Скопировать");
-    QPushButton *InsertMatrixA = new QPushButton("Вставить");
+    copyIcon = new QIcon(createColoredIcon(":/Icons/copyIcon.svg", iconColor));
+    CopyMatrixA = new QPushButton(); // Use member variable
+    CopyMatrixA->setIcon(*copyIcon);
+
+    insertIcon = new QIcon(createColoredIcon(":/Icons/insertIcon.svg", iconColor));
+    InsertMatrixA = new QPushButton();
+    InsertMatrixA->setIcon(*insertIcon);
 
     SIzeLayout->addWidget(StrokiALabel);
     SIzeLayout->addWidget(rowsASpinBox);
@@ -159,10 +183,16 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     colsBSpinBox->setRange(1, 10);
     colsBSpinBox->setValue(3);
 
-    QPushButton *CreateMatrixB = new QPushButton("Поменять размер");
+    CreateMatrixB = new QPushButton;
+    CreateMatrixB->setIcon(*changeSizeIcon);
 
-    QPushButton *CopyMatrixB = new QPushButton("Скопировать");
-    QPushButton *InsertMatrixB = new QPushButton("Вставить");
+    // QPushButton *CopyMatrixB = new QPushButton("Скопировать");
+    // QPushButton *InsertMatrixB = new QPushButton("Вставить");
+
+    CopyMatrixB = new QPushButton();
+    CopyMatrixB->setIcon(*copyIcon);
+    InsertMatrixB = new QPushButton();
+    InsertMatrixB->setIcon(*insertIcon);
 
     SIzeLayout->addWidget(StrokiBLabel);
     SIzeLayout->addWidget(rowsBSpinBox);
@@ -205,12 +235,28 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout* operationsLayout = new QHBoxLayout(operationsWidget);
     QLabel* operationsLabel = new QLabel("Операции: ");
 
-    QPushButton* summButton = new QPushButton("А+B");
+
+    multiply = new QIcon(createColoredIcon(":/Icons/mathematics-sign-multiplied-round-icon.svg", iconColor));
+    summarize = new QIcon(createColoredIcon(":/Icons/plus-round-icon.svg", iconColor));
+    substract = new QIcon(createColoredIcon(":/Icons/minus-round-icon.svg", iconColor));
+    cleanIcon = new QIcon(createColoredIcon(":/Icons/broom-cleaning-icon.svg", iconColor));
+    randomizeIcon = new QIcon(createColoredIcon(":/Icons/RAND.svg", iconColor));
+
+    summButton = new QPushButton;
+    summButton->setIcon(*summarize);
     summButton->setToolTip("SOSAT'");
-    QPushButton* raznButton = new QPushButton("A-B");
-    QPushButton* multiplyButton = new QPushButton("A*B");
-    QPushButton* clearButton = new QPushButton("Очистить матрицы");
-    QPushButton* randomButton = new QPushButton("Добавить рандомные числа в матрицы A и B");
+
+    raznButton = new QPushButton;
+    raznButton->setIcon(*substract);
+
+    multiplyButton = new QPushButton;
+    multiplyButton->setIcon(*multiply);
+
+    clearButton = new QPushButton;
+    clearButton->setIcon(*cleanIcon);
+
+    randomButton = new QPushButton;
+    randomButton->setIcon(*randomizeIcon);
 
 
     operationsLayout->addWidget(operationsLabel);
@@ -228,7 +274,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout* matrixc = new QHBoxLayout();
     QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
     QLabel* matrixCLabel = new QLabel("Результирующая матрица");
-    QPushButton *CopyMatrixC = new QPushButton("Скопировать");
+
+    CopyMatrixC = new QPushButton;
+    CopyMatrixC->setIcon(*copyIcon);
+
     matrixc->setAlignment(Qt::AlignLeft);
     matrixCTable = new QTableWidget();
     matrixc->addWidget(matrixCLabel);
@@ -448,26 +497,74 @@ Matrix_Calculator::~Matrix_Calculator()
         substract
     };
 
-    const int arraySize = sizeof(qicons) / sizeof(qicons[0]);
+    const int arraySize = qicons.size();
 
-    // Удаляем все указатели в цикле
     for (int i = 0; i < arraySize; i++) {
         delete qicons[i];
     }
 
-    // Qt автоматически освобождает память для виджетов, которые являются
-    // дочерними (имеют родителя) благодаря системе родитель-потомок.
-    // Поскольку все виджеты имеют родителя (this или другой виджет),
-    // дополнительное освобождение памяти для них не требуется.
-
-    // Если бы были другие объекты, созданные с помощью new и не являющиеся
-    // дочерними объектами (без родителя), их нужно было бы освободить здесь.
-
-    // Удаляем валидаторы, если они не привязаны к родительским объектам
     QList<QValidator*> validators = findChildren<QValidator*>();
     for (QValidator* validator : std::as_const(validators)) {
         if (!validator->parent()) {
             delete validator;
         }
     }
+}
+#include <QPalette>
+#include <QSvgRenderer>
+#include <QPainter>
+
+// Функция для определения темы
+bool Matrix_Calculator::isDarkTheme() {
+    QPalette palette = QApplication::palette();
+    return palette.color(QPalette::Window).lightness() < 128;
+}
+
+// Функция для изменения цвета SVG-иконки
+QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor &color) {
+    QSvgRenderer renderer(iconPath);
+    QImage image(32, 32, QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    renderer.render(&painter);
+
+    // Применяем цветовой фильтр
+    for (int x = 0; x < image.width(); ++x) {
+        for (int y = 0; y < image.height(); ++y) {
+            QColor pixel = image.pixelColor(x, y);
+            if (pixel.alpha() > 0) {
+                image.setPixelColor(x, y, color);
+            }
+        }
+    }
+
+    return QIcon(QPixmap::fromImage(image));
+}
+
+void Matrix_Calculator::updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath) {
+    QColor iconColor = isDarkTheme() ? Qt::white : Qt::black;
+
+    if (icon && button) {
+        *icon = createColoredIcon(iconPath, iconColor);
+        button->setIcon(*icon);
+    }
+}
+
+void Matrix_Calculator::onPaletteChanged() {
+    updateIcons(copyIcon, CopyMatrixA, ":/Icons/copyIcon.svg");
+    updateIcons(insertIcon, InsertMatrixA, ":/Icons/insertIcon.svg");
+    updateIcons(copyIcon, CopyMatrixB, ":/Icons/copyIcon.svg");
+    updateIcons(insertIcon, InsertMatrixB, ":/Icons/insertIcon.svg");
+    updateIcons(copyIcon, CopyMatrixC, ":/Icons/copyIcon.svg");
+    updateIcons(change3SizeIcon, sizeButton, ":/Icons/iconmonstr-screen-size-increase-filled.svg");
+    updateIcons(copy3Icon, copymatrices, ":/Icons/iconmonstr-copy-lined-nigga_3.svg");
+    updateIcons(insert3Icon, insertmatrices, ":/Icons/iconmonstr-paste-clipboard-filled_3.svg");
+    updateIcons(swapIcon, swapmatrixAB, ":/Icons/arrow-goes-left-right-icon.svg");
+    updateIcons(changeSizeIcon, CreateMatrixA, ":/Icons/four-corners-arrows-line-icon.svg");
+    updateIcons(changeSizeIcon, CreateMatrixB, ":/Icons/four-corners-arrows-line-icon.svg");
+    updateIcons(multiply, multiplyButton, ":/Icons/mathematics-sign-multiplied-round-icon.svg");
+    updateIcons(summarize, summButton, ":/Icons/plus-round-icon.svg");
+    updateIcons(substract, raznButton, ":/Icons/minus-round-icon.svg");
+    updateIcons(cleanIcon, clearButton, ":/Icons/broom-cleaning-icon.svg");
+    updateIcons(randomizeIcon, randomButton, ":/Icons/RAND.svg");
 }

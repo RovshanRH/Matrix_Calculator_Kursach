@@ -1,5 +1,17 @@
 <RCC>
     <qresource prefix="/">
         <file>Icons/Icon.png</file>
+        <file>Icons/arrow-goes-left-right-icon.svg</file>
+        <file>Icons/broom-cleaning-icon.svg</file>
+        <file>Icons/four-corners-arrows-line-icon.svg</file>
+        <file>Icons/iconmonstr-copy-lined-nigga_3.svg</file>
+        <file>Icons/iconmonstr-screen-size-increase-filled.svg</file>
+        <file>Icons/mathematics-sign-multiplied-round-icon.svg</file>
+        <file>Icons/minus-round-icon.svg</file>
+        <file>Icons/iconmonstr-paste-clipboard-filled_3.svg</file>
+        <file>Icons/plus-round-icon.svg</file>
+        <file>Icons/copyIcon.svg</file>
+        <file>Icons/insertIcon.svg</file>
+        <file>Icons/RAND.svg</file>
     </qresource>
 </RCC>
