@@ -57,6 +57,17 @@ private:
     copymatrix copy;
     insertmatrix insert;
     QIcon *appIcon;
+    QIcon *copyIcon;
+    QIcon *insertIcon;
+    QIcon *changeSizeIcon;
+    QIcon *change3SizeIcon;
+    QIcon *copy3Icon;
+    QIcon *insert3Icon;
+    QIcon *cleanIcon;
+    QIcon *randomizeIcon;
+    QIcon *swapIcon;
+    QIcon *transposeAIcon, *transposeBIcon, *inverseAIcon, *inverseBIcon, *AmultyplybyC, *AsubstractbyC, *BmultyplybyC, *BsubstractbyC;
+    QIcon *multiply, *summarize, *substract;
 };
 
 #endif // MATRIX_CALCULATOR_H

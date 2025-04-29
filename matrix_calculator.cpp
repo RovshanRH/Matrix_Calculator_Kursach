@@ -206,6 +206,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QLabel* operationsLabel = new QLabel("Операции: ");
 
     QPushButton* summButton = new QPushButton("А+B");
+    summButton->setToolTip("SOSAT'");
     QPushButton* raznButton = new QPushButton("A-B");
     QPushButton* multiplyButton = new QPushButton("A*B");
     QPushButton* clearButton = new QPushButton("Очистить матрицы");
@@ -423,7 +424,36 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
 Matrix_Calculator::~Matrix_Calculator()
 {
-    delete appIcon;
+    vector<QIcon*> qicons {
+        appIcon,
+        copyIcon,
+        insertIcon,
+        changeSizeIcon,
+        change3SizeIcon,
+        copy3Icon,
+        insert3Icon,
+        cleanIcon,
+        randomizeIcon,
+        swapIcon,
+        transposeAIcon,
+        transposeBIcon,
+        inverseAIcon,
+        inverseBIcon,
+        AmultyplybyC,
+        AsubstractbyC,
+        BmultyplybyC,
+        BsubstractbyC,
+        multiply,
+        summarize,
+        substract
+    };
+
+    const int arraySize = sizeof(qicons) / sizeof(qicons[0]);
+
+    // Удаляем все указатели в цикле
+    for (int i = 0; i < arraySize; i++) {
+        delete qicons[i];
+    }
 
     // Qt автоматически освобождает память для виджетов, которые являются
     // дочерними (имеют родителя) благодаря системе родитель-потомок.
