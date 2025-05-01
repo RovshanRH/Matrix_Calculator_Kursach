@@ -31,3 +31,7 @@ void matrix::create2Matrices(QTableWidget* matrix1, QTableWidget* matrix2, int r
     createMatrix(matrix2, rows, cols);
 }
 
+
+
+
+

@@ -5,6 +5,7 @@
 #include <QTableWidget>
 #include <QSpinBox>
 #include <QVector>
+#include <QMenu>
 #include <QApplication>
 #include <QGridLayout>
 #include <QVBoxLayout>
