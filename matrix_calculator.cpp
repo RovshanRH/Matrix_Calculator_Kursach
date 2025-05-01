@@ -205,10 +205,22 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // Кнопки для матрицы А
     QWidget *matrixAButtonsWidget = new QWidget();
     QHBoxLayout *matrixAButtonsLayout = new QHBoxLayout(matrixAButtonsWidget);
-    QPushButton *transposeAButton = new QPushButton("Aᵀ");
-    QPushButton *inverseAButton = new QPushButton("A⁻¹");
-    QPushButton *multyplyConstantA = new QPushButton("* на c");
-    QPushButton *divideConstantA = new QPushButton("/ на c");
+
+    transposeAIcon = new QIcon(createColoredIcon(":/Icons/A-transpose.svg", iconColor));
+    transposeAButton = new QPushButton();
+    transposeAButton->setIcon(*transposeAIcon);
+
+    inverseAIcon = new QIcon(createColoredIcon(":/Icons/A-inverse.svg", iconColor));
+    inverseAButton = new QPushButton();
+    inverseAButton->setIcon(*inverseAIcon);
+
+    AmultyplybyC = new QIcon(createColoredIcon(":/Icons/multiplyC.svg", iconColor));
+    multyplyConstantA = new QPushButton();
+    multyplyConstantA->setIcon(*AmultyplybyC);
+
+    AsubstractbyC = new QIcon(createColoredIcon(":/Icons/divC.svg", iconColor));
+    divideConstantA = new QPushButton();
+    divideConstantA->setIcon(*AsubstractbyC);
 
     constantA = new QLineEdit();
     QDoubleValidator *validatorA = new QDoubleValidator(-1000.0, 1000.0, 2, constantA);
@@ -310,10 +322,22 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // Кнопки для матрицы B
     QWidget *matrixBButtonsWidget = new QWidget();
     QHBoxLayout *matrixBButtonsLayout = new QHBoxLayout(matrixBButtonsWidget);
-    QPushButton *transposeBButton = new QPushButton("Bᵀ");
-    QPushButton *inverseBButton = new QPushButton("B⁻¹");
-    QPushButton *multyplyConstantB = new QPushButton("* на c");
-    QPushButton *divideConstantB = new QPushButton("/ на c");
+
+    transposeBIcon = new QIcon(createColoredIcon(":/Icons/B-transpose.svg", iconColor));
+    transposeBButton = new QPushButton;
+    transposeBButton->setIcon(*transposeBIcon);
+
+    inverseBIcon = new QIcon(createColoredIcon(":/Icons/B-inverse.svg", iconColor));
+    inverseBButton = new QPushButton;
+    inverseBButton->setIcon(*inverseBIcon);
+
+    BmultyplybyC = new QIcon(createColoredIcon(":/Icons/multiplyC.svg", iconColor));
+    multyplyConstantB = new QPushButton;
+    multyplyConstantB->setIcon(*BmultyplybyC);
+
+    BsubstractbyC = new QIcon(createColoredIcon(":/Icons/multiplyC.svg", iconColor));
+    divideConstantB = new QPushButton;
+    divideConstantB->setIcon(*BsubstractbyC);
 
     constantB = new QLineEdit();
     QDoubleValidator *validatorB = new QDoubleValidator(-1000.0, 1000.0, 2, constantB);
@@ -380,19 +404,19 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // Результирующая матрица C
     // QWidget* SizeMatrixC = new QWidget();
     QWidget* matrixCWidget = new QWidget();
-    QHBoxLayout* matrixc = new QHBoxLayout();
+    // QHBoxLayout* matrixc = new QHBoxLayout();
     QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
     // QLabel* matrixCLabel = new QLabel("Результирующая матрица");
 
-    CopyMatrixC = new QPushButton;
-    CopyMatrixC->setIcon(*copyIcon);
-    CopyMatrixC->setToolTip("Скопировать матрицу");
+    // CopyMatrixC = new QPushButton;
+    // CopyMatrixC->setIcon(*copyIcon);
+    // CopyMatrixC->setToolTip("Скопировать матрицу");
 
-    matrixc->setAlignment(Qt::AlignLeft);
+    // matrixc->setAlignment(Qt::AlignLeft);
     matrixCTable = new QTableWidget();
     // matrixc->addWidget(matrixCLabel);
-    matrixc->addWidget(CopyMatrixC);
-    matrixCLayout->addLayout(matrixc);
+    // matrixc->addWidget(CopyMatrixC);
+    // matrixCLayout->addLayout(matrixc);
     matrixCLayout->addWidget(matrixCTable);
 
     rowsCSpinBox = new QSpinBox();
@@ -403,7 +427,36 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     // MainLayout->addWidget(SizeMatrixC);
 
+    matrixCTable->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(matrixCTable, &QTableWidget::customContextMenuRequested, this, [this](const QPoint &pos) {
+        QMenu *contextMenuC = new QMenu("Меню выбора", this);
+
+        QAction *copyAction = new QAction(tr("Скопировать"), this);
+        QAction *pasteAction = new QAction(tr("Вставить"), this);
+        QAction *clearAction = new QAction(tr("Очистить"), this);
+
+        contextMenuC->addAction(copyAction);
+        contextMenuC->addAction(pasteAction);
+        contextMenuC->addAction(clearAction);
+
+        connect(copyAction, &QAction::triggered, this, [this]() {
+            copy.copy(matrixCTable);
+        });
+
+        connect(pasteAction, &QAction::triggered, this, [this]() {
+            insert.insert(matrixCTable);
+        });
+
+        connect(clearAction, &QAction::triggered, this, [this]() {
+            clean.clearMatrices(matrixCTable);
+        });
+
+        contextMenuC->exec(matrixCTable->mapToGlobal(pos));
+    });
+
     MainLayout->addWidget(matrixCWidget);
+
 
     connect(CreateMatrixA, &QPushButton::clicked, this, [this]() {
         matr.createMatrix(matrixATable, rowsASpinBox->value(), colsASpinBox->value());
@@ -569,9 +622,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     connect(CopyMatrixB, &QPushButton::clicked, this, [this]() {
         copy.copy(matrixBTable);
     });
-    connect(CopyMatrixC, &QPushButton::clicked, this, [this]() {
-        copy.copy(matrixCTable);
-    });
+    // connect(CopyMatrixC, &QPushButton::clicked, this, [this]() {
+    //     copy.copy(matrixCTable);
+    // });
     connect(copymatrices, &QPushButton::clicked, this, [this]() {
         copy.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
     });
@@ -663,10 +716,13 @@ QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor
 void Matrix_Calculator::updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath) {
     QColor iconColor = isDarkTheme() ? Qt::white : Qt::black;
 
-    if (icon && button) {
-        *icon = createColoredIcon(iconPath, iconColor);
-        button->setIcon(*icon);
+    if (!icon || !button) {
+        qWarning() << "Warning: Invalid icon or button for iconPath" << iconPath;
+        return;
     }
+
+    *icon = createColoredIcon(iconPath, iconColor);
+    button->setIcon(*icon);
 }
 
 void Matrix_Calculator::onPaletteChanged() {
@@ -674,7 +730,7 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(insertIcon, InsertMatrixA, ":/Icons/insertIcon.svg");
     updateIcons(copyIcon, CopyMatrixB, ":/Icons/copyIcon.svg");
     updateIcons(insertIcon, InsertMatrixB, ":/Icons/insertIcon.svg");
-    updateIcons(copyIcon, CopyMatrixC, ":/Icons/copyIcon.svg");
+    // updateIcons(copyIcon, CopyMatrixC, ":/Icons/copyIcon.svg");
     updateIcons(change3SizeIcon, sizeButton, ":/Icons/iconmonstr-screen-size-increase-filled.svg");
     updateIcons(copy3Icon, copymatrices, ":/Icons/iconmonstr-copy-lined-nigga_3.svg");
     updateIcons(insert3Icon, insertmatrices, ":/Icons/iconmonstr-paste-clipboard-filled_3.svg");
@@ -686,4 +742,12 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(substract, raznButton, ":/Icons/minus-round-icon.svg");
     updateIcons(cleanIcon, clearButton, ":/Icons/broom-cleaning-icon.svg");
     updateIcons(randomizeIcon, randomButton, ":/Icons/RAND.svg");
+    updateIcons(transposeAIcon, transposeAButton, ":/Icons/A-transpose.svg");
+    updateIcons(inverseAIcon, inverseAButton, ":/Icons/A-inverse.svg");
+    updateIcons(transposeBIcon, transposeBButton, ":/Icons/B-transpose.svg");
+    updateIcons(inverseBIcon, inverseBButton, ":/Icons/B-inverse.svg");
+    updateIcons(AmultyplybyC, multyplyConstantA, ":/Icons/multiplyC.svg");
+    updateIcons(AsubstractbyC, divideConstantA, ":/Icons/divC.svg");
+    updateIcons(BmultyplybyC, multyplyConstantB, ":/Icons/multiplyC.svg");
+    updateIcons(BsubstractbyC, divideConstantB, ":/Icons/divC.svg");
 }

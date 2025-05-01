@@ -13,5 +13,13 @@
         <file>Icons/copyIcon.svg</file>
         <file>Icons/insertIcon.svg</file>
         <file>Icons/RAND.svg</file>
+        <file>Icons/A-inverse.svg</file>
+        <file>Icons/A-transpose.svg</file>
+        <file>Icons/B-inverse.svg</file>
+        <file>Icons/B-transpose.svg</file>
+        <file>Icons/divC.svg</file>
+        <file>Icons/Down-triangle.svg</file>
+        <file>Icons/multiplyC.svg</file>
+        <file>Icons/Up-triangle.svg</file>
     </qresource>
 </RCC>

@@ -75,7 +75,8 @@ private:
     QIcon *transposeAIcon, *transposeBIcon, *inverseAIcon, *inverseBIcon, *AmultyplybyC, *AsubstractbyC, *BmultyplybyC, *BsubstractbyC;
     QIcon *multiply, *summarize, *substract;
     QPushButton *CopyMatrixA, * InsertMatrixA, * CopyMatrixB, * InsertMatrixB, * CopyMatrixC,  * sizeButton, * copymatrices, * insertmatrices, * swapmatrixAB, * CreateMatrixA, * CreateMatrixB,
-        * summButton, * raznButton, * multiplyButton, * clearButton, * randomButton;
+        * summButton, * raznButton, * multiplyButton, * clearButton, * randomButton, * transposeAButton, * inverseAButton, * multyplyConstantA, * divideConstantA, * transposeBButton, * inverseBButton,
+        * multyplyConstantB, * divideConstantB;
 private slots:
     void onPaletteChanged();
 };

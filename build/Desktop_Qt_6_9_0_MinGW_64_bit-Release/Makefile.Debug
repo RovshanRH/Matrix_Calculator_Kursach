@@ -152,16 +152,24 @@ debug/qrc_resources.cpp: ../../resources.qrc \
 		C:/Qt/6.9.0/mingw_64/bin/rcc.exe \
 		../../Icons/four-corners-arrows-line-icon.svg \
 		../../Icons/Icon.png \
+		../../Icons/Down-triangle.svg \
 		../../Icons/copyIcon.svg \
+		../../Icons/Up-triangle.svg \
+		../../Icons/B-transpose.svg \
 		../../Icons/RAND.svg \
 		../../Icons/minus-round-icon.svg \
 		../../Icons/broom-cleaning-icon.svg \
 		../../Icons/iconmonstr-copy-lined-nigga_3.svg \
 		../../Icons/mathematics-sign-multiplied-round-icon.svg \
+		../../Icons/multiplyC.svg \
 		../../Icons/insertIcon.svg \
 		../../Icons/plus-round-icon.svg \
 		../../Icons/iconmonstr-paste-clipboard-filled_3.svg \
+		../../Icons/B-inverse.svg \
+		../../Icons/A-transpose.svg \
 		../../Icons/arrow-goes-left-right-icon.svg \
+		../../Icons/A-inverse.svg \
+		../../Icons/divC.svg \
 		../../Icons/iconmonstr-screen-size-increase-filled.svg
 	C:\Qt\6.9.0\mingw_64\bin\rcc.exe -name resources --no-zstd ..\..\resources.qrc -o debug\qrc_resources.cpp
 
@@ -1536,6 +1544,8 @@ debug/moc_matrix_calculator.cpp: ../../matrix_calculator.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qspinbox.h \
 		C:/Qt/6.9.0/mingw_64/include/QtCore/QVector \
 		C:/Qt/6.9.0/mingw_64/include/QtCore/qvector.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QMenu \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qmenu.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QApplication \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qapplication.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QGridLayout \
@@ -2269,6 +2279,8 @@ debug/main.o: ../../main.cpp C:/Qt/6.9.0/mingw_64/include/QtWidgets/QApplication
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qspinbox.h \
 		C:/Qt/6.9.0/mingw_64/include/QtCore/QVector \
 		C:/Qt/6.9.0/mingw_64/include/QtCore/qvector.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QMenu \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qmenu.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QGridLayout \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qgridlayout.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qlayout.h \
@@ -3662,6 +3674,8 @@ debug/matrix_calculator.o: ../../matrix_calculator.cpp ../../matrix_calculator.h
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qspinbox.h \
 		C:/Qt/6.9.0/mingw_64/include/QtCore/QVector \
 		C:/Qt/6.9.0/mingw_64/include/QtCore/qvector.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QMenu \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qmenu.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QApplication \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qapplication.h \
 		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QGridLayout \
