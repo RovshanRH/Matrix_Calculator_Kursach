@@ -31,65 +31,83 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *hlayout = new QHBoxLayout();
     QVBoxLayout *vlayout = new QVBoxLayout(vlayoutWidget);
 
-    QLabel *iconlabel = new QLabel();
-    iconlabel->setAlignment(Qt::AlignLeft);
-    appIcon = new QIcon(":/Icons/Icon.png");
-    iconlabel->setPixmap(appIcon->pixmap(50, 50));
-    hlayout->addWidget(iconlabel);
+    // QLabel *iconlabel = new QLabel();
+    // iconlabel->setAlignment(Qt::AlignLeft);
+    // appIcon = new QIcon(":/Icons/Icon.png");
+    // iconlabel->setPixmap(appIcon->pixmap(50, 50));
+    // hlayout->addWidget(iconlabel);
 
-    QLabel *labeltext = new QLabel("Калькулятор матриц");
-    QFont font = labeltext->font();
-    font.setPointSize(20);
-    labeltext->setFont(font);
-    hlayout->addWidget(labeltext);
-    hlayout->addStretch();
-    vlayout->addLayout(hlayout);
-    auto lineA = new QFrame;
-    lineA->setFrameShape(QFrame::HLine);
-    lineA->setFrameShadow(QFrame::Sunken);
-    vlayout->addWidget(lineA);
-    vlayout->addStretch();
+    // QLabel *labeltext = new QLabel("Калькулятор матриц");
+    // QFont font = labeltext->font();
+    // font.setPointSize(20);
+    // labeltext->setFont(font);
+    // hlayout->addWidget(labeltext);
+    // hlayout->addStretch();
+    // vlayout->addLayout(hlayout);
 
-    QWidget *razmerButtonWidget = new QWidget();
-    QHBoxLayout *razmerHButtonLayout = new QHBoxLayout();
-    QVBoxLayout *razmerVLayout = new QVBoxLayout(razmerButtonWidget);
+
+    // QWidget *razmerButtonWidget = new QWidget();
+    // QHBoxLayout *razmerHButtonLayout = new QHBoxLayout();
+    // QVBoxLayout *razmerVLayout = new QVBoxLayout(razmerButtonWidget);
 
     change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
     sizeButton = new QPushButton;
     sizeButton->setIcon(*change3SizeIcon);
+    sizeButton->setToolTip("Задать Х размер квадратов А и В значением");
 
     QLabel *razmer = new QLabel("X :");
     razmerSpinBox = new QSpinBox();
     razmerSpinBox->setRange(1,100);
     razmerSpinBox->setValue(3);
+    razmerSpinBox->setToolTip("Задать значение Х");
 
     copy3Icon = new QIcon(createColoredIcon(":/Icons/iconmonstr-copy-lined-nigga_3.svg", iconColor));
     copymatrices = new QPushButton;
     copymatrices->setIcon(*copy3Icon);
+    copymatrices->setToolTip("Скопировать значения 3 матриц");
 
     insert3Icon = new QIcon(createColoredIcon(":/Icons/iconmonstr-paste-clipboard-filled_3.svg", iconColor));
     insertmatrices = new QPushButton;
     insertmatrices->setIcon(*insert3Icon);
-
-    // sizeButton->setFixedSize(320, 30);
-    razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
-    razmerHButtonLayout->addWidget(sizeButton);
-    razmerHButtonLayout->addWidget(razmer);
-    razmerHButtonLayout->addWidget(razmerSpinBox);
-    razmerHButtonLayout->addWidget(copymatrices);
-    razmerHButtonLayout->addWidget(insertmatrices);
-    razmerVLayout->addLayout(razmerHButtonLayout);
+    insertmatrices->setToolTip("Вставить из буфер обменя 3 матрицы");
 
     swapIcon = new QIcon(createColoredIcon(":/Icons/arrow-goes-left-right-icon.svg", iconColor));
     swapmatrixAB = new QPushButton;
     swapmatrixAB->setIcon(*swapIcon);
+    swapmatrixAB->setToolTip("Поменять местами матрицы");
+
+    // sizeButton->setFixedSize(320, 30);
+    // razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
+    // razmerHButtonLayout->addWidget(sizeButton);
+    // razmerHButtonLayout->addWidget(razmer);
+    // razmerHButtonLayout->addWidget(razmerSpinBox);
+    // razmerHButtonLayout->addWidget(copymatrices);
+    // razmerHButtonLayout->addWidget(insertmatrices);
+    // razmerVLayout->addLayout(razmerHButtonLayout);
+    hlayout->setAlignment(Qt::AlignLeft);
+    hlayout->addWidget(sizeButton);
+    hlayout->addWidget(razmer);
+    hlayout->addWidget(razmerSpinBox);
+    hlayout->addWidget(copymatrices);
+    hlayout->addWidget(insertmatrices);
+    hlayout->addWidget(swapmatrixAB);
+    vlayout->addLayout(hlayout);
+
+    auto lineA = new QFrame;
+    lineA->setFrameShape(QFrame::HLine);
+    lineA->setFrameShadow(QFrame::Sunken);
+    vlayout->addWidget(lineA);
+    // vlayout->addStretch();
+
 
     // swapmatrixAB->setFixedSize(650, 30);
-    razmerVLayout->addWidget(swapmatrixAB, 0, Qt::AlignHCenter);
-    razmerVLayout->addStretch();
+    // razmerVLayout->addWidget(swapmatrixAB, 0, Qt::AlignHCenter);
+    // razmerVLayout->addStretch();
+
+    // MainLayout->addWidget(vlayoutWidget);
+    // MainLayout->addWidget(razmerButtonWidget);
 
     MainLayout->addWidget(vlayoutWidget);
-    MainLayout->addWidget(razmerButtonWidget);
 
     // Матрица А
     QWidget* SizeMatrixA = new QWidget();
@@ -118,14 +136,17 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     changeSizeIcon = new QIcon(createColoredIcon(":/Icons/four-corners-arrows-line-icon.svg", iconColor));
     CreateMatrixA = new QPushButton;
     CreateMatrixA->setIcon(*changeSizeIcon);
+    CreateMatrixA->setToolTip("Поменять размер");
 
     copyIcon = new QIcon(createColoredIcon(":/Icons/copyIcon.svg", iconColor));
     CopyMatrixA = new QPushButton(); // Use member variable
     CopyMatrixA->setIcon(*copyIcon);
+    CopyMatrixA->setToolTip("Скопировать матрицу");
 
     insertIcon = new QIcon(createColoredIcon(":/Icons/insertIcon.svg", iconColor));
     InsertMatrixA = new QPushButton();
     InsertMatrixA->setIcon(*insertIcon);
+    InsertMatrixA->setToolTip("Вставить из буфер обмена");
 
     SIzeLayout->addWidget(StrokiALabel);
     SIzeLayout->addWidget(rowsASpinBox);
@@ -185,14 +206,17 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     CreateMatrixB = new QPushButton;
     CreateMatrixB->setIcon(*changeSizeIcon);
+    CreateMatrixB->setToolTip("Поменять размер");
 
     // QPushButton *CopyMatrixB = new QPushButton("Скопировать");
     // QPushButton *InsertMatrixB = new QPushButton("Вставить");
 
     CopyMatrixB = new QPushButton();
     CopyMatrixB->setIcon(*copyIcon);
+    CopyMatrixB->setToolTip("Скопировать матрицу");
     InsertMatrixB = new QPushButton();
     InsertMatrixB->setIcon(*insertIcon);
+    InsertMatrixB->setToolTip("Вставить из буфер обмена");
 
     SIzeLayout->addWidget(StrokiBLabel);
     SIzeLayout->addWidget(rowsBSpinBox);
@@ -244,19 +268,23 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     summButton = new QPushButton;
     summButton->setIcon(*summarize);
-    summButton->setToolTip("SOSAT'");
+    summButton->setToolTip("Найти сумму");
 
     raznButton = new QPushButton;
     raznButton->setIcon(*substract);
+    raznButton->setToolTip("Найти разность");
 
     multiplyButton = new QPushButton;
     multiplyButton->setIcon(*multiply);
+    multiplyButton->setToolTip("Найти произведение");
 
     clearButton = new QPushButton;
     clearButton->setIcon(*cleanIcon);
+    clearButton->setToolTip("Очистить матрицы А и В");
 
     randomButton = new QPushButton;
     randomButton->setIcon(*randomizeIcon);
+    randomButton->setToolTip("Вставить случайные значения в матрицы А и В");
 
 
     operationsLayout->addWidget(operationsLabel);
@@ -277,6 +305,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     CopyMatrixC = new QPushButton;
     CopyMatrixC->setIcon(*copyIcon);
+    CopyMatrixC->setToolTip("Скопировать матрицу");
 
     matrixc->setAlignment(Qt::AlignLeft);
     matrixCTable = new QTableWidget();
