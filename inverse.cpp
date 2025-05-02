@@ -4,7 +4,7 @@
 
 inverse::inverse(QObject *parent) : QObject(parent) {}
 
-QVector<QVector<double>> getMatrixFromTable(QTableWidget *table)
+QVector<QVector<double>> inverse::getMatrixFromTable(QTableWidget *table)
 {
     int rows = table->rowCount();
     int cols = table->columnCount();

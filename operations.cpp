@@ -202,3 +202,48 @@ void Operations::transposeMatrix(QTableWidget *matrix) {
 
 int Operations::rows_getter(QTableWidget *matrix) {return matrix->rowCount();}
 int Operations::cols_getter(QTableWidget *matrix) {return matrix->columnCount();}
+
+int Operations::FindRang(QTableWidget* matrix) {
+    QVector<QVector<double>> matr  = inv.getMatrixFromTable(matrix);
+    int rows = matrix->rowCount();
+    int cols = matrix->columnCount();
+    int rang = 0;
+    const double eps = 1e-10;
+
+    for (int col{0}; col < cols && rang < rows;col++) {
+        int pivot_row = rang;
+        while(pivot_row < rows && abs(matr[pivot_row][col]) < eps) {
+            pivot_row++;
+        }
+
+        if (pivot_row == rows) {
+            continue;
+        }
+
+        if (pivot_row != rang) {
+            std::swap(matr[rang], matr[pivot_row]);
+        }
+        for (int row = rang+1; row < rows; row++) {
+            if (abs(matr[row][col]) > eps) {
+                double factor = matr[row][col] / matr[rang][col];
+                for (int j{col}; j < cols; j++) {
+                    matr[row][j] -= factor * matr[rang][j];
+                }
+            }
+        }
+        rang++;
+    }
+
+    for (int row = rang; row < rows; row++) {
+        bool non_zero = false;
+        for (int col{}; col < cols; col++) {
+            if (abs(matr[row][col]) > eps) {
+                non_zero = true;
+                break;
+            }
+        }
+        if (non_zero) rang++;
+    }
+
+    return rang;
+};

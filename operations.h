@@ -1,10 +1,11 @@
 #ifndef OPERATIONS_H
 #define OPERATIONS_H
 
-// #include "stabilizingcsize.h"
 #include <QObject>
 #include <QTableWidget>
 #include <QMessageBox>
+#include <QVector>
+#include "inverse.h"
 
 class Operations : public QObject
 {
@@ -18,6 +19,7 @@ public slots:
     void swapMatrices(QTableWidget *matrix1, QTableWidget *matrix2, QVector<QVector<double>> tempB, QVector<QVector<double>> tempA);
     void multyplyconstant(QTableWidget *matrix, double cnst);
     void divisionconstant(QTableWidget *matrix, double cnst);
+    int FindRang(QTableWidget *matrix);
 
     int rows_getter(QTableWidget *matrix);
     int cols_getter(QTableWidget *matrix);
@@ -26,6 +28,8 @@ public slots:
     QVector<QVector<double>> settempB(int rows, int cols, QTableWidget *matrix);
 
     void transposeMatrix(QTableWidget *matrix);
+private:
+    inverse inv;
 
 };
 

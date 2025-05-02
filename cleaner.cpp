@@ -13,6 +13,6 @@ void Cleaner::clearMatrices(QTableWidget* matrix) {
     }
 }
 
-void Cleaner::clearMatrixA() {}
-void Cleaner::clearMatrixB() {}
-void Cleaner::clearMatrixC() {}
+// void Cleaner::clearMatrixA() {}
+// void Cleaner::clearMatrixB() {}
+// void Cleaner::clearMatrixC() {}

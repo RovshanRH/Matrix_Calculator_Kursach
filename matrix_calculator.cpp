@@ -135,10 +135,17 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         QAction *copyAction = new QAction(tr("Скопировать"), this);
         QAction *pasteAction = new QAction(tr("Вставить"), this);
         QAction *clearAction = new QAction(tr("Очистить"), this);
+        QAction *addOneMatrixAction = new QAction(tr("Вставить единичную матрицу"), this);
+        QAction *addUpTriangleAction = new QAction(tr("Вставить верхнюю треугольную матрицу"), this);
+        QAction *addDownTriangleAction = new QAction(tr("Вставить нижнюю треугольную матрицу"), this);
 
         contextMenu.addAction(copyAction);
         contextMenu.addAction(pasteAction);
         contextMenu.addAction(clearAction);
+        contextMenu.addSeparator();
+        contextMenu.addAction(addOneMatrixAction);
+        contextMenu.addAction(addUpTriangleAction);
+        contextMenu.addAction(addDownTriangleAction);
 
         connect(copyAction, &QAction::triggered, this, [this]() {
             copy.copy(matrixATable);
@@ -150,6 +157,17 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
         connect(clearAction, &QAction::triggered, this, [this]() {
             clean.clearMatrices(matrixATable);
+        });
+
+        connect(addOneMatrixAction, &QAction::triggered, this, [this]() {
+            matr.BasicOneMatrix(matrixATable, matrixATable->rowCount(), matrixATable->columnCount());
+        });
+
+        connect(addUpTriangleAction, &QAction::triggered, this, [this]() {
+            matr.BasicUpTriangleMatrix(matrixATable, matrixATable->rowCount(), matrixATable->columnCount());
+        });
+        connect(addDownTriangleAction, &QAction::triggered, this, [this]() {
+            matr.BasicDownTriangleMatrix(matrixATable, matrixATable->rowCount(), matrixATable->columnCount());
         });
 
         contextMenu.exec(matrixATable->mapToGlobal(pos));
@@ -228,11 +246,21 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     constantA->setPlaceholderText("const");
     // matrixAButtonsLayout->addWidget(constantA);
 
+    QLabel *RangAText = new QLabel("Ранг: ");
+    QLabel *RangAValue = new QLabel();
+    RangAValue->setText(QString::number(oper.FindRang(matrixATable)));
+
+    // connect(matrixATable, &QTableWidget::itemChanged, this, [this]() {
+    //     RangAValue->setText(QString::number(oper.FindRang(matrixATable)));
+    // });
+
     matrixAButtonsLayout->addWidget(transposeAButton);
     matrixAButtonsLayout->addWidget(inverseAButton);
     matrixAButtonsLayout->addWidget(multyplyConstantA);
     matrixAButtonsLayout->addWidget(divideConstantA);
     matrixAButtonsLayout->addWidget(constantA);
+    matrixAButtonsLayout->addWidget(RangAText);
+    matrixAButtonsLayout->addWidget(RangAValue);
     matrixAButtonsLayout->addStretch();
     matrixALayout->addWidget(matrixAButtonsWidget);
     // matrixALayout->addLayout(matrixAButtonsLayout);
@@ -419,11 +447,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // matrixCLayout->addLayout(matrixc);
     matrixCLayout->addWidget(matrixCTable);
 
-    rowsCSpinBox = new QSpinBox();
-    rowsCSpinBox->setValue(3);
+    // rowsCSpinBox = new QSpinBox();
+    // rowsCSpinBox->setValue(3);
 
-    colsCSpinBox = new QSpinBox();
-    colsCSpinBox->setValue(3);
+    // colsCSpinBox = new QSpinBox();
+    // colsCSpinBox->setValue(3);
 
     // MainLayout->addWidget(SizeMatrixC);
 
@@ -639,6 +667,62 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         insert.insertThreeMatrices(matrixATable, matrixBTable, matrixCTable);
     });
 
+    CentralWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(CentralWidget, &QTableWidget::customContextMenuRequested, this, [this, CentralWidget](const QPoint &pos) {
+        QMenu *menuBar = new QMenu(tr("Режим выбора"), this);
+
+        QAction *copy3Action = new QAction(tr("Скопировать 3 матрицы"), this);
+        QAction *paste3Action = new QAction(tr("Вставить 3 матрицы"), this);
+        QAction *cleareAllAction = new QAction(tr("Очистить матрицы"), this);
+        QAction *swapAction = new QAction(tr("Поменять матрицы А и В местами"), this);
+
+        menuBar->addAction(copy3Action);
+        menuBar->addAction(paste3Action);
+        menuBar->addAction(cleareAllAction);
+        menuBar->addAction(swapAction);
+
+        connect(copy3Action, &QAction::triggered, this, [this]() {
+            copy.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
+        });
+        connect(paste3Action, &QAction::triggered, this, [this]() {
+            insert.insertThreeMatrices(matrixATable, matrixBTable, matrixCTable);
+        });
+        connect(cleareAllAction, &QAction::triggered, this, [this]() {
+            clean.clearMatrices(matrixATable);
+            clean.clearMatrices(matrixBTable);
+            clean.clearMatrices(matrixCTable);
+        });
+        connect(swapAction, &QAction::triggered, this, [this]() {
+            // Сохраняем старые размеры до изменения матриц
+            int oldRowsA = matrixATable->rowCount();
+            int oldColsA = matrixATable->columnCount();
+            int oldRowsB = matrixBTable->rowCount();
+            int oldColsB = matrixBTable->columnCount();
+
+            // Сохраняем данные матриц перед перестановкой
+            QVector<QVector<double>> tempA = oper.settempA(oper.rows_getter(matrixATable), oper.cols_getter(matrixATable), matrixATable);
+            QVector<QVector<double>> tempB = oper.settempB(oper.rows_getter(matrixBTable), oper.cols_getter(matrixBTable), matrixBTable);
+
+            // Обновляем значения спин-боксов
+            rowsASpinBox->setValue(oldRowsB);
+            colsASpinBox->setValue(oldColsB);
+            rowsBSpinBox->setValue(oldRowsA);
+            colsBSpinBox->setValue(oldColsA);
+
+            // Создаём матрицы с правильными размерами
+            matr.createMatrix(matrixATable, oldRowsB, oldColsB);
+            matr.createMatrix(matrixBTable, oldRowsA, oldColsA);
+
+            // Меняем значения местами
+            oper.swapMatrices(matrixATable, matrixBTable, tempB, tempA);
+        });
+
+        menuBar->exec(CentralWidget->mapToGlobal(pos));
+
+    });
+
+
     matr.create3Matrices(matrixATable, matrixBTable, matrixCTable, 3, 3);
 
 }
@@ -751,3 +835,76 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(BmultyplybyC, multyplyConstantB, ":/Icons/multiplyC.svg");
     updateIcons(BsubstractbyC, divideConstantB, ":/Icons/divC.svg");
 }
+
+void Matrix_Calculator::setupMatrix(
+    QVBoxLayout *&MainLayout,
+    QWidget *&SizeWidget,
+    QHBoxLayout *&SizeLayout,
+    QVBoxLayout *&MatrixLayout,
+    QTableWidget*& MatrixTable,
+    QSpinBox*& rowsSpinBox,
+    QSpinBox*& colsSpinBox,
+    QPushButton*& CreateMatrix,
+    QWidget *&matrixButtonsWidget,
+    QHBoxLayout *&matrixButtonsLayout,
+    QLabel*& RangText,
+    QLabel*& RangValue,
+    std::string& name)
+{
+    MatrixTable->setToolTip(QString::fromStdString(name));
+    MatrixTable->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    // Connect the custom context menu signal
+    connect(MatrixTable, &QTableWidget::customContextMenuRequested, this, [this, MatrixTable](const QPoint &pos) {
+        QMenu contextMenu(tr("Меню выбора"), this);
+
+        QAction *copyAction = new QAction(tr("Скопировать"), this);
+        QAction *pasteAction = new QAction(tr("Вставить"), this);
+        QAction *clearAction = new QAction(tr("Очистить"), this);
+        QAction *addOneMatrixAction = new QAction(tr("Вставить единичную матрицу"), this);
+        QAction *addUpTriangleAction = new QAction(tr("Вставить верхнюю треугольную матрицу"), this);
+        QAction *addDownTriangleAction = new QAction(tr("Вставить нижнюю треугольную матрицу"), this);
+
+        contextMenu.addAction(copyAction);
+        contextMenu.addAction(pasteAction);
+        contextMenu.addAction(clearAction);
+        contextMenu.addSeparator();
+        contextMenu.addAction(addOneMatrixAction);
+        contextMenu.addAction(addUpTriangleAction);
+        contextMenu.addAction(addDownTriangleAction);
+
+        connect(copyAction, &QAction::triggered, this, [this, MatrixTable]() {
+            copy.copy(MatrixTable);
+        });
+
+        connect(pasteAction, &QAction::triggered, this, [this, MatrixTable]() {
+            insert.insert(MatrixTable);
+        });
+
+        connect(clearAction, &QAction::triggered, this, [this, MatrixTable]() {
+            clean.clearMatrices(MatrixTable);
+        });
+
+        connect(addOneMatrixAction, &QAction::triggered, this, [this, MatrixTable]() {
+            matr.BasicOneMatrix(MatrixTable, MatrixTable->rowCount(), MatrixTable->columnCount());
+        });
+
+        connect(addUpTriangleAction, &QAction::triggered, this, [this, MatrixTable]() {
+            matr.BasicUpTriangleMatrix(MatrixTable, MatrixTable->rowCount(), MatrixTable->columnCount());
+        });
+        connect(addDownTriangleAction, &QAction::triggered, this, [this, MatrixTable]() {
+            matr.BasicDownTriangleMatrix(MatrixTable, MatrixTable->rowCount(), MatrixTable->columnCount());
+        });
+
+        contextMenu.exec(MatrixTable->mapToGlobal(pos));
+    });
+
+    rowsSpinBox->setRange(0, 10);
+    rowsSpinBox->setValue(3);
+
+    colsSpinBox->setRange(0, 10);
+    colsSpinBox->setValue(3);
+
+
+};
+

@@ -11,9 +11,9 @@ public:
     explicit Cleaner(QObject *parent = nullptr);
 public slots:
     void clearMatrices(QTableWidget* matrix);
-    void clearMatrixA();
-    void clearMatrixB();
-    void clearMatrixC();
+    // void clearMatrixA();
+    // void clearMatrixB();
+    // void clearMatrixC();
 };
 
 #endif // CLEANER_H

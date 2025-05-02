@@ -13,6 +13,7 @@ public:
     inverse(QObject *parent = nullptr);
 public slots:
     void invertMatrix(QTableWidget *table);
+    QVector<QVector<double>> getMatrixFromTable(QTableWidget *table);
 };
 
 #endif // INVERSE_H

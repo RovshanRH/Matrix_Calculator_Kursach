@@ -32,6 +32,68 @@ void matrix::create2Matrices(QTableWidget* matrix1, QTableWidget* matrix2, int r
 }
 
 
+void matrix::BasicOneMatrix(QTableWidget *matrix, int rows, int cols) {
+    if (rows == 1 && cols == 1) {
+        QMessageBox::warning(nullptr, "Ошибка", "Матрица единичная");
+        return;
+    }
 
+    // Устанавливаем квадратную матрицу
+    int size = qMax(rows, cols);
+    matrix->setRowCount(size);
+    matrix->setColumnCount(size);
 
+    for (int i{}; i < size; i++) {
+        for (int j{}; j < size; j++) {
+            if (i == j) {
+                QTableWidgetItem *item = new QTableWidgetItem("1");
+                matrix->setItem(i, j, item);
+            } else {
+                QTableWidgetItem *item = new QTableWidgetItem("0");
+                matrix->setItem(i, j, item);
+            }
+        }
+    }
+}
 
+void matrix::BasicDownTriangleMatrix(QTableWidget *matrix, int rows, int cols) {
+    if (rows == 1 && cols == 1) {
+        QMessageBox::warning(nullptr, "Ошибка", "Матрица единичная");
+        return;
+    }
+
+    // Устанавливаем квадратную матрицу
+    int size = qMax(rows, cols);
+    matrix->setRowCount(size);
+    matrix->setColumnCount(size);
+
+    for (int i{}; i < size; i++) {
+        for (int j{}; j < size; j++) {
+            QString value = (i >= j) ? "1" : "0";
+            QTableWidgetItem *item = new QTableWidgetItem(value);
+            matrix->setItem(i, j, item);
+        }
+    }
+    matrix->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    matrix->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+}
+
+void matrix::BasicUpTriangleMatrix(QTableWidget* matrix, int rows, int cols) {
+    if (rows == 1 && cols == 1) {
+        QMessageBox::warning(nullptr, "Ошибка", "Матрица единичная");
+        return;
+    }
+
+    // Устанавливаем квадратную матрицу
+    int size = qMax(rows, cols);
+    matrix->setRowCount(size);
+    matrix->setColumnCount(size);
+
+    for (int i{}; i < size; i++) {
+        for (int j{}; j < size; j++) {
+            QString value = (i <= j) ? "1" : "0";
+            QTableWidgetItem *item = new QTableWidgetItem(value);
+            matrix->setItem(i, j, item);
+        }
+    }
+}

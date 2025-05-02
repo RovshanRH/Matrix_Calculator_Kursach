@@ -42,13 +42,27 @@ private:
     bool isDarkTheme();
     QIcon createColoredIcon(const QString &iconPath, const QColor &color);
     void updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath);
+    void setupMatrix(
+        QVBoxLayout *&MainLayout,
+        QWidget *&SizeWidget,
+        QHBoxLayout *&SizeLayout,
+        QVBoxLayout *&MatrixLayout,
+        QTableWidget*& MatrixTable,
+        QSpinBox*& rowsSpinBox,
+        QSpinBox*& colsSpinBox,
+        QPushButton*& CreateMatrix,
+        QWidget *&matrixButtonsWidget,
+        QHBoxLayout *&matrixButtonsLayout,
+        QLabel*& RangText,
+        QLabel*& RangValue,
+        std::string &name);
 
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;
     QSpinBox *rowsBSpinBox;
     QSpinBox *colsBSpinBox;
-    QSpinBox *rowsCSpinBox;
-    QSpinBox *colsCSpinBox;
+    // QSpinBox *rowsCSpinBox;
+    // QSpinBox *colsCSpinBox;
     QSpinBox *razmerSpinBox;
     QLineEdit *constantA;
     QLineEdit *constantB;
@@ -79,6 +93,7 @@ private:
         * multyplyConstantB, * divideConstantB;
 private slots:
     void onPaletteChanged();
+
 };
 
 #endif // MATRIX_CALCULATOR_H

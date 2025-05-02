@@ -13,6 +13,8 @@
 #include <QLineEdit>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QMessageBox>
+
 
 class matrix : public QObject
 {
@@ -23,6 +25,9 @@ public slots:
     void create3Matrices(QTableWidget* matrix1, QTableWidget* matrix2, QTableWidget* matrix3, int rows, int cols);
     void create2Matrices(QTableWidget* matrix1, QTableWidget* matrix2, int rows, int cols);
     void createMatrix(QTableWidget* matrix, int rows, int cols);
+    void BasicUpTriangleMatrix(QTableWidget* matrix, int rows, int cols);
+    void BasicDownTriangleMatrix(QTableWidget* matrix, int rows, int cols);
+    void BasicOneMatrix(QTableWidget* matrix, int rows, int cols);
 
 private:
     QSpinBox* rowsSpinBox;

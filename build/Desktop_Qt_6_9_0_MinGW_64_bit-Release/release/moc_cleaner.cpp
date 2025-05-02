@@ -42,10 +42,7 @@ template <> constexpr inline auto Cleaner::qt_create_metaobjectdata<qt_meta_tag_
         "clearMatrices",
         "",
         "QTableWidget*",
-        "matrix",
-        "clearMatrixA",
-        "clearMatrixB",
-        "clearMatrixC"
+        "matrix"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -53,12 +50,6 @@ template <> constexpr inline auto Cleaner::qt_create_metaobjectdata<qt_meta_tag_
         QtMocHelpers::SlotData<void(QTableWidget *)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
             { 0x80000000 | 3, 4 },
         }}),
-        // Slot 'clearMatrixA'
-        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'clearMatrixB'
-        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPublic, QMetaType::Void),
-        // Slot 'clearMatrixC'
-        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -83,9 +74,6 @@ void Cleaner::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->clearMatrices((*reinterpret_cast< std::add_pointer_t<QTableWidget*>>(_a[1]))); break;
-        case 1: _t->clearMatrixA(); break;
-        case 2: _t->clearMatrixB(); break;
-        case 3: _t->clearMatrixC(); break;
         default: ;
         }
     }
@@ -122,14 +110,14 @@ int Cleaner::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 1;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 1;
     }
     return _id;
 }
