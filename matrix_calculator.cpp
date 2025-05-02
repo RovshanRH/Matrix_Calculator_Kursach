@@ -838,6 +838,8 @@ void Matrix_Calculator::onPaletteChanged() {
 
 void Matrix_Calculator::setupMatrix(
     QVBoxLayout *&MainLayout,
+    QHBoxLayout *&MatricesLayout,
+    QWidget *&MatricesWidget,
     QWidget *&SizeWidget,
     QHBoxLayout *&SizeLayout,
     QVBoxLayout *&MatrixLayout,
@@ -856,6 +858,7 @@ void Matrix_Calculator::setupMatrix(
 
     // Connect the custom context menu signal
     connect(MatrixTable, &QTableWidget::customContextMenuRequested, this, [this, MatrixTable](const QPoint &pos) {
+
         QMenu contextMenu(tr("Меню выбора"), this);
 
         QAction *copyAction = new QAction(tr("Скопировать"), this);
@@ -905,6 +908,29 @@ void Matrix_Calculator::setupMatrix(
     colsSpinBox->setRange(0, 10);
     colsSpinBox->setValue(3);
 
+    SizeLayout->addWidget(rowsSpinBox);
+    SizeLayout->addWidget(colsSpinBox);
+    SizeLayout->addWidget(CreateMatrix);
+    SizeLayout->setAlignment(Qt::AlignLeft);
 
+    MatrixLayout->addLayout(SizeLayout);
+    MatrixLayout->addWidget(matrixATable);
+
+
+    RangText->setText("Ранг ");
+    RangValue->setText(QString::number(oper.FindRang(MatrixTable)));
+
+    // matrixButtonsLayout->addWidget(transposeAButton);
+    // matrixButtonsLayout->addWidget(inverseAButton);
+    // matrixButtonsLayout->addWidget(multyplyConstantA);
+    // matrixButtonsLayout->addWidget(divideConstantA);
+    // matrixButtonsLayout->addWidget(constantA);
+    matrixButtonsLayout->addWidget(RangText);
+    matrixButtonsLayout->addWidget(RangValue);
+    matrixButtonsLayout->addStretch();
+    MatrixLayout->addWidget(matrixButtonsWidget);
+
+    MatricesLayout->addWidget(SizeWidget);
+    MainLayout->addWidget(MatricesWidget);
 };
 

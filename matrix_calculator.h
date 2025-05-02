@@ -43,7 +43,7 @@ private:
     QIcon createColoredIcon(const QString &iconPath, const QColor &color);
     void updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath);
     void setupMatrix(
-        QVBoxLayout *&MainLayout,
+        QVBoxLayout *&MainLayout, QHBoxLayout *&MatricesLayout, QWidget *&MatricesWidget,
         QWidget *&SizeWidget,
         QHBoxLayout *&SizeLayout,
         QVBoxLayout *&MatrixLayout,
