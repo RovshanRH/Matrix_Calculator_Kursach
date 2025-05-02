@@ -6,7 +6,6 @@
 #include "copymatrix.h"
 #include "insertmatrix.h"
 
-
 using namespace std;
 
 Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
@@ -35,24 +34,14 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // vlayout->setSpacing(0);
     vlayout->setContentsMargins(0,0,0,0);
 
-    // QLabel *iconlabel = new QLabel();
-    // iconlabel->setAlignment(Qt::AlignLeft);
-    // appIcon = new QIcon(":/Icons/Icon.png");
-    // iconlabel->setPixmap(appIcon->pixmap(50, 50));
-    // hlayout->addWidget(iconlabel);
+    QPushButton* help = new QPushButton(tr("Помощь"), this);
 
-    // QLabel *labeltext = new QLabel("Калькулятор матриц");
-    // QFont font = labeltext->font();
-    // font.setPointSize(20);
-    // labeltext->setFont(font);
-    // hlayout->addWidget(labeltext);
-    // hlayout->addStretch();
-    // vlayout->addLayout(hlayout);
-
-
-    // QWidget *razmerButtonWidget = new QWidget();
-    // QHBoxLayout *razmerHButtonLayout = new QHBoxLayout();
-    // QVBoxLayout *razmerVLayout = new QVBoxLayout(razmerButtonWidget);
+    connect(help, &QPushButton::clicked, this, []() {
+        QMainWindow *helpWindow = new QMainWindow();
+        helpWindow->setWindowTitle(tr("Помощь"));
+        helpWindow->resize(300, 200);
+        helpWindow->show();
+    });
 
     change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
     sizeButton = new QPushButton;
@@ -95,6 +84,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     hlayout->addWidget(copymatrices);
     hlayout->addWidget(insertmatrices);
     hlayout->addWidget(swapmatrixAB);
+    hlayout->addWidget(help);
     vlayout->addLayout(hlayout);
 
     auto lineA = new QFrame;

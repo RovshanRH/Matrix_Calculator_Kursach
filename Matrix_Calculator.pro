@@ -9,6 +9,7 @@ TEMPLATE = app
 SOURCES += main.cpp \
     cleaner.cpp \
     copymatrix.cpp \
+    helpwindow.cpp \
     insertmatrix.cpp \
     inverse.cpp \
     matrix.cpp \
@@ -24,6 +25,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     cleaner.h \
     copymatrix.h \
+    helpwindow.h \
     insertmatrix.h \
     inverse.h \
     matrix.h \
