@@ -1,4 +1,6 @@
 #include "matrix_calculator.h"
+#include "qpainter.h"
+#include "qsvgrenderer.h"
 #include "randomizer.h"
 #include "cleaner.h"
 #include "operations.h"
@@ -12,6 +14,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 {
     setWindowTitle("Калькулятор матриц");
     setMinimumSize(900, 680);
+
+    // Initialize appIcon here which was missing
+    appIcon = nullptr;
 
     // глав виджет и компоновка
     QWidget* CentralWidget = new QWidget(this);
@@ -37,10 +42,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QPushButton* help = new QPushButton(tr("Помощь"), this);
 
     connect(help, &QPushButton::clicked, this, []() {
-        QMainWindow *helpWindow = new QMainWindow();
-        helpWindow->setWindowTitle(tr("Помощь"));
-        helpWindow->resize(300, 200);
-        helpWindow->show();
+        // QMainWindow *helpWindow = new QMainWindow();
+        // helpWindow->setWindowTitle(tr("Помощь"));
+        // helpWindow->resize(900, 680);
+        // helpWindow->show();
     });
 
     change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
@@ -49,8 +54,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     sizeButton->setToolTip("Задать Х размер квадратов А и В значением");
 
     QLabel *razmer = new QLabel("X :");
-    razmerSpinBox = new QSpinBox();
-    razmerSpinBox->setRange(1,100);
+    razmerSpinBox = new QSpinBox;
+    razmerSpinBox->setRange(1,10);
     razmerSpinBox->setValue(3);
     razmerSpinBox->setToolTip("Задать значение Х");
 
@@ -69,14 +74,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     swapmatrixAB->setIcon(*swapIcon);
     swapmatrixAB->setToolTip("Поменять местами матрицы");
 
-    // sizeButton->setFixedSize(320, 30);
-    // razmerHButtonLayout->setAlignment(Qt::AlignHCenter);
-    // razmerHButtonLayout->addWidget(sizeButton);
-    // razmerHButtonLayout->addWidget(razmer);
-    // razmerHButtonLayout->addWidget(razmerSpinBox);
-    // razmerHButtonLayout->addWidget(copymatrices);
-    // razmerHButtonLayout->addWidget(insertmatrices);
-    // razmerVLayout->addLayout(razmerHButtonLayout);
     hlayout->setAlignment(Qt::AlignLeft);
     hlayout->addWidget(sizeButton);
     hlayout->addWidget(razmer);
@@ -91,92 +88,24 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     lineA->setFrameShape(QFrame::HLine);
     lineA->setFrameShadow(QFrame::Sunken);
     vlayout->addWidget(lineA);
-    // vlayout->addStretch();
-
-
-    // swapmatrixAB->setFixedSize(650, 30);
-    // razmerVLayout->addWidget(swapmatrixAB, 0, Qt::AlignHCenter);
-    // razmerVLayout->addStretch();
-
-    // MainLayout->addWidget(vlayoutWidget);
-    // MainLayout->addWidget(razmerButtonWidget);
 
     MainLayout->addWidget(vlayoutWidget);
 
     // Матрица А
     QWidget* SizeMatrixA = new QWidget();
     QHBoxLayout* SizeLayoutA = new QHBoxLayout;
-    // SizeLayoutA->setSpacing(0);
-    // SizeLayoutA->setContentsMargins(0,0,0,0);
 
-    // QWidget *matrixAWidget = new QWidget();
     QVBoxLayout *matrixALayout = new QVBoxLayout(SizeMatrixA);
-    // QLabel *matrixALabel = new QLabel("Матрица A");
     matrixATable = new QTableWidget();
     matrixATable->setToolTip("Матрица А");
 
-
-    matrixATable->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    // Connect the custom context menu signal
-    connect(matrixATable, &QTableWidget::customContextMenuRequested, this, [this](const QPoint &pos) {
-        QMenu contextMenu(tr("Меню выбора"), this);
-
-        QAction *copyAction = new QAction(tr("Скопировать"), this);
-        QAction *pasteAction = new QAction(tr("Вставить"), this);
-        QAction *clearAction = new QAction(tr("Очистить"), this);
-        QAction *addOneMatrixAction = new QAction(tr("Вставить единичную матрицу"), this);
-        QAction *addUpTriangleAction = new QAction(tr("Вставить верхнюю треугольную матрицу"), this);
-        QAction *addDownTriangleAction = new QAction(tr("Вставить нижнюю треугольную матрицу"), this);
-
-        contextMenu.addAction(copyAction);
-        contextMenu.addAction(pasteAction);
-        contextMenu.addAction(clearAction);
-        contextMenu.addSeparator();
-        contextMenu.addAction(addOneMatrixAction);
-        contextMenu.addAction(addUpTriangleAction);
-        contextMenu.addAction(addDownTriangleAction);
-
-        connect(copyAction, &QAction::triggered, this, [this]() {
-            copy.copy(matrixATable);
-        });
-
-        connect(pasteAction, &QAction::triggered, this, [this]() {
-            insert.insert(matrixATable);
-        });
-
-        connect(clearAction, &QAction::triggered, this, [this]() {
-            clean.clearMatrices(matrixATable);
-        });
-
-        connect(addOneMatrixAction, &QAction::triggered, this, [this]() {
-            matr.BasicOneMatrix(matrixATable, matrixATable->rowCount(), matrixATable->columnCount());
-        });
-
-        connect(addUpTriangleAction, &QAction::triggered, this, [this]() {
-            matr.BasicUpTriangleMatrix(matrixATable, matrixATable->rowCount(), matrixATable->columnCount());
-        });
-        connect(addDownTriangleAction, &QAction::triggered, this, [this]() {
-            matr.BasicDownTriangleMatrix(matrixATable, matrixATable->rowCount(), matrixATable->columnCount());
-        });
-
-        contextMenu.exec(matrixATable->mapToGlobal(pos));
-    });
-
-    // Кнопки для настройки размера матрицы А
-    // Строки
-    // QLabel *StrokiALabel = new QLabel("Строки A: ");
     rowsASpinBox = new QSpinBox();
-    rowsASpinBox->setRange(1, 10);
-    rowsASpinBox->setValue(3);
-    rowsASpinBox->setToolTip("Строки А");
+    // rowsASpinBox->setRange(1, 10);
+    // rowsASpinBox->setValue(3);
 
-    // Столбцы
-    // QLabel *StolbciALabel = new QLabel("Столбцы A: ");
     colsASpinBox = new QSpinBox();
-    colsASpinBox->setRange(1, 10);
-    colsASpinBox->setValue(3);
-    colsASpinBox->setToolTip("Столбцы А");
+    // colsASpinBox->setRange(1, 10);
+    // colsASpinBox->setValue(3);
 
     changeSizeIcon = new QIcon(createColoredIcon(":/Icons/four-corners-arrows-line-icon.svg", iconColor));
     CreateMatrixA = new QPushButton;
@@ -184,7 +113,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     CreateMatrixA->setToolTip("Поменять размер");
 
     copyIcon = new QIcon(createColoredIcon(":/Icons/copyIcon.svg", iconColor));
-    CopyMatrixA = new QPushButton(); // Use member variable
+    CopyMatrixA = new QPushButton();
     CopyMatrixA->setIcon(*copyIcon);
     CopyMatrixA->setToolTip("Скопировать матрицу");
 
@@ -192,23 +121,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     InsertMatrixA = new QPushButton();
     InsertMatrixA->setIcon(*insertIcon);
     InsertMatrixA->setToolTip("Вставить из буфер обмена");
-
-    // SizeLayoutA->addWidget(matrixALabel);
-    // SizeLayoutA->addWidget(StrokiALabel);
-    SizeLayoutA->addWidget(rowsASpinBox);
-    // SizeLayoutA->addWidget(StolbciALabel);
-    SizeLayoutA->addWidget(colsASpinBox);
-    SizeLayoutA->addWidget(CreateMatrixA);
-    SizeLayoutA->addWidget(CopyMatrixA);
-    SizeLayoutA->addWidget(InsertMatrixA);
-    SizeLayoutA->setAlignment(Qt::AlignLeft);
-    // SizeLayoutA->addStretch();
-
-    matrixALayout->addLayout(SizeLayoutA);
-    matrixALayout->addWidget(matrixATable);
-
-
-    // MainLayout->addWidget(SizeMatrixA);
 
     // Кнопки для матрицы А
     QWidget *matrixAButtonsWidget = new QWidget();
@@ -234,108 +146,60 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QDoubleValidator *validatorA = new QDoubleValidator(-1000.0, 1000.0, 2, constantA);
     constantA->setValidator(validatorA);
     constantA->setPlaceholderText("const");
-    // matrixAButtonsLayout->addWidget(constantA);
 
-    QLabel *RangAText = new QLabel("Ранг: ");
-    QLabel *RangAValue = new QLabel();
-    RangAValue->setText(QString::number(oper.FindRang(matrixATable)));
+    qDebug() << "setup A start";
 
-    // connect(matrixATable, &QTableWidget::itemChanged, this, [this]() {
-    //     RangAValue->setText(QString::number(oper.FindRang(matrixATable)));
-    // });
+    setupMatrix(
+        MainLayout,
+        MatricesLayout,
+        matricesWidget,
+        SizeMatrixA,
+        SizeLayoutA,
+        matrixALayout,
+        matrixATable,
+        rowsASpinBox,
+        colsASpinBox,
+        CreateMatrixA,
+        transposeAButton,
+        inverseAButton,
+        multyplyConstantA,
+        divideConstantA,
+        constantA,
+        matrixAButtonsWidget,
+        matrixAButtonsLayout,
+        "матрица А"
+        );
 
-    matrixAButtonsLayout->addWidget(transposeAButton);
-    matrixAButtonsLayout->addWidget(inverseAButton);
-    matrixAButtonsLayout->addWidget(multyplyConstantA);
-    matrixAButtonsLayout->addWidget(divideConstantA);
-    matrixAButtonsLayout->addWidget(constantA);
-    matrixAButtonsLayout->addWidget(RangAText);
-    matrixAButtonsLayout->addWidget(RangAValue);
-    matrixAButtonsLayout->addStretch();
-    matrixALayout->addWidget(matrixAButtonsWidget);
-    // matrixALayout->addLayout(matrixAButtonsLayout);
+    qDebug() << "setup A end";
 
     // Матрица B
     QWidget* SizeMatrixB = new QWidget();
     QHBoxLayout* SizeLayoutB = new QHBoxLayout;
 
-    // QWidget *matrixBWidget = new QWidget();
     QVBoxLayout *matrixBLayout = new QVBoxLayout(SizeMatrixB);
-    // QLabel *matrixBLabel = new QLabel("Матрица B");
     matrixBTable = new QTableWidget();
     matrixBTable->setToolTip("Матрица В");
-    // matrixBLayout->addWidget(matrixBLabel);
 
-    matrixBTable->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    connect(matrixBTable, &QTableWidget::customContextMenuRequested, this, [this](const QPoint &pos) {
-        QMenu *contextMenuB = new QMenu("Меню выбора", this);
-
-        QAction *copyAction = new QAction(tr("Скопировать"), this);
-        QAction *pasteAction = new QAction(tr("Вставить"), this);
-        QAction *clearAction = new QAction(tr("Очистить"), this);
-
-        contextMenuB->addAction(copyAction);
-        contextMenuB->addAction(pasteAction);
-        contextMenuB->addAction(clearAction);
-
-        connect(copyAction, &QAction::triggered, this, [this]() {
-            copy.copy(matrixBTable);
-        });
-
-        connect(pasteAction, &QAction::triggered, this, [this]() {
-            insert.insert(matrixBTable);
-        });
-
-        connect(clearAction, &QAction::triggered, this, [this]() {
-            clean.clearMatrices(matrixBTable);
-        });
-
-        contextMenuB->exec(matrixBTable->mapToGlobal(pos));
-    });
-
-
-    // Кнопки для настройки размера матрицы B
-    // Строки
-    // QLabel *StrokiBLabel = new QLabel("Строки B: ");
     rowsBSpinBox = new QSpinBox();
-    rowsBSpinBox->setRange(1, 10);
-    rowsBSpinBox->setValue(3);
-    rowsBSpinBox->setToolTip("Строки В");
+    // rowsBSpinBox->setRange(1, 10);
+    // rowsBSpinBox->setValue(3);
 
-    // Столбцы
-    // QLabel *StolbciBLabel = new QLabel("Столбцы B: ");
     colsBSpinBox = new QSpinBox();
-    colsBSpinBox->setRange(1, 10);
-    colsBSpinBox->setValue(3);
-    colsBSpinBox->setToolTip("Столбцы В");
+    // colsBSpinBox->setRange(1, 10);
+    // colsBSpinBox->setValue(3);
 
     CreateMatrixB = new QPushButton;
     CreateMatrixB->setIcon(*changeSizeIcon);
     CreateMatrixB->setToolTip("Поменять размер");
 
-    // QPushButton *CopyMatrixB = new QPushButton("Скопировать");
-    // QPushButton *InsertMatrixB = new QPushButton("Вставить");
-
+    // Initialize these buttons which were missing
     CopyMatrixB = new QPushButton();
     CopyMatrixB->setIcon(*copyIcon);
     CopyMatrixB->setToolTip("Скопировать матрицу");
+
     InsertMatrixB = new QPushButton();
     InsertMatrixB->setIcon(*insertIcon);
     InsertMatrixB->setToolTip("Вставить из буфер обмена");
-
-
-    // SizeLayoutB->addWidget(StrokiBLabel);
-    SizeLayoutB->addWidget(rowsBSpinBox);
-    // SizeLayoutB->addWidget(StolbciBLabel);
-    SizeLayoutB->addWidget(colsBSpinBox);
-    SizeLayoutB->addWidget(CreateMatrixB);
-    SizeLayoutB->addWidget(CopyMatrixB);
-    SizeLayoutB->addWidget(InsertMatrixB);
-    SizeLayoutB->setAlignment(Qt::AlignLeft);
-    // SizeLayoutB->addStretch();
-    matrixBLayout->addLayout(SizeLayoutB);
-    matrixBLayout->addWidget(matrixBTable);
 
     // Кнопки для матрицы B
     QWidget *matrixBButtonsWidget = new QWidget();
@@ -353,7 +217,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     multyplyConstantB = new QPushButton;
     multyplyConstantB->setIcon(*BmultyplybyC);
 
-    BsubstractbyC = new QIcon(createColoredIcon(":/Icons/multiplyC.svg", iconColor));
+    // Fix: Changed icon path to the correct one for division
+    BsubstractbyC = new QIcon(createColoredIcon(":/Icons/divC.svg", iconColor));
     divideConstantB = new QPushButton;
     divideConstantB->setIcon(*BsubstractbyC);
 
@@ -361,27 +226,36 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QDoubleValidator *validatorB = new QDoubleValidator(-1000.0, 1000.0, 2, constantB);
     constantB->setValidator(validatorB);
     constantB->setPlaceholderText("const");
-    matrixBButtonsLayout->addWidget(constantB);
 
-    matrixBButtonsLayout->addWidget(transposeBButton);
-    matrixBButtonsLayout->addWidget(inverseBButton);
-    matrixBButtonsLayout->addWidget(multyplyConstantB);
-    matrixBButtonsLayout->addWidget(divideConstantB);
-    matrixBButtonsLayout->addWidget(constantB);
-    matrixBButtonsLayout->addStretch();
-    matrixBLayout->addWidget(matrixBButtonsWidget);
+    qDebug() << "Setup B start";
 
-    MatricesLayout->addWidget(SizeMatrixA);
-    MatricesLayout->addWidget(SizeMatrixB);
-    MainLayout->addWidget(matricesWidget);
+    setupMatrix(
+        MainLayout,
+        MatricesLayout,
+        matricesWidget,
+        SizeMatrixB,
+        SizeLayoutB,
+        matrixBLayout,
+        matrixBTable,
+        rowsBSpinBox,
+        colsBSpinBox,
+        CreateMatrixB,
+        transposeBButton,
+        inverseBButton,
+        multyplyConstantB,
+        divideConstantB,
+        constantB,
+        matrixBButtonsWidget,
+        matrixBButtonsLayout,
+        "матрица В"
+        );
+
+    qDebug() << "Setup B end";
 
     // операции над матрицами
     QWidget* operationsWidget = new QWidget();
     QHBoxLayout* operationsLayout = new QHBoxLayout(operationsWidget);
     operationsLayout->setSpacing(0);
-
-    // QLabel* operationsLabel = new QLabel("Операции: ");
-
 
     multiply = new QIcon(createColoredIcon(":/Icons/mathematics-sign-multiplied-round-icon.svg", iconColor));
     summarize = new QIcon(createColoredIcon(":/Icons/plus-round-icon.svg", iconColor));
@@ -409,8 +283,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     randomButton->setIcon(*randomizeIcon);
     randomButton->setToolTip("Вставить случайные значения в матрицы А и В");
 
-
-    // operationsLayout->addWidget(operationsLabel);
     operationsLayout->addWidget(summButton);
     operationsLayout->addWidget(raznButton);
     operationsLayout->addWidget(multiplyButton);
@@ -420,30 +292,21 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     MainLayout->addWidget(operationsWidget);
 
     // Результирующая матрица C
-    // QWidget* SizeMatrixC = new QWidget();
     QWidget* matrixCWidget = new QWidget();
-    // QHBoxLayout* matrixc = new QHBoxLayout();
     QVBoxLayout* matrixCLayout = new QVBoxLayout(matrixCWidget);
-    // QLabel* matrixCLabel = new QLabel("Результирующая матрица");
 
-    // CopyMatrixC = new QPushButton;
-    // CopyMatrixC->setIcon(*copyIcon);
-    // CopyMatrixC->setToolTip("Скопировать матрицу");
+    // Add CopyMatrixC button which was commented out
+    CopyMatrixC = new QPushButton;
+    CopyMatrixC->setIcon(*copyIcon);
+    CopyMatrixC->setToolTip("Скопировать матрицу");
 
-    // matrixc->setAlignment(Qt::AlignLeft);
+    QHBoxLayout* matrixc = new QHBoxLayout();
+    matrixc->setAlignment(Qt::AlignLeft);
+    matrixc->addWidget(CopyMatrixC);
+    matrixCLayout->addLayout(matrixc);
+
     matrixCTable = new QTableWidget();
-    // matrixc->addWidget(matrixCLabel);
-    // matrixc->addWidget(CopyMatrixC);
-    // matrixCLayout->addLayout(matrixc);
     matrixCLayout->addWidget(matrixCTable);
-
-    // rowsCSpinBox = new QSpinBox();
-    // rowsCSpinBox->setValue(3);
-
-    // colsCSpinBox = new QSpinBox();
-    // colsCSpinBox->setValue(3);
-
-    // MainLayout->addWidget(SizeMatrixC);
 
     matrixCTable->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -475,6 +338,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     MainLayout->addWidget(matrixCWidget);
 
+    qDebug() << "end";
 
     connect(CreateMatrixA, &QPushButton::clicked, this, [this]() {
         matr.createMatrix(matrixATable, rowsASpinBox->value(), colsASpinBox->value());
@@ -497,8 +361,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
         matr.createMatrix(matrixCTable, rowsA, colsA);
         oper.addMatrices(matrixATable, matrixBTable, matrixCTable);
-
-
     });
 
     connect(raznButton, &QPushButton::clicked, this, [this](){
@@ -532,8 +394,6 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
         matr.createMatrix(matrixCTable, rowsA, colsB);
         oper.multyplyMatrices(matrixATable, matrixBTable, matrixCTable);
-
-
     });
 
     connect(transposeAButton, &QPushButton::clicked, this, [this]() {
@@ -547,14 +407,12 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         clean.clearMatrices(matrixATable);
         clean.clearMatrices(matrixBTable);
         clean.clearMatrices(matrixCTable);
-
     });
 
     connect(randomButton, &QPushButton::clicked, this, [this]() {
         randomizer.randomizeMatrices(matrixATable);
         randomizer.randomizeMatrices(matrixBTable);
     });
-
 
     connect(sizeButton, &QPushButton::clicked, this, [this](){
         int size = razmerSpinBox->value();
@@ -633,16 +491,15 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         oper.divisionconstant(matrixBTable, constant);
     });
 
-
     connect(CopyMatrixA, &QPushButton::clicked, this, [this]() {
         copy.copy(matrixATable);
     });
     connect(CopyMatrixB, &QPushButton::clicked, this, [this]() {
         copy.copy(matrixBTable);
     });
-    // connect(CopyMatrixC, &QPushButton::clicked, this, [this]() {
-    //     copy.copy(matrixCTable);
-    // });
+    connect(CopyMatrixC, &QPushButton::clicked, this, [this]() {
+        copy.copy(matrixCTable);
+    });
     connect(copymatrices, &QPushButton::clicked, this, [this]() {
         copy.copyThreeMatricesToClipboard(matrixATable, matrixBTable, matrixCTable);
     });
@@ -709,12 +566,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         });
 
         menuBar->exec(CentralWidget->mapToGlobal(pos));
-
     });
 
-
     matr.create3Matrices(matrixATable, matrixBTable, matrixCTable, 3, 3);
-
 }
 
 Matrix_Calculator::~Matrix_Calculator()
@@ -746,19 +600,12 @@ Matrix_Calculator::~Matrix_Calculator()
     const int arraySize = qicons.size();
 
     for (int i = 0; i < arraySize; i++) {
-        delete qicons[i];
-    }
-
-    QList<QValidator*> validators = findChildren<QValidator*>();
-    for (QValidator* validator : std::as_const(validators)) {
-        if (!validator->parent()) {
-            delete validator;
+        // Check if the pointer is not null before deleting
+        if (qicons[i]) {
+            delete qicons[i];
         }
     }
 }
-#include <QPalette>
-#include <QSvgRenderer>
-#include <QPainter>
 
 // Функция для определения темы
 bool Matrix_Calculator::isDarkTheme() {
@@ -837,12 +684,20 @@ void Matrix_Calculator::setupMatrix(
     QSpinBox*& rowsSpinBox,
     QSpinBox*& colsSpinBox,
     QPushButton*& CreateMatrix,
+    QPushButton*& transposeMatrix,
+    QPushButton*& inverseMatrix,
+    QPushButton*& multiplyByC,
+    QPushButton*& divisionByC,
+    QLineEdit*& constant,
     QWidget *&matrixButtonsWidget,
     QHBoxLayout *&matrixButtonsLayout,
-    QLabel*& RangText,
-    QLabel*& RangValue,
-    std::string& name)
+    // QLabel*& RangText,
+    // QLabel*& RangValue,
+    const std::string& name)
 {
+    rowsSpinBox = new QSpinBox();
+    colsSpinBox = new QSpinBox();
+
     MatrixTable->setToolTip(QString::fromStdString(name));
     MatrixTable->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -892,10 +747,10 @@ void Matrix_Calculator::setupMatrix(
         contextMenu.exec(MatrixTable->mapToGlobal(pos));
     });
 
-    rowsSpinBox->setRange(0, 10);
+    rowsSpinBox->setRange(1, 10);
     rowsSpinBox->setValue(3);
 
-    colsSpinBox->setRange(0, 10);
+    colsSpinBox->setRange(1, 10);
     colsSpinBox->setValue(3);
 
     SizeLayout->addWidget(rowsSpinBox);
@@ -904,23 +759,29 @@ void Matrix_Calculator::setupMatrix(
     SizeLayout->setAlignment(Qt::AlignLeft);
 
     MatrixLayout->addLayout(SizeLayout);
-    MatrixLayout->addWidget(matrixATable);
+    MatrixLayout->addWidget(MatrixTable);  // FIXED: Was using matrixATable instead of MatrixTable
 
+    // RangValue->setText(QString::number(oper.FindRang(MatrixTable)));
 
-    RangText->setText("Ранг ");
-    RangValue->setText(QString::number(oper.FindRang(MatrixTable)));
+    // Add a connection to update the rang value when matrix values change
+    // connect(MatrixTable, &QTableWidget::itemChanged, this, [this, MatrixTable, RangValue]() {
+    //     RangValue->setText(QString::number(oper.FindRang(MatrixTable)));
+    // });
 
-    // matrixButtonsLayout->addWidget(transposeAButton);
-    // matrixButtonsLayout->addWidget(inverseAButton);
-    // matrixButtonsLayout->addWidget(multyplyConstantA);
-    // matrixButtonsLayout->addWidget(divideConstantA);
-    // matrixButtonsLayout->addWidget(constantA);
-    matrixButtonsLayout->addWidget(RangText);
-    matrixButtonsLayout->addWidget(RangValue);
+    matrixButtonsLayout->addWidget(transposeMatrix);
+    matrixButtonsLayout->addWidget(inverseMatrix);
+    matrixButtonsLayout->addWidget(multiplyByC);
+    matrixButtonsLayout->addWidget(divisionByC);
+    matrixButtonsLayout->addWidget(constant);
+    // matrixButtonsLayout->addWidget(RangText);
+    // matrixButtonsLayout->addWidget(RangValue);
     matrixButtonsLayout->addStretch();
     MatrixLayout->addWidget(matrixButtonsWidget);
 
     MatricesLayout->addWidget(SizeWidget);
     MainLayout->addWidget(MatricesWidget);
+
+    qDebug() << "LOL";
 };
+
 

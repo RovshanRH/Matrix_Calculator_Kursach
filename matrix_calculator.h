@@ -37,13 +37,10 @@ class Matrix_Calculator : public QMainWindow {
 public:
     Matrix_Calculator(QWidget* parent = nullptr);
     ~Matrix_Calculator();
-
-private:
-    bool isDarkTheme();
-    QIcon createColoredIcon(const QString &iconPath, const QColor &color);
-    void updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath);
     void setupMatrix(
-        QVBoxLayout *&MainLayout, QHBoxLayout *&MatricesLayout, QWidget *&MatricesWidget,
+        QVBoxLayout *&MainLayout,
+        QHBoxLayout *&MatricesLayout,
+        QWidget *&MatricesWidget,
         QWidget *&SizeWidget,
         QHBoxLayout *&SizeLayout,
         QVBoxLayout *&MatrixLayout,
@@ -51,11 +48,20 @@ private:
         QSpinBox*& rowsSpinBox,
         QSpinBox*& colsSpinBox,
         QPushButton*& CreateMatrix,
+        QPushButton*& transposeMatrix,
+        QPushButton*& inverseMatrix,
+        QPushButton*& multiplyByC,
+        QPushButton*& divisionByC,
+        QLineEdit*& constant,
         QWidget *&matrixButtonsWidget,
         QHBoxLayout *&matrixButtonsLayout,
-        QLabel*& RangText,
-        QLabel*& RangValue,
-        std::string &name);
+        const std::string& name);
+
+private:
+    bool isDarkTheme();
+    QIcon createColoredIcon(const QString &iconPath, const QColor &color);
+    void updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath);
+
 
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;

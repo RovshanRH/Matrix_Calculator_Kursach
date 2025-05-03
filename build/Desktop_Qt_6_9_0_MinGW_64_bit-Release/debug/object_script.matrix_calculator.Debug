@@ -1,6 +1,7 @@
 debug/main.o
 debug/cleaner.o
 debug/copymatrix.o
+debug/helpwindow.o
 debug/insertmatrix.o
 debug/inverse.o
 debug/matrix.o

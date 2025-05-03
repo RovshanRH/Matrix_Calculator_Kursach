@@ -1,6 +1,7 @@
 release/main.o
 release/cleaner.o
 release/copymatrix.o
+release/helpwindow.o
 release/insertmatrix.o
 release/inverse.o
 release/matrix.o
