@@ -41,11 +41,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     QPushButton* help = new QPushButton(tr("Помощь"), this);
 
-    connect(help, &QPushButton::clicked, this, []() {
-        // QMainWindow *helpWindow = new QMainWindow();
-        // helpWindow->setWindowTitle(tr("Помощь"));
-        // helpWindow->resize(900, 680);
-        // helpWindow->show();
+    connect(help, &QPushButton::clicked, this, [this]() {
+        helpi.show();
     });
 
     change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
@@ -78,9 +75,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     hlayout->addWidget(sizeButton);
     hlayout->addWidget(razmer);
     hlayout->addWidget(razmerSpinBox);
-    hlayout->addWidget(copymatrices);
+    /*hlayout->addWidget(copymatrices);
     hlayout->addWidget(insertmatrices);
-    hlayout->addWidget(swapmatrixAB);
+    hlayout->addWidget(swapmatrixAB)*/
     hlayout->addWidget(help);
     vlayout->addLayout(hlayout);
 
@@ -121,6 +118,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     InsertMatrixA = new QPushButton();
     InsertMatrixA->setIcon(*insertIcon);
     InsertMatrixA->setToolTip("Вставить из буфер обмена");
+
+    QLabel *RangALabel = new QLabel("Ранг А: ");
+    QLabel *RangeAValue = new QLabel(QString::number(0));
+    QPushButton *RangAButton = new QPushButton("Ранг");
+    RangAButton->setToolTip("Найти ранг матрицы");
 
     // Кнопки для матрицы А
     QWidget *matrixAButtonsWidget = new QWidget();
@@ -167,6 +169,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         constantA,
         matrixAButtonsWidget,
         matrixAButtonsLayout,
+        RangALabel,
+        RangeAValue,
+        RangAButton,
         "матрица А"
         );
 
@@ -200,6 +205,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     InsertMatrixB = new QPushButton();
     InsertMatrixB->setIcon(*insertIcon);
     InsertMatrixB->setToolTip("Вставить из буфер обмена");
+
+    QLabel *RangBLabel = new QLabel("Ранг В: ");
+    QLabel *RangeBValue = new QLabel(QString::number(0));
+    QPushButton* RangBButton = new QPushButton("Ранг");
+    RangBButton->setToolTip("Найти ранг матрицы");
 
     // Кнопки для матрицы B
     QWidget *matrixBButtonsWidget = new QWidget();
@@ -247,6 +257,9 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         constantB,
         matrixBButtonsWidget,
         matrixBButtonsLayout,
+        RangBLabel,
+        RangeBValue,
+        RangBButton,
         "матрица В"
         );
 
@@ -302,7 +315,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
 
     QHBoxLayout* matrixc = new QHBoxLayout();
     matrixc->setAlignment(Qt::AlignLeft);
-    matrixc->addWidget(CopyMatrixC);
+    // matrixc->addWidget(CopyMatrixC);
     matrixCLayout->addLayout(matrixc);
 
     matrixCTable = new QTableWidget();
@@ -651,7 +664,7 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(insertIcon, InsertMatrixA, ":/Icons/insertIcon.svg");
     updateIcons(copyIcon, CopyMatrixB, ":/Icons/copyIcon.svg");
     updateIcons(insertIcon, InsertMatrixB, ":/Icons/insertIcon.svg");
-    // updateIcons(copyIcon, CopyMatrixC, ":/Icons/copyIcon.svg");
+    updateIcons(copyIcon, CopyMatrixC, ":/Icons/copyIcon.svg");
     updateIcons(change3SizeIcon, sizeButton, ":/Icons/iconmonstr-screen-size-increase-filled.svg");
     updateIcons(copy3Icon, copymatrices, ":/Icons/iconmonstr-copy-lined-nigga_3.svg");
     updateIcons(insert3Icon, insertmatrices, ":/Icons/iconmonstr-paste-clipboard-filled_3.svg");
@@ -691,8 +704,7 @@ void Matrix_Calculator::setupMatrix(
     QLineEdit*& constant,
     QWidget *&matrixButtonsWidget,
     QHBoxLayout *&matrixButtonsLayout,
-    // QLabel*& RangText,
-    // QLabel*& RangValue,
+    QLabel *Rangtext, QLabel *&Rangvalue, QPushButton*& RangButton,
     const std::string& name)
 {
     rowsSpinBox = new QSpinBox();
@@ -761,20 +773,18 @@ void Matrix_Calculator::setupMatrix(
     MatrixLayout->addLayout(SizeLayout);
     MatrixLayout->addWidget(MatrixTable);  // FIXED: Was using matrixATable instead of MatrixTable
 
-    // RangValue->setText(QString::number(oper.FindRang(MatrixTable)));
-
-    // Add a connection to update the rang value when matrix values change
-    // connect(MatrixTable, &QTableWidget::itemChanged, this, [this, MatrixTable, RangValue]() {
-    //     RangValue->setText(QString::number(oper.FindRang(MatrixTable)));
-    // });
+    connect(RangButton, &QPushButton::clicked, this, [this, MatrixTable, Rangvalue]() {
+        Rangvalue->setText(QString::number(oper.FindRang(MatrixTable)));
+    });
 
     matrixButtonsLayout->addWidget(transposeMatrix);
     matrixButtonsLayout->addWidget(inverseMatrix);
     matrixButtonsLayout->addWidget(multiplyByC);
     matrixButtonsLayout->addWidget(divisionByC);
     matrixButtonsLayout->addWidget(constant);
-    // matrixButtonsLayout->addWidget(RangText);
-    // matrixButtonsLayout->addWidget(RangValue);
+    matrixButtonsLayout->addWidget(Rangtext);
+    matrixButtonsLayout->addWidget(Rangvalue);
+    matrixButtonsLayout->addWidget(RangButton);
     matrixButtonsLayout->addStretch();
     MatrixLayout->addWidget(matrixButtonsWidget);
 

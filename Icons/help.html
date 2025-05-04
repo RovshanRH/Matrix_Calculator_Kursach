@@ -1,0 +1,158 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Помощь - Калькулятор матриц</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Раздел “Помощь”</h1>
+    <p>Калькулятор матриц - это приложение для выполнения базовых арифметических операций над двумя матрицами. Для работы представлены две матрицы с условным обозначением “<strong>Матрица А</strong>” и “<strong>Матрица В</strong>”, а также матрица результата операций над матрицами - “<strong>Результирующая матрица</strong>”.</p>
+    <p>Функции для работы с матрицами поделены на разделы:</p>
+    <ul>
+        <li><a href="#matrix">Матрица</a>
+            <ul>
+                <li><a href="#matrix-size">Размер матрицы</a></li>
+                <li><a href="#matrix-operations">Операции над матрицей</a></li>
+                <li><a href="#matrix-context-menu">Контекстное меню матрицы</a></li>
+                <li><a href="#matrix-rank">Ранг матрицы</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Операции</a></li>
+        <li><a href="#header">Заголовок</a></li>
+        <li><a href="#app-context-menu">Контекстное меню приложения</a></li>
+    </ul>
+
+    <h2 id="matrix">Раздел “Матрица”</h2>
+    <p>2 последовательные операнды - матрица А и В - представлены в виде таблиц размером 3х3 по умолчанию. Матрица А и В функционалом не отличаются.</p>
+
+    <h3 id="matrix-size">Размер матрицы</h3>
+    <p>Для изменения размера матрицы представлены 2 счётчика от 1 до 10. 1 счётчик отвечает за кол-во строк, 2 - за кол-во столбцов. Для изменения размера надо нажать на кнопку, которая следует за ними.</p>
+
+    <h3 id="matrix-operations">Операции над матрицей</h3>
+    <p>Всего для каждой матрицы представлено 4 опции: <strong>транспонирование матрицы</strong>, <strong>нахождение обратной матрицы</strong>, <strong>деление на константу</strong> и <strong>умножение на константу</strong>. Для задания константы под таблицей матрицы присутствует поле ввода <em>const</em>.</p>
+    <ul>
+        <li><strong>Транспонирование</strong> - происходит операция транспонирование матрицы.</li>
+        <li><strong>Нахождение обратной матрицы</strong> - происходит нахождение обратной матрицы с погрешностью ~0.001-0.1 в нахождении значения ячейки. Программа выдаёт ошибку, если матрица - вырожденная.</li>
+        <li><strong>Деление на константу</strong> - каждая ячейка делится на заданное число.</li>
+        <li><strong>Умножение на константу</strong> - каждая ячейка умножается на заданное число.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Контекстное меню</h3>
+    <p>При нажатии правой кнопкой мыши на матрицу, выведется контекстное меню, которое содержит следующие опции:</p>
+    <ul>
+        <li><strong>Скопировать</strong> - значения матрицы копируются в буфер обмена в формате TSV.</li>
+        <li><strong>Вставить</strong> - значения матрицы меняются на то, что хранится в буфер обмена. Поддерживаются форматы TSV и CSV.</li>
+        <li><strong>Очистить</strong> - значения матрицы заменяются на ноль.</li>
+        <li><strong>Вставить единичную матрицу</strong> - значения матрицы заменяются на значения единичной матрицы (главная диагональ - “1”, остальное - “0”).</li>
+        <li><strong>Вставить верхнюю треугольную матрицу</strong> - значения матрицы заменяются на значения верхней треугольной матрицы (всё, что выше или находится на главной диагонали - “1”, остальное - “0”).</li>
+        <li><strong>Вставить нижнюю треугольную матрицу</strong> - значения матрицы заменяются на значения нижней треугольной матрицы (всё, что ниже или находится на главной диагонали - “1”, остальное - “0”).</li>
+    </ul>
+
+    <h3 id="matrix-rank">Ранг матрицы</h3>
+    <p>Под таблицей находится счётчик ранга матрицы, который обновляется после нажатия на кнокпу "Найти ранг матрицы". Изначально - “0”</p>
+
+    <h2 id="operations">Раздел “Операции”</h2>
+    <ul>
+        <li><strong>Сумма</strong> - сумма матриц А и В.</li>
+        <li><strong>Вычитание</strong> - вычитание матрицы А на матрицу В.</li>
+        <li><strong>Умножение</strong> - умножение матриц А на матрицу В.</li>
+    </ul>
+    <p>Программа не даёт пользователю суммировать или вычесть не квадраты, а также умножить матрицы, неподходящих под условие умножения.</p>
+    <ul>
+        <li><strong>Очистка</strong> - замена значений всех матриц на ноль.</li>
+        <li><strong>Вставить случайные значения</strong> - вставка случайных значений в матрицы А и В.</li>
+    </ul>
+
+    <h2 id="header">Раздел “Заголовок”</h2>
+    <p>С помощью счётчика <strong>Х</strong> можно задать число - размер квадрата, на который заменятся размеры матриц А и В. Для изменения размеров матриц нужно нажать на кнопку слева от счётчика.</p>
+
+    <h2 id="app-context-menu">Контекстное меню приложения</h2>
+    <p>При нажатии правой кнопкой мыши на окно приложения появляется контекстное меню со следующими опциями:</p>
+    <ul>
+        <li><strong>Скопировать 3 матрицы</strong> - в буфер обмена копируются значения 3 матриц в формате CSV.</li>
+        <li><strong>Вставить 3 матрицы</strong> - из буфер обмена вставляются значения 3 матриц в матрицы А, В и С соответственно либо в формате CSV, либо в TSV.</li>
+        <li><strong>Очистить матрицы</strong> - изменяет значение матриц на 0.</li>
+        <li><strong>Поменять матрицы местами</strong> - смена матриц А и В местами.</li>
+    </ul>
+</body>
+</html>

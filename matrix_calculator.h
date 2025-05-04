@@ -25,6 +25,7 @@
 #include <QDoubleValidator>
 #include <cmath>
 #include "cleaner.h"
+#include "helpwindow.h"
 #include "inverse.h"
 #include "operations.h"
 #include "randomizer.h"
@@ -55,6 +56,8 @@ public:
         QLineEdit*& constant,
         QWidget *&matrixButtonsWidget,
         QHBoxLayout *&matrixButtonsLayout,
+        QLabel* Rangtext,
+        QLabel *&Rangvalue, QPushButton *&RangButton,
         const std::string& name);
 
 private:
@@ -82,6 +85,7 @@ private:
     Operations oper;
     copymatrix copy;
     insertmatrix insert;
+    HelpWindow helpi;
     QIcon *appIcon;
     QIcon *copyIcon;
     QIcon *insertIcon;

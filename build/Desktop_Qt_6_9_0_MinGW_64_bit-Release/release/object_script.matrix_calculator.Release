@@ -11,6 +11,7 @@ release/randomizer.o
 release/qrc_resources.o
 release/moc_cleaner.o
 release/moc_copymatrix.o
+release/moc_helpwindow.o
 release/moc_insertmatrix.o
 release/moc_inverse.o
 release/moc_matrix.o

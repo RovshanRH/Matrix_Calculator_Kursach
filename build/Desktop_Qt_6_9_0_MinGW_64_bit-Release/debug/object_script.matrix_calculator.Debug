@@ -11,6 +11,7 @@ debug/randomizer.o
 debug/qrc_resources.o
 debug/moc_cleaner.o
 debug/moc_copymatrix.o
+debug/moc_helpwindow.o
 debug/moc_insertmatrix.o
 debug/moc_inverse.o
 debug/moc_matrix.o

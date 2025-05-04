@@ -21,5 +21,6 @@
         <file>Icons/Down-triangle.svg</file>
         <file>Icons/multiplyC.svg</file>
         <file>Icons/Up-triangle.svg</file>
+        <file>Icons/help.html</file>
     </qresource>
 </RCC>
