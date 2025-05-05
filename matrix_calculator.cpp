@@ -128,21 +128,25 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QWidget *matrixAButtonsWidget = new QWidget();
     QHBoxLayout *matrixAButtonsLayout = new QHBoxLayout(matrixAButtonsWidget);
 
-    transposeAIcon = new QIcon(createColoredIcon(":/Icons/A-transpose.svg", iconColor));
-    transposeAButton = new QPushButton();
+    transposeAIcon = new QIcon(createColoredIcon(":/Icons/Frame 1.svg", iconColor));
+    transposeAButton = new QPushButton;
     transposeAButton->setIcon(*transposeAIcon);
+    transposeAButton->setToolTip("Транспонирование");
 
     inverseAIcon = new QIcon(createColoredIcon(":/Icons/A-inverse.svg", iconColor));
-    inverseAButton = new QPushButton();
+    inverseAButton = new QPushButton;
     inverseAButton->setIcon(*inverseAIcon);
+    inverseAButton->setToolTip("Обратная матрица");
 
     AmultyplybyC = new QIcon(createColoredIcon(":/Icons/multiplyC.svg", iconColor));
-    multyplyConstantA = new QPushButton();
+    multyplyConstantA = new QPushButton;
     multyplyConstantA->setIcon(*AmultyplybyC);
+    multyplyConstantA->setToolTip("Умножить на константу");
 
     AsubstractbyC = new QIcon(createColoredIcon(":/Icons/divC.svg", iconColor));
-    divideConstantA = new QPushButton();
+    divideConstantA = new QPushButton;
     divideConstantA->setIcon(*AsubstractbyC);
+    divideConstantA->setToolTip("Делить на константу");
 
     constantA = new QLineEdit();
     QDoubleValidator *validatorA = new QDoubleValidator(-1000.0, 1000.0, 2, constantA);
@@ -218,19 +222,23 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     transposeBIcon = new QIcon(createColoredIcon(":/Icons/B-transpose.svg", iconColor));
     transposeBButton = new QPushButton;
     transposeBButton->setIcon(*transposeBIcon);
+    transposeBButton->setToolTip("Транспонирование");
 
     inverseBIcon = new QIcon(createColoredIcon(":/Icons/B-inverse.svg", iconColor));
     inverseBButton = new QPushButton;
     inverseBButton->setIcon(*inverseBIcon);
+    inverseBButton->setToolTip("Обратная матрица");
 
     BmultyplybyC = new QIcon(createColoredIcon(":/Icons/multiplyC.svg", iconColor));
     multyplyConstantB = new QPushButton;
     multyplyConstantB->setIcon(*BmultyplybyC);
+    multyplyConstantB->setToolTip("УМножить на константу");
 
     // Fix: Changed icon path to the correct one for division
     BsubstractbyC = new QIcon(createColoredIcon(":/Icons/divC.svg", iconColor));
     divideConstantB = new QPushButton;
     divideConstantB->setIcon(*BsubstractbyC);
+    divideConstantB->setToolTip("Делить на константу");
 
     constantB = new QLineEdit();
     QDoubleValidator *validatorB = new QDoubleValidator(-1000.0, 1000.0, 2, constantB);
@@ -629,17 +637,26 @@ bool Matrix_Calculator::isDarkTheme() {
 // Функция для изменения цвета SVG-иконки
 QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor &color) {
     QSvgRenderer renderer(iconPath);
-    QImage image(32, 32, QImage::Format_ARGB32);
-    image.fill(Qt::transparent);
-    QPainter painter(&image);
-    renderer.render(&painter);
+    if (!renderer.isValid()) {
+        qWarning() << "Invalid SVG file:" << iconPath;
+        return QIcon(); // Возвращаем пустую иконку, если SVG некорректен
+    }
 
-    // Применяем цветовой фильтр
+    // Создаем изображение с нужным размером
+    QImage image(32, 32, QImage::Format_ARGB32);
+    image.fill(Qt::transparent); // Прозрачный фон
+
+    // Рендерим SVG
+    QPainter painter(&image);
+    renderer.render(&painter, QRectF(0, 0, 32, 32)); // Убедитесь, что SVG масштабируется корректно
+
+    // Применяем цвет ко всем непрозрачным пикселям
     for (int x = 0; x < image.width(); ++x) {
         for (int y = 0; y < image.height(); ++y) {
             QColor pixel = image.pixelColor(x, y);
-            if (pixel.alpha() > 0) {
-                image.setPixelColor(x, y, color);
+            if (pixel.alpha() > 0) { // Если пиксель не полностью прозрачный
+                // Сохраняем альфа-канал, применяем новый цвет
+                image.setPixelColor(x, y, QColor(color.red(), color.green(), color.blue(), pixel.alpha()));
             }
         }
     }
@@ -660,6 +677,8 @@ void Matrix_Calculator::updateIcons(QIcon *icon, QPushButton *button, const QStr
 }
 
 void Matrix_Calculator::onPaletteChanged() {
+    QColor iconColor = isDarkTheme() ? Qt::white : Qt::black;
+
     updateIcons(copyIcon, CopyMatrixA, ":/Icons/copyIcon.svg");
     updateIcons(insertIcon, InsertMatrixA, ":/Icons/insertIcon.svg");
     updateIcons(copyIcon, CopyMatrixB, ":/Icons/copyIcon.svg");
@@ -676,6 +695,8 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(substract, raznButton, ":/Icons/minus-round-icon.svg");
     updateIcons(cleanIcon, clearButton, ":/Icons/broom-cleaning-icon.svg");
     updateIcons(randomizeIcon, randomButton, ":/Icons/RAND.svg");
+
+    // Обновляем проблемные иконки
     updateIcons(transposeAIcon, transposeAButton, ":/Icons/A-transpose.svg");
     updateIcons(inverseAIcon, inverseAButton, ":/Icons/A-inverse.svg");
     updateIcons(transposeBIcon, transposeBButton, ":/Icons/B-transpose.svg");

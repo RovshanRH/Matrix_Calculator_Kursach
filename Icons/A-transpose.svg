@@ -1,8 +1,11 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="A-transpose">
 <g clip-path="url(#clip0_1_2)">
 <rect width="32" height="32" fill="white"/>
-<path d="M18.304 25L17.8 22.336H14.008L13.504 25H10.24L13.48 8.2H18.448L21.52 25H18.304ZM15.856 11.32L14.92 16.912L14.392 19.768H17.392L16.84 16.912L15.904 11.32H15.856Z" fill="black"/>
-<path d="M22.61 5.2H21.1V4H25.48V5.2H23.97V11H22.61V5.2Z" fill="black"/>
+<path id="A" d="M18.304 25L17.8 22.336H14.008L13.504 25H10.24L13.48 8.2H18.448L21.52 25H18.304ZM15.856 11.32L14.92 16.912L14.392 19.768H17.392L16.84 16.912L15.904 11.32H15.856Z" fill="black"/>
+<path id="T" d="M22.61 5.2H21.1V4H25.48V5.2H23.97V11H22.61V5.2Z" fill="black"/>
+</g>
+<rect x="-0.5" y="-0.5" width="33" height="33" stroke="black"/>
 </g>
 <defs>
 <clipPath id="clip0_1_2">

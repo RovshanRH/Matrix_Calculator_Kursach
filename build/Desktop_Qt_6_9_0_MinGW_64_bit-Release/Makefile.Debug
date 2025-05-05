@@ -170,6 +170,7 @@ debug/qrc_resources.cpp: ../../resources.qrc \
 		../../Icons/multiplyC.svg \
 		../../Icons/insertIcon.svg \
 		../../Icons/plus-round-icon.svg \
+		../../Icons/Frame\ 1.svg \
 		../../Icons/iconmonstr-paste-clipboard-filled_3.svg \
 		../../Icons/B-inverse.svg \
 		../../Icons/A-transpose.svg \
@@ -1807,6 +1808,10 @@ debug/moc_matrix_calculator.cpp: ../../matrix_calculator.h \
 		C:/Qt/6.9.0/mingw_64/include/QtGui/qtextoption.h \
 		C:/Qt/6.9.0/mingw_64/include/QtGui/QDoubleValidator \
 		../../cleaner.h \
+		../../helpwindow.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QTextBrowser \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qtextbrowser.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qtextedit.h \
 		../../inverse.h \
 		../../operations.h \
 		../../randomizer.h \
@@ -2542,6 +2547,10 @@ debug/main.o: ../../main.cpp C:/Qt/6.9.0/mingw_64/include/QtWidgets/QApplication
 		C:/Qt/6.9.0/mingw_64/include/QtGui/qtextoption.h \
 		C:/Qt/6.9.0/mingw_64/include/QtGui/QDoubleValidator \
 		../../cleaner.h \
+		../../helpwindow.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QTextBrowser \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qtextbrowser.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qtextedit.h \
 		../../inverse.h \
 		../../operations.h \
 		../../randomizer.h \
@@ -4163,6 +4172,10 @@ debug/matrix_calculator.o: ../../matrix_calculator.cpp ../../matrix_calculator.h
 		C:/Qt/6.9.0/mingw_64/include/QtGui/qtextoption.h \
 		C:/Qt/6.9.0/mingw_64/include/QtGui/QDoubleValidator \
 		../../cleaner.h \
+		../../helpwindow.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/QTextBrowser \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qtextbrowser.h \
+		C:/Qt/6.9.0/mingw_64/include/QtWidgets/qtextedit.h \
 		../../inverse.h \
 		../../operations.h \
 		../../randomizer.h \
