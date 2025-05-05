@@ -128,10 +128,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QWidget *matrixAButtonsWidget = new QWidget();
     QHBoxLayout *matrixAButtonsLayout = new QHBoxLayout(matrixAButtonsWidget);
 
-    transposeAIcon = new QIcon(createColoredIcon(":/Icons/Frame 1.svg", iconColor));
+    transposeAIcon = new QIcon(createColoredIcon(":/Icons/A-transpose.svg", iconColor));
     transposeAButton = new QPushButton;
     transposeAButton->setIcon(*transposeAIcon);
     transposeAButton->setToolTip("Транспонирование");
+    // transposeAButton->setIconSize(QSize(50, 50));
 
     inverseAIcon = new QIcon(createColoredIcon(":/Icons/A-inverse.svg", iconColor));
     inverseAButton = new QPushButton;
@@ -636,6 +637,7 @@ bool Matrix_Calculator::isDarkTheme() {
 
 // Функция для изменения цвета SVG-иконки
 QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor &color) {
+
     QSvgRenderer renderer(iconPath);
     if (!renderer.isValid()) {
         qWarning() << "Invalid SVG file:" << iconPath;
@@ -643,12 +645,18 @@ QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor
     }
 
     // Создаем изображение с нужным размером
-    QImage image(32, 32, QImage::Format_ARGB32);
+    QImage image(64, 64, QImage::Format_ARGB32);
     image.fill(Qt::transparent); // Прозрачный фон
 
     // Рендерим SVG
     QPainter painter(&image);
-    renderer.render(&painter, QRectF(0, 0, 32, 32)); // Убедитесь, что SVG масштабируется корректно
+
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    renderer.render(&painter, QRectF(0, 0, 64, 64)); // Убедитесь, что SVG масштабируется корректно
+
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(image.rect(), color);
 
     // Применяем цвет ко всем непрозрачным пикселям
     for (int x = 0; x < image.width(); ++x) {
@@ -661,7 +669,9 @@ QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor
         }
     }
 
-    return QIcon(QPixmap::fromImage(image));
+    QImage scaledImage = image.scaled(64, 64, Qt::KeepAspectRatio, Qt::FastTransformation);
+    return QIcon(QPixmap::fromImage(scaledImage));
+
 }
 
 void Matrix_Calculator::updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath) {
@@ -674,6 +684,7 @@ void Matrix_Calculator::updateIcons(QIcon *icon, QPushButton *button, const QStr
 
     *icon = createColoredIcon(iconPath, iconColor);
     button->setIcon(*icon);
+    button->setIconSize(QSize(128, 128));
 }
 
 void Matrix_Calculator::onPaletteChanged() {

@@ -23,5 +23,6 @@
         <file>Icons/Up-triangle.svg</file>
         <file>Icons/help.html</file>
         <file>Icons/Frame 1.svg</file>
+        <file>Icons/circle.svg</file>
     </qresource>
 </RCC>

@@ -174,6 +174,7 @@ release/qrc_resources.cpp: ../../resources.qrc \
 		../../Icons/iconmonstr-paste-clipboard-filled_3.svg \
 		../../Icons/B-inverse.svg \
 		../../Icons/A-transpose.svg \
+		../../Icons/circle.svg \
 		../../Icons/arrow-goes-left-right-icon.svg \
 		../../Icons/help.html \
 		../../Icons/A-inverse.svg \
