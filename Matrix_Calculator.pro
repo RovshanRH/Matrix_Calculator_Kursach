@@ -5,7 +5,13 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = matrix_calculator
 TEMPLATE = app
-
+TRANSLATIONS += \
+    translations/myapp_ru.ts \
+    translations/myapp_en.ts \
+    translations/myapp_de.ts \
+    translations/myapp_fr.ts \  # Французский
+    translations/myapp_es.ts \  # Испанский
+    translations/myapp_zh.ts    # Китайский
 SOURCES += main.cpp \
     cleaner.cpp \
     copymatrix.cpp \

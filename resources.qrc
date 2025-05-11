@@ -24,5 +24,26 @@
         <file>Icons/help.html</file>
         <file>Icons/Frame 1.svg</file>
         <file>Icons/circle.svg</file>
+        <file>Icons/change-theme-icon-off.svg</file>
+        <file>Icons/change-theme-icon-on.svg</file>
+        <file>Icons/world.svg</file>
+        <file>Translations/myapp_ch.qm</file>
+        <file>Translations/myapp_ch.ts</file>
+        <file>Translations/myapp_de.qm</file>
+        <file>Translations/myapp_de.ts</file>
+        <file>Translations/myapp_en.qm</file>
+        <file>Translations/myapp_en.ts</file>
+        <file>Translations/myapp_es.qm</file>
+        <file>Translations/myapp_es.ts</file>
+        <file>Translations/myapp_fr.qm</file>
+        <file>Translations/myapp_fr.ts</file>
+        <file>Translations/myapp_it.qm</file>
+        <file>Translations/myapp_it.ts</file>
+        <file>Translations/myapp_jp.qm</file>
+        <file>Translations/myapp_jp.ts</file>
+        <file>Translations/myapp_kr.qm</file>
+        <file>Translations/myapp_kr.ts</file>
+        <file>Translations/myapp_ru.qm</file>
+        <file>Translations/myapp_ru.ts</file>
     </qresource>
 </RCC>

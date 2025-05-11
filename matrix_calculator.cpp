@@ -15,6 +15,11 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     setWindowTitle("Калькулятор матриц");
     setMinimumSize(900, 680);
 
+    QSettings settings;
+    QString language = settings.value("language", QLocale::system().name().left(2)).toString();
+    loadlanguage(language);
+
+
     // Initialize appIcon here which was missing
     appIcon = nullptr;
 
@@ -45,6 +50,30 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         helpi.show();
     });
 
+    changeLang = new QPushButton;
+    changeLangIcon = new QIcon(createColoredIcon(":/Icons/world.svg", iconColor));
+    changeLang->setIcon(*changeLangIcon);
+    changeLang->setToolTip(tr("Изменить язык"));
+
+    QMenu* LangMenuBar = new QMenu(tr("меню"), this);
+    QAction* rus = new QAction("Русский");
+    QAction* eng = new QAction("English");
+    LangMenuBar->addAction(rus);
+    LangMenuBar->addAction(eng);
+
+    changeLang->setMenu(LangMenuBar);
+
+    // And add these connections right after:
+    connect(rus, &QAction::triggered, this, [this]() {
+        loadlanguage("ru");  // Load Russian translations
+        retranslateUi();     // Update the UI with new translations
+    });
+
+    connect(eng, &QAction::triggered, this, [this]() {
+        loadlanguage("en");  // Load English translations
+        retranslateUi();     // Update the UI with new translations
+    });
+
     change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
     sizeButton = new QPushButton;
     sizeButton->setIcon(*change3SizeIcon);
@@ -54,7 +83,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     razmerSpinBox = new QSpinBox;
     razmerSpinBox->setRange(1,10);
     razmerSpinBox->setValue(3);
-    razmerSpinBox->setToolTip("Задать значение Х");
+    razmerSpinBox->setToolTip(tr("Задать значение Х"));
 
     copy3Icon = new QIcon(createColoredIcon(":/Icons/iconmonstr-copy-lined-nigga_3.svg", iconColor));
     copymatrices = new QPushButton;
@@ -79,6 +108,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     hlayout->addWidget(insertmatrices);
     hlayout->addWidget(swapmatrixAB)*/
     hlayout->addWidget(help);
+    hlayout->addWidget(changeLang);
     vlayout->addLayout(hlayout);
 
     auto lineA = new QFrame;
@@ -645,7 +675,7 @@ QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor
     }
 
     // Создаем изображение с нужным размером
-    QImage image(64, 64, QImage::Format_ARGB32);
+    QImage image(32, 32, QImage::Format_ARGB32);
     image.fill(Qt::transparent); // Прозрачный фон
 
     // Рендерим SVG
@@ -653,7 +683,7 @@ QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    renderer.render(&painter, QRectF(0, 0, 64, 64)); // Убедитесь, что SVG масштабируется корректно
+    renderer.render(&painter, QRectF(0, 0, 32, 32)); // Убедитесь, что SVG масштабируется корректно
 
     painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
     painter.fillRect(image.rect(), color);
@@ -669,7 +699,7 @@ QIcon Matrix_Calculator::createColoredIcon(const QString &iconPath, const QColor
         }
     }
 
-    QImage scaledImage = image.scaled(64, 64, Qt::KeepAspectRatio, Qt::FastTransformation);
+    QImage scaledImage = image.scaled(32, 32, Qt::KeepAspectRatio, Qt::FastTransformation);
     return QIcon(QPixmap::fromImage(scaledImage));
 
 }
@@ -684,7 +714,7 @@ void Matrix_Calculator::updateIcons(QIcon *icon, QPushButton *button, const QStr
 
     *icon = createColoredIcon(iconPath, iconColor);
     button->setIcon(*icon);
-    button->setIconSize(QSize(128, 128));
+    button->setIconSize(QSize(32, 32));
 }
 
 void Matrix_Calculator::onPaletteChanged() {
@@ -716,6 +746,8 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(AsubstractbyC, divideConstantA, ":/Icons/divC.svg");
     updateIcons(BmultyplybyC, multyplyConstantB, ":/Icons/multiplyC.svg");
     updateIcons(BsubstractbyC, divideConstantB, ":/Icons/divC.svg");
+
+    updateIcons(changeLangIcon, changeLang, ":/Icons/world.svg");
 }
 
 void Matrix_Calculator::setupMatrix(
@@ -826,4 +858,111 @@ void Matrix_Calculator::setupMatrix(
     qDebug() << "LOL";
 };
 
+void Matrix_Calculator::loadlanguage(const QString &language)
+{
+    // Remove current translator if it exists
+    qApp->removeTranslator(&translator);
 
+    // Load translation file
+    qDebug() << "wtf";
+    bool loaded = translator.load("myapp_" + language, ":/Translations");
+    qDebug() << "wtf2";
+    if (loaded) {
+        // Install translator
+        qApp->installTranslator(&translator);
+
+        // Save selected language in settings
+        QSettings settings;
+        settings.setValue("language", language);
+
+        qDebug() << "wtf2.5";
+
+        retranslateUi();
+
+        qDebug() << "wtf3";
+    } else {
+        qWarning() << "Failed to load translation for language:" << language;
+    }
+
+}
+
+void Matrix_Calculator::retranslateUi()
+{
+    // Update window title
+    // setWindowTitle(tr("Калькулятор матриц"));
+
+    // Update button tooltips and text
+    changeLang->setToolTip(tr("Изменить язык"));
+    sizeButton->setToolTip(tr("Задать Х размер квадратов А и В значением"));
+    razmerSpinBox->setToolTip(tr("Задать значение Х"));
+    copymatrices->setToolTip(tr("Скопировать значения 3 матриц"));
+    insertmatrices->setToolTip(tr("Вставить из буфер обменя 3 матрицы"));
+    swapmatrixAB->setToolTip(tr("Поменять местами матрицы"));
+
+    // Matrix A buttons
+    matrixATable->setToolTip(tr("Матрица А"));
+    CreateMatrixA->setToolTip(tr("Поменять размер"));
+    CopyMatrixA->setToolTip(tr("Скопировать матрицу"));
+    InsertMatrixA->setToolTip(tr("Вставить из буфер обмена"));
+    transposeAButton->setToolTip(tr("Транспонирование"));
+    inverseAButton->setToolTip(tr("Обратная матрица"));
+    multyplyConstantA->setToolTip(tr("Умножить на константу"));
+    divideConstantA->setToolTip(tr("Делить на константу"));
+
+    // Matrix B buttons
+    matrixBTable->setToolTip(tr("Матрица В"));
+    CreateMatrixB->setToolTip(tr("Поменять размер"));
+    CopyMatrixB->setToolTip(tr("Скопировать матрицу"));
+    InsertMatrixB->setToolTip(tr("Вставить из буфер обмена"));
+    transposeBButton->setToolTip(tr("Транспонирование"));
+    inverseBButton->setToolTip(tr("Обратная матрица"));
+    multyplyConstantB->setToolTip(tr("Умножить на константу"));
+    divideConstantB->setToolTip(tr("Делить на константу"));
+
+    // Operation buttons
+    summButton->setToolTip(tr("Операция суммы"));
+    raznButton->setToolTip(tr("Операция разности"));
+    multiplyButton->setToolTip(tr("Операция произведения"));
+    clearButton->setToolTip(tr("Очистить матрицы"));
+    randomButton->setToolTip(tr("Вставить случайные значения в матрицы А и В"));
+
+    // Matrix C
+    CopyMatrixC->setToolTip(tr("Скопировать матрицу"));
+
+    // Update constant placeholders
+    constantA->setPlaceholderText(tr("const"));
+    constantB->setPlaceholderText(tr("const"));
+}
+
+    // В файле mainwindow.cpp
+// void Matrix_Calculator::loadlanguage(const QString &language)
+// {
+//     // Удаляем текущий переводчик если он был установлен
+//     qApp->removeTranslator(&translator);
+
+//     // Загружаем файл перевода
+//     bool loaded = translator.load("myapp_" + language, ":/translations");
+//     if (loaded) {
+//         // Устанавливаем переводчик
+//         qApp->installTranslator(&translator);
+
+//         // Сохраняем выбранный язык в настройках
+//         QSettings settings;
+//         settings.setValue("language", language);
+//     }
+
+//     // Обновляем интерфейс приложения
+//     ui->retranslateUi(this);
+
+//     // Обновляем динамические строки, если они есть
+//     updateUITexts();
+// }
+
+// // Обновление динамических элементов интерфейса
+// void Matrix_Calculator::updateUITexts()
+// {
+//     // Обновляем тексты, которые не входят в ui файл
+//     // Например:
+//     setWindowTitle(tr("My Application"));
+//     // другие элементы...
+// }

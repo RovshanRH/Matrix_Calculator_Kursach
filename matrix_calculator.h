@@ -23,6 +23,8 @@
 #include <QSize>
 #include <QLineEdit>
 #include <QDoubleValidator>
+#include <QTranslator>
+#include <QSettings>
 #include <cmath>
 #include "cleaner.h"
 #include "helpwindow.h"
@@ -101,8 +103,18 @@ private:
     QPushButton *CopyMatrixA, * InsertMatrixA, * CopyMatrixB, * InsertMatrixB, * CopyMatrixC,  * sizeButton, * copymatrices, * insertmatrices, * swapmatrixAB, * CreateMatrixA, * CreateMatrixB,
         * summButton, * raznButton, * multiplyButton, * clearButton, * randomButton, * transposeAButton, * inverseAButton, * multyplyConstantA, * divideConstantA, * transposeBButton, * inverseBButton,
         * multyplyConstantB, * divideConstantB;
+
+    QTranslator translator;
+    QPushButton *changeLang;
+    QIcon* changeLangIcon;
+    void loadlanguage(const QString &language);
+    void updateUITexts();
+    void retranslateUi();
+
+
 private slots:
     void onPaletteChanged();
+    // void changeLanguage(const QString &language);
 
 };
 
