@@ -1,4 +1,5 @@
 #include "helpwindow.h"
+#include "qapplication.h"
 #include <QFile>
 #include <QTextStream>
 
@@ -27,17 +28,26 @@ void HelpWindow::loadHtmlFile(const QString &filePath)
         return;
     }
 
+    // connect(qApp, &QApplication::paletteChanged, this, &HelpWindow::ChangeColorTheme);
+
     QTextStream in(&file);
     textBrowser->setHtml(in.readAll());
     file.close();
 }
 
-// void HelpWindow::loadHelpRus() {
-//     loadHtmlFile(":/Icons/help.html");
-// }
-// void HelpWindow::loadHelpEng() {
-//     loadHtmlFile(":/Icons/help_en.html");
-// }
-// void HelpWindow::loadHelpFra() {
-//     loadHtmlFile(":/Icons/help_fr.html");
-// }
+bool isDarkTheme() {
+    QPalette palette = QApplication::palette();
+    return palette.color(QPalette::Window).lightness() < 128;
+}
+
+void HelpWindow::ChangeColorTheme() {
+    bool dark = isDarkTheme();
+    QPalette newPalette = QPalette();
+    if (!dark) {
+        newPalette.setColor(QPalette::Window, QColor(255, 255, 255)); // Яркий белый фон
+        newPalette.setColor(QPalette::Text, Qt::black);
+    } else {
+        newPalette.setColor(QPalette::Window, QColor(0, 0, 0)); // Яркий белый фон
+        newPalette.setColor(QPalette::Text, Qt::white);
+    }
+}

@@ -35,7 +35,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // MainLayout->setContentsMargins(0,0,0,0);
 
     QColor iconColor = isDarkTheme() ? Qt::white : Qt::black;
-    connect(qApp, &QApplication::paletteChanged, this, &Matrix_Calculator::onPaletteChanged);
+    connect(qApp, &QApplication::paletteChanged, this, [this]() {
+        onPaletteChanged();
+        if (changePaletteAndTextValue) {changePaletteAndText();}
+    });
 
     // макет матриц
     QWidget *matricesWidget = new QWidget();
@@ -1051,15 +1054,26 @@ void Matrix_Calculator::changePaletteAndText() {
     changePaletteAndTextValue = !changePaletteAndTextValue;
 
     // QBrush brush = QBrush(QFont::Bold);
+    bool isDark = isDarkTheme();
 
     newPalette = QPalette();
-    newPalette.setColor(QPalette::Window, QColor(255, 255, 255)); // Яркий белый фон
-    newPalette.setColor(QPalette::Text, Qt::black); // Чёрный текст для максимальной контрастности
-    newPalette.setColor(QPalette::Base, QColor(255, 255, 255)); // Белый фон для текстовых полей
-    newPalette.setColor(QPalette::AlternateBase, QColor(255, 255, 255)); // Светло-серый для чередующихся строк
-    newPalette.setColor(QPalette::Button, QColor(255, 255, 255)); // Серый для кнопок
+    if (!isDark){
+        newPalette.setColor(QPalette::Window, QColor(255, 255, 255)); // Яркий белый фон
+        newPalette.setColor(QPalette::Text, Qt::black); // Чёрный текст для максимальной контрастности
+        newPalette.setColor(QPalette::Base, QColor(255, 255, 255)); // Белый фон для текстовых полей
+        newPalette.setColor(QPalette::AlternateBase, QColor(255, 255, 255)); // Светло-серый для чередующихся строк
+        newPalette.setColor(QPalette::HighlightedText, Qt::white); // Белый текст на выделении
+        newPalette.setColor(QPalette::Button, QColor(255, 255, 255)); // Серый для кнопок
+    } else {
+        newPalette.setColor(QPalette::Window, QColor(0, 0, 0)); // Яркий белый фон
+        newPalette.setColor(QPalette::Text, Qt::white); // Чёрный текст для максимальной контрастности
+        newPalette.setColor(QPalette::Base, QColor(10, 10, 10)); // Белый фон для текстовых полей
+        newPalette.setColor(QPalette::AlternateBase, QColor(10, 10, 10)); // Светло-серый для чередующихся строк
+        newPalette.setColor(QPalette::HighlightedText, Qt::white); // Белый текст на выделении
+        newPalette.setColor(QPalette::Button, QColor(10, 10, 10)); // Серый для кнопок
+    }
     newPalette.setColor(QPalette::Highlight, QColor(0, 120, 215)); // Синий для выделения (WCAG-совместимый)
-    newPalette.setColor(QPalette::HighlightedText, Qt::white); // Белый текст на выделении
+
 
     if (changePaletteAndTextValue) {
         setPalette(newPalette);
@@ -1067,6 +1081,8 @@ void Matrix_Calculator::changePaletteAndText() {
         font.setBold(true);
         font.setPointSize(14);
         QApplication::setFont(font); // Устанавливаем жирный шрифт для всего приложения
+
+
     } else {
         setPalette(QApplication::palette());
         QFont font;

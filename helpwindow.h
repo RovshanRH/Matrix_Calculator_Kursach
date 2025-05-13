@@ -18,6 +18,8 @@ public:
 
 private:
     QTextBrowser *textBrowser;
+    // bool isDarkTheme();
+    void ChangeColorTheme();
 };
 
 #endif // HELPWINDOW_H
