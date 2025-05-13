@@ -15,6 +15,10 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     setWindowTitle("Калькулятор матриц");
     setMinimumSize(900, 680);
 
+    QFont font;
+    font.setPointSize(8);
+    QApplication::setFont(font);
+
     QSettings settings;
     QString language = settings.value("language", QLocale::system().name().left(2)).toString();
     loadlanguage(language);
@@ -44,7 +48,8 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     // vlayout->setSpacing(0);
     vlayout->setContentsMargins(0,0,0,0);
 
-    QPushButton* help = new QPushButton(tr("Помощь"), this);
+    help = new QPushButton;
+    help->setText(tr("Помощь"));
 
     connect(help, &QPushButton::clicked, this, [this]() {
         helpi.show();
@@ -58,8 +63,36 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     QMenu* LangMenuBar = new QMenu(tr("меню"), this);
     QAction* rus = new QAction("Русский");
     QAction* eng = new QAction("English");
+    QAction* fra = new QAction("Français");
+    QAction* esp = new QAction("Español");
+    QAction* ita = new QAction("Italiano");
+    QAction* deu = new QAction("Deutsch");
+    QAction* pol = new QAction("Polski");
+    QAction* kor = new QAction("한국어");
+    QAction* chi = new QAction("中文");
+    QAction* jap = new QAction("日本語");
+
+    rus->setIcon(QIcon(":/Icons/flag-ru.svg"));
+    eng->setIcon(QIcon(":/Icons/flag-en.svg"));
+    fra->setIcon(QIcon(":/Icons/flag-fr.svg"));
+    esp->setIcon(QIcon(":/Icons/flag-es.svg"));
+    ita->setIcon(QIcon(":/Icons/flag-it.svg"));
+    deu->setIcon(QIcon(":/Icons/flag-de.svg"));
+    pol->setIcon(QIcon(":/Icons/flag-pl.svg"));
+    kor->setIcon(QIcon(":/Icons/flag-kr.svg"));
+    chi->setIcon(QIcon(":/Icons/flag-zh.svg"));
+    jap->setIcon(QIcon(":/Icons/flag-jp.svg"));
+
     LangMenuBar->addAction(rus);
     LangMenuBar->addAction(eng);
+    LangMenuBar->addAction(fra);
+    LangMenuBar->addAction(esp);
+    LangMenuBar->addAction(ita);
+    LangMenuBar->addAction(deu);
+    LangMenuBar->addAction(pol);
+    LangMenuBar->addAction(kor);
+    LangMenuBar->addAction(chi);
+    LangMenuBar->addAction(jap);
 
     changeLang->setMenu(LangMenuBar);
 
@@ -68,11 +101,50 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
         loadlanguage("ru");  // Load Russian translations
         retranslateUi();     // Update the UI with new translations
     });
-
     connect(eng, &QAction::triggered, this, [this]() {
         loadlanguage("en");  // Load English translations
         retranslateUi();     // Update the UI with new translations
     });
+    connect(fra, &QAction::triggered, this, [this](){
+        loadlanguage("fr");
+        retranslateUi();
+    });
+    connect(ita, &QAction::triggered, this, [this](){
+        loadlanguage("it");
+        retranslateUi();
+    });
+    connect(deu, &QAction::triggered, this, [this](){
+        loadlanguage("de");
+        retranslateUi();
+    });
+    connect(esp, &QAction::triggered, this, [this](){
+        loadlanguage("es");
+        retranslateUi();
+    });
+    connect(pol, &QAction::triggered, this, [this](){
+        loadlanguage("pl");
+        retranslateUi();
+    });
+    connect(kor, &QAction::triggered, this, [this](){
+        loadlanguage("kr");
+        retranslateUi();
+    });
+    connect(chi, &QAction::triggered, this, [this](){
+        loadlanguage("zh");
+        retranslateUi();
+    });
+    connect(jap, &QAction::triggered, this, [this](){
+        loadlanguage("jp");
+        retranslateUi();
+    });
+
+
+    glassesIcon = new QIcon(createColoredIcon(":Icons/glasses.svg", iconColor));
+    glassesButton = new QPushButton;
+    glassesButton->setIcon(*glassesIcon);
+    glassesButton->setToolTip("Режим для слабовидящих");
+
+    connect(glassesButton, &QPushButton::clicked, this, &Matrix_Calculator::changePaletteAndText);
 
     change3SizeIcon = new QIcon(createColoredIcon(":/Icons/iconmonstr-screen-size-increase-filled.svg", iconColor));
     sizeButton = new QPushButton;
@@ -109,6 +181,7 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     hlayout->addWidget(swapmatrixAB)*/
     hlayout->addWidget(help);
     hlayout->addWidget(changeLang);
+    hlayout->addWidget(glassesButton);
     vlayout->addLayout(hlayout);
 
     auto lineA = new QFrame;
@@ -149,10 +222,12 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     InsertMatrixA->setIcon(*insertIcon);
     InsertMatrixA->setToolTip("Вставить из буфер обмена");
 
-    QLabel *RangALabel = new QLabel("Ранг А: ");
-    QLabel *RangeAValue = new QLabel(QString::number(0));
-    QPushButton *RangAButton = new QPushButton("Ранг");
-    RangAButton->setToolTip("Найти ранг матрицы");
+    RangALabel = new QLabel;
+    RangeAValue = new QLabel(QString::number(0));
+    RangAButton = new QPushButton;
+    RangALabel->setText(tr("Ранг А: "));
+    RangAButton->setText(tr("Ранг"));
+    RangAButton->setToolTip(tr("Найти ранг матрицы"));
 
     // Кнопки для матрицы А
     QWidget *matrixAButtonsWidget = new QWidget();
@@ -241,10 +316,12 @@ Matrix_Calculator::Matrix_Calculator(QWidget *parent) : QMainWindow(parent)
     InsertMatrixB->setIcon(*insertIcon);
     InsertMatrixB->setToolTip("Вставить из буфер обмена");
 
-    QLabel *RangBLabel = new QLabel("Ранг В: ");
-    QLabel *RangeBValue = new QLabel(QString::number(0));
-    QPushButton* RangBButton = new QPushButton("Ранг");
-    RangBButton->setToolTip("Найти ранг матрицы");
+    RangBLabel = new QLabel;
+    RangeBValue = new QLabel(QString::number(0));
+    RangBButton = new QPushButton;
+    RangBLabel->setText(tr("Ранг В: "));
+    RangBButton->setText(tr("Ранг"));
+    RangBButton->setToolTip(tr("Найти ранг матрицы"));
 
     // Кнопки для матрицы B
     QWidget *matrixBButtonsWidget = new QWidget();
@@ -748,6 +825,7 @@ void Matrix_Calculator::onPaletteChanged() {
     updateIcons(BsubstractbyC, divideConstantB, ":/Icons/divC.svg");
 
     updateIcons(changeLangIcon, changeLang, ":/Icons/world.svg");
+    updateIcons(glassesIcon, glassesButton, ":/Icons/glasses.svg");
 }
 
 void Matrix_Calculator::setupMatrix(
@@ -877,9 +955,31 @@ void Matrix_Calculator::loadlanguage(const QString &language)
 
         qDebug() << "wtf2.5";
 
-        retranslateUi();
+        // retranslateUi();
 
         qDebug() << "wtf3";
+
+        if (language == "ru") {
+            helpi.loadHtmlFile(":/Icons/help.html");
+        } /*else if (language == "it") {
+            helpi.loadHtmlFile(":/Icons/help_it_brainrot.html");
+        }*/
+        else {
+            helpi.loadHtmlFile(":/Icons/help_" + language + ".html");
+        }
+
+
+        // If the help window is visible, force it to refresh
+        if (helpi.isVisible()) {
+            if (language == "ru") {
+                helpi.loadHtmlFile(":/Icons/help.html");
+            } /*else if (language == "it") {
+                helpi.loadHtmlFile(":/Icons/help_it_brainrot.html");
+            }*/
+            else {
+                helpi.loadHtmlFile(":/Icons/help_" + language + ".html");
+            }
+        }
     } else {
         qWarning() << "Failed to load translation for language:" << language;
     }
@@ -889,7 +989,7 @@ void Matrix_Calculator::loadlanguage(const QString &language)
 void Matrix_Calculator::retranslateUi()
 {
     // Update window title
-    // setWindowTitle(tr("Калькулятор матриц"));
+    setWindowTitle(tr("Калькулятор матриц"));
 
     // Update button tooltips and text
     changeLang->setToolTip(tr("Изменить язык"));
@@ -898,6 +998,17 @@ void Matrix_Calculator::retranslateUi()
     copymatrices->setToolTip(tr("Скопировать значения 3 матриц"));
     insertmatrices->setToolTip(tr("Вставить из буфер обменя 3 матрицы"));
     swapmatrixAB->setToolTip(tr("Поменять местами матрицы"));
+
+    help->setText(tr("Помощь"));
+    helpi.setWindowTitle(tr("Помощь"));
+
+    RangALabel->setText(tr("Ранг А: "));
+    RangAButton->setText(tr("Ранг"));
+    RangAButton->setToolTip(tr("Найти ранг матрицы"));
+
+    RangBLabel->setText(tr("Ранг В: "));
+    RangBButton->setText(tr("Ранг"));
+    RangBButton->setToolTip(tr("Найти ранг матрицы"));
 
     // Matrix A buttons
     matrixATable->setToolTip(tr("Матрица А"));
@@ -932,37 +1043,35 @@ void Matrix_Calculator::retranslateUi()
     // Update constant placeholders
     constantA->setPlaceholderText(tr("const"));
     constantB->setPlaceholderText(tr("const"));
+
+    glassesButton->setToolTip(tr("Режим для слабовидящих"));
 }
 
-    // В файле mainwindow.cpp
-// void Matrix_Calculator::loadlanguage(const QString &language)
-// {
-//     // Удаляем текущий переводчик если он был установлен
-//     qApp->removeTranslator(&translator);
+void Matrix_Calculator::changePaletteAndText() {
+    changePaletteAndTextValue = !changePaletteAndTextValue;
 
-//     // Загружаем файл перевода
-//     bool loaded = translator.load("myapp_" + language, ":/translations");
-//     if (loaded) {
-//         // Устанавливаем переводчик
-//         qApp->installTranslator(&translator);
+    // QBrush brush = QBrush(QFont::Bold);
 
-//         // Сохраняем выбранный язык в настройках
-//         QSettings settings;
-//         settings.setValue("language", language);
-//     }
+    newPalette = QPalette();
+    newPalette.setColor(QPalette::Window, QColor(255, 255, 255)); // Яркий белый фон
+    newPalette.setColor(QPalette::Text, Qt::black); // Чёрный текст для максимальной контрастности
+    newPalette.setColor(QPalette::Base, QColor(255, 255, 255)); // Белый фон для текстовых полей
+    newPalette.setColor(QPalette::AlternateBase, QColor(255, 255, 255)); // Светло-серый для чередующихся строк
+    newPalette.setColor(QPalette::Button, QColor(255, 255, 255)); // Серый для кнопок
+    newPalette.setColor(QPalette::Highlight, QColor(0, 120, 215)); // Синий для выделения (WCAG-совместимый)
+    newPalette.setColor(QPalette::HighlightedText, Qt::white); // Белый текст на выделении
 
-//     // Обновляем интерфейс приложения
-//     ui->retranslateUi(this);
-
-//     // Обновляем динамические строки, если они есть
-//     updateUITexts();
-// }
-
-// // Обновление динамических элементов интерфейса
-// void Matrix_Calculator::updateUITexts()
-// {
-//     // Обновляем тексты, которые не входят в ui файл
-//     // Например:
-//     setWindowTitle(tr("My Application"));
-//     // другие элементы...
-// }
+    if (changePaletteAndTextValue) {
+        setPalette(newPalette);
+        QFont font;
+        font.setBold(true);
+        font.setPointSize(14);
+        QApplication::setFont(font); // Устанавливаем жирный шрифт для всего приложения
+    } else {
+        setPalette(QApplication::palette());
+        QFont font;
+        font.setBold(false);
+        font.setPointSize(8);
+        QApplication::setFont(font); // Устанавливаем жирный шрифт для всего приложения
+    }
+}

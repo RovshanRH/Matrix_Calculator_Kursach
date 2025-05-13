@@ -4,192 +4,222 @@
 <context>
     <name>Matrix_Calculator</name>
     <message>
-        <location filename="matrix_calculator.cpp" line="48"/>
+        <location filename="../matrix_calculator.cpp" line="48"/>
+        <location filename="../matrix_calculator.cpp" line="969"/>
+        <location filename="../matrix_calculator.cpp" line="970"/>
         <source>Помощь</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="57"/>
-        <location filename="matrix_calculator.cpp" line="885"/>
+        <location filename="../matrix_calculator.cpp" line="57"/>
+        <location filename="../matrix_calculator.cpp" line="962"/>
         <source>Изменить язык</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="59"/>
+        <location filename="../matrix_calculator.cpp" line="59"/>
         <source>меню</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="369"/>
-        <location filename="matrix_calculator.cpp" line="786"/>
+        <location filename="../matrix_calculator.cpp" line="419"/>
+        <location filename="../matrix_calculator.cpp" line="836"/>
         <source>Скопировать</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="370"/>
-        <location filename="matrix_calculator.cpp" line="787"/>
+        <location filename="../matrix_calculator.cpp" line="420"/>
+        <location filename="../matrix_calculator.cpp" line="837"/>
         <source>Вставить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="371"/>
-        <location filename="matrix_calculator.cpp" line="788"/>
+        <location filename="../matrix_calculator.cpp" line="421"/>
+        <location filename="../matrix_calculator.cpp" line="838"/>
         <source>Очистить</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="573"/>
+        <location filename="../matrix_calculator.cpp" line="623"/>
         <source>Режим выбора</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="575"/>
+        <location filename="../matrix_calculator.cpp" line="625"/>
         <source>Скопировать 3 матрицы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="576"/>
+        <location filename="../matrix_calculator.cpp" line="626"/>
         <source>Вставить 3 матрицы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="577"/>
-        <location filename="matrix_calculator.cpp" line="916"/>
+        <location filename="../matrix_calculator.cpp" line="627"/>
+        <location filename="../matrix_calculator.cpp" line="1004"/>
         <source>Очистить матрицы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="578"/>
+        <location filename="../matrix_calculator.cpp" line="628"/>
         <source>Поменять матрицы А и В местами</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="784"/>
+        <location filename="../matrix_calculator.cpp" line="834"/>
         <source>Меню выбора</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="789"/>
+        <location filename="../matrix_calculator.cpp" line="839"/>
         <source>Вставить единичную матрицу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="790"/>
+        <location filename="../matrix_calculator.cpp" line="840"/>
         <source>Вставить верхнюю треугольную матрицу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="791"/>
+        <location filename="../matrix_calculator.cpp" line="841"/>
         <source>Вставить нижнюю треугольную матрицу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="882"/>
+        <location filename="../matrix_calculator.cpp" line="959"/>
         <source>Калькулятор матриц</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="886"/>
+        <location filename="../matrix_calculator.cpp" line="963"/>
         <source>Задать Х размер квадратов А и В значением</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="87"/>
-        <location filename="matrix_calculator.cpp" line="887"/>
+        <location filename="../matrix_calculator.cpp" line="133"/>
+        <location filename="../matrix_calculator.cpp" line="964"/>
         <source>Задать значение Х</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="888"/>
+        <location filename="../matrix_calculator.cpp" line="202"/>
+        <location filename="../matrix_calculator.cpp" line="972"/>
+        <source>Ранг А: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../matrix_calculator.cpp" line="203"/>
+        <location filename="../matrix_calculator.cpp" line="297"/>
+        <location filename="../matrix_calculator.cpp" line="973"/>
+        <location filename="../matrix_calculator.cpp" line="977"/>
+        <source>Ранг</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../matrix_calculator.cpp" line="204"/>
+        <location filename="../matrix_calculator.cpp" line="298"/>
+        <location filename="../matrix_calculator.cpp" line="974"/>
+        <location filename="../matrix_calculator.cpp" line="978"/>
+        <source>Найти ранг матрицы</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../matrix_calculator.cpp" line="296"/>
+        <location filename="../matrix_calculator.cpp" line="976"/>
+        <source>Ранг В: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../matrix_calculator.cpp" line="965"/>
         <source>Скопировать значения 3 матриц</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="889"/>
+        <location filename="../matrix_calculator.cpp" line="966"/>
         <source>Вставить из буфер обменя 3 матрицы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="890"/>
+        <location filename="../matrix_calculator.cpp" line="967"/>
         <source>Поменять местами матрицы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="893"/>
+        <location filename="../matrix_calculator.cpp" line="981"/>
         <source>Матрица А</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="894"/>
-        <location filename="matrix_calculator.cpp" line="904"/>
+        <location filename="../matrix_calculator.cpp" line="982"/>
+        <location filename="../matrix_calculator.cpp" line="992"/>
         <source>Поменять размер</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="895"/>
-        <location filename="matrix_calculator.cpp" line="905"/>
-        <location filename="matrix_calculator.cpp" line="920"/>
+        <location filename="../matrix_calculator.cpp" line="983"/>
+        <location filename="../matrix_calculator.cpp" line="993"/>
+        <location filename="../matrix_calculator.cpp" line="1008"/>
         <source>Скопировать матрицу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="896"/>
-        <location filename="matrix_calculator.cpp" line="906"/>
+        <location filename="../matrix_calculator.cpp" line="984"/>
+        <location filename="../matrix_calculator.cpp" line="994"/>
         <source>Вставить из буфер обмена</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="897"/>
-        <location filename="matrix_calculator.cpp" line="907"/>
+        <location filename="../matrix_calculator.cpp" line="985"/>
+        <location filename="../matrix_calculator.cpp" line="995"/>
         <source>Транспонирование</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="898"/>
-        <location filename="matrix_calculator.cpp" line="908"/>
+        <location filename="../matrix_calculator.cpp" line="986"/>
+        <location filename="../matrix_calculator.cpp" line="996"/>
         <source>Обратная матрица</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="899"/>
-        <location filename="matrix_calculator.cpp" line="909"/>
+        <location filename="../matrix_calculator.cpp" line="987"/>
+        <location filename="../matrix_calculator.cpp" line="997"/>
         <source>Умножить на константу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="900"/>
-        <location filename="matrix_calculator.cpp" line="910"/>
+        <location filename="../matrix_calculator.cpp" line="988"/>
+        <location filename="../matrix_calculator.cpp" line="998"/>
         <source>Делить на константу</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="903"/>
+        <location filename="../matrix_calculator.cpp" line="991"/>
         <source>Матрица В</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="913"/>
+        <location filename="../matrix_calculator.cpp" line="1001"/>
         <source>Операция суммы</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="914"/>
+        <location filename="../matrix_calculator.cpp" line="1002"/>
         <source>Операция разности</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="915"/>
+        <location filename="../matrix_calculator.cpp" line="1003"/>
         <source>Операция произведения</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="917"/>
+        <location filename="../matrix_calculator.cpp" line="1005"/>
         <source>Вставить случайные значения в матрицы А и В</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="matrix_calculator.cpp" line="923"/>
-        <location filename="matrix_calculator.cpp" line="924"/>
+        <location filename="../matrix_calculator.cpp" line="1011"/>
+        <location filename="../matrix_calculator.cpp" line="1012"/>
         <source>const</source>
         <translation type="unfinished"></translation>
     </message>

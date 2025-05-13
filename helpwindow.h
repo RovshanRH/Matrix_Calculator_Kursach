@@ -12,6 +12,9 @@ public:
     HelpWindow(QWidget* parent = nullptr);
     ~HelpWindow();
     void loadHtmlFile(const QString &filePath);
+    // void loadHelpRus();
+    // void loadHelpEng();
+    // void loadHelpFra();
 
 private:
     QTextBrowser *textBrowser;

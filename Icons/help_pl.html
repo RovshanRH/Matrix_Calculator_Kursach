@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc - Kalkulator Macierzy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sekcja Pomocy</h1>
+    <p>Kalkulator Macierzy to aplikacja do wykonywania podstawowych operacji arytmetycznych na dwóch macierzach. Aplikacja zawiera dwie macierze oznaczone jako „<strong>Macierz A</strong>” i „<strong>Macierz B</strong>”, a także „<strong>Macierz Wynikowa</strong>”, która wyświetla wyniki operacji przeprowadzonych na macierzach.</p>
+    <p>Funkcje związane z macierzami są podzielone na następujące sekcje:</p>
+    <ul>
+        <li><a href="#matrix">Macierz</a>
+            <ul>
+                <li><a href="#matrix-size">Rozmiar Macierzy</a></li>
+                <li><a href="#matrix-operations">Operacje na Macierzach</a></li>
+                <li><a href="#matrix-context-menu">Menu Kontekstowe Macierzy</a></li>
+                <li><a href="#matrix-rank">Rząd Macierzy</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Operacje</a></li>
+        <li><a href="#header">Nagłówek</a></li>
+        <li><a href="#app-context-menu">Menu Kontekstowe Aplikacji</a></li>
+    </ul>
+
+    <h2 id="matrix">Sekcja Macierzy</h2>
+    <p>Dwa sekwencyjne operandy, Macierz A i Macierz B, są przedstawione jako tabele o domyślnym rozmiarze 3x3. Macierz A i Macierz B są funkcjonalnie identyczne.</p>
+
+    <h3 id="matrix-size">Rozmiar Macierzy</h3>
+    <p>Aby zmienić rozmiar macierzy, dostępne są dwa liczniki w zakresie od 1 do 10. Pierwszy licznik kontroluje liczbę wierszy, a drugi liczbę kolumn. Aby zastosować zmianę rozmiaru, kliknij przycisk znajdujący się po licznikach.</p>
+
+    <h3 id="matrix-operations">Operacje na Macierzach</h3>
+    <p>Każda macierz obsługuje cztery operacje: <strong>transpozycję macierzy</strong>, <strong>znajdowanie macierzy odwrotnej</strong>, <strong>dzielenie przez stałą</strong> oraz <strong>mnożenie przez stałą</strong>. Pole wprowadzania <em>const</em> znajduje się poniżej tabeli macierzy, aby określić wartość stałej.</p>
+    <ul>
+        <li><strong>Transpozycja</strong> - Wykonuje operację transpozycji macierzy.</li>
+        <li><strong>Znajdowanie Macierzy Odwrotnej</strong> - Oblicza macierz odwrotną z marginesem błędu około 0,001–0,1 dla wartości komórek. Program zwraca błąd, jeśli macierz jest osobliwa (zdegenerowana).</li>
+        <li><strong>Dzielenie przez Stałą</strong> - Każda komórka jest dzielona przez podaną liczbę.</li>
+        <li><strong>Mnożenie przez Stałą</strong> - Każda komórka jest mnożona przez podaną liczbę.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Menu Kontekstowe</h3>
+    <p>Kliknięcie prawym przyciskiem myszy na macierzy wyświetla menu kontekstowe z następującymi opcjami:</p>
+    <ul>
+        <li><strong>Kopiuj</strong> - Kopiuje wartości macierzy do schowka w formacie TSV.</li>
+        <li><strong>Wklej</strong> - Zastępuje wartości macierzy danymi ze schowka. Obsługuje formaty TSV i CSV.</li>
+        <li><strong>Wyczyść</strong> - Zastępuje wszystkie wartości macierzy zerami.</li>
+        <li><strong>Wstaw Macierz Jednostkową</strong> - Zastępuje wartości macierzy wartościami macierzy jednostkowej (główna przekątna to „1”, pozostałe komórki to „0”).</li>
+        <li><strong>Wstaw Macierz Górnotrójkątną</strong> - Zastępuje wartości macierzy wartościami macierzy górnotrójkątnej (wszystkie komórki powyżej lub na głównej przekątnej to „1”, pozostałe to „0”).</li>
+        <li><strong>Wstaw Macierz Dolnotrójkątną</strong> - Zastępuje wartości macierzy wartościami macierzy dolnotrójkątnej (wszystkie komórki poniżej lub na głównej przekątnej to „1”, pozostałe to „0”).</li>
+    </ul>
+
+    <h3 id="matrix-rank">Rząd Macierzy</h3>
+    <p>Poniżej tabeli macierzy znajduje się licznik rzędu, który aktualizuje się po kliknięciu przycisku „Znajdź Rząd Macierzy”. Początkowa wartość wynosi „0”.</p>
+
+    <h2 id="operations">Sekcja Operacji</h2>
+    <ul>
+        <li><strong>Dodawanie</strong> - Oblicza sumę Macierzy A i Macierzy B.</li>
+        <li><strong>Odejmowanie</strong> - Odejmuje Macierz B od Macierzy A.</li>
+        <li><strong>Mnożenie</strong> - Mnoży Macierz A przez Macierz B.</li>
+    </ul>
+    <p>Program zapobiega dodawaniu lub odejmowaniu macierzy niekwadratowych oraz mnożeniu macierzy, które nie spełniają warunków mnożenia.</p>
+    <ul>
+        <li><strong>Wyczyść</strong> - Zastępuje wartości wszystkich macierzy zerami.</li>
+        <li><strong>Wstaw Losowe Wartości</strong> - Wstawia losowe wartości do Macierzy A i Macierzy B.</li>
+    </ul>
+
+    <h2 id="header">Sekcja Nagłówka</h2>
+    <p>Za pomocą licznika <strong>X</strong> można określić liczbę, która ustala rozmiar macierzy kwadratowej dla Macierzy A i Macierzy B. Aby zastosować zmianę rozmiaru, kliknij przycisk po lewej stronie licznika.</p>
+
+    <h2 id="app-context-menu">Menu Kontekstowe Aplikacji</h2>
+    <p>Kliknięcie prawym przyciskiem myszy na oknie aplikacji wyświetla menu kontekstowe z następującymi opcjami:</p>
+    <ul>
+        <li><strong>Kopiuj 3 Macierze</strong> - Kopiuje wartości wszystkich trzech macierzy do schowka w formacie CSV.</li>
+        <li><strong>Wklej 3 Macierze</strong> - Wkleja wartości ze schowka do Macierzy A, Macierzy B i Macierzy C, odpowiednio, w formacie CSV lub TSV.</li>
+        <li><strong>Wyczyść Macierze</strong> - Ustawia wszystkie wartości macierzy na zero.</li>
+        <li><strong>Zamień Macierze</strong> - Zamienia pozycje Macierzy A i Macierzy B.</li>
+    </ul>
+</body>
+</html>

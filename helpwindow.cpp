@@ -31,3 +31,13 @@ void HelpWindow::loadHtmlFile(const QString &filePath)
     textBrowser->setHtml(in.readAll());
     file.close();
 }
+
+// void HelpWindow::loadHelpRus() {
+//     loadHtmlFile(":/Icons/help.html");
+// }
+// void HelpWindow::loadHelpEng() {
+//     loadHtmlFile(":/Icons/help_en.html");
+// }
+// void HelpWindow::loadHelpFra() {
+//     loadHtmlFile(":/Icons/help_fr.html");
+// }

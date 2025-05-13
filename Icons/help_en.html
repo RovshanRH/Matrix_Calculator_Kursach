@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Matrix Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Help Section</h1>
+    <p>The Matrix Calculator is an application for performing basic arithmetic operations on two matrices. The application features two matrices labeled "<strong>Matrix A</strong>" and "<strong>Matrix B</strong>", as well as a "<strong>Resulting Matrix</strong>" that displays the outcome of operations performed on the matrices.</p>
+    <p>Matrix-related functions are divided into the following sections:</p>
+    <ul>
+        <li><a href="#matrix">Matrix</a>
+            <ul>
+                <li><a href="#matrix-size">Matrix Size</a></li>
+                <li><a href="#matrix-operations">Matrix Operations</a></li>
+                <li><a href="#matrix-context-menu">Matrix Context Menu</a></li>
+                <li><a href="#matrix-rank">Matrix Rank</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Operations</a></li>
+        <li><a href="#header">Header</a></li>
+        <li><a href="#app-context-menu">Application Context Menu</a></li>
+    </ul>
+
+    <h2 id="matrix">Matrix Section</h2>
+    <p>The two sequential operands, Matrix A and Matrix B, are presented as tables with a default size of 3x3. Matrix A and Matrix B are functionally identical.</p>
+
+    <h3 id="matrix-size">Matrix Size</h3>
+    <p>To change the size of a matrix, two counters ranging from 1 to 10 are provided. The first counter controls the number of rows, and the second controls the number of columns. To apply the size change, click the button that follows the counters.</p>
+
+    <h3 id="matrix-operations">Matrix Operations</h3>
+    <p>Each matrix supports four operations: <strong>matrix transposition</strong>, <strong>finding the inverse matrix</strong>, <strong>division by a constant</strong>, and <strong>multiplication by a constant</strong>. A <em>const</em> input field is provided below the matrix table to specify the constant.</p>
+    <ul>
+        <li><strong>Transposition</strong> - Performs the matrix transposition operation.</li>
+        <li><strong>Finding the Inverse Matrix</strong> - Calculates the inverse matrix with an error margin of approximately 0.001–0.1 for cell values. The program returns an error if the matrix is singular (degenerate).</li>
+        <li><strong>Division by a Constant</strong> - Each cell is divided by the specified number.</li>
+        <li><strong>Multiplication by a Constant</strong> - Each cell is multiplied by the specified number.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Context Menu</h3>
+    <p>Right-clicking on a matrix displays a context menu with the following options:</p>
+    <ul>
+        <li><strong>Copy</strong> - Copies the matrix values to the clipboard in TSV format.</li>
+        <li><strong>Paste</strong> - Replaces the matrix values with data from the clipboard. Supports TSV and CSV formats.</li>
+        <li><strong>Clear</strong> - Replaces all matrix values with zero.</li>
+        <li><strong>Insert Identity Matrix</strong> - Replaces the matrix values with those of an identity matrix (main diagonal is "1", all other cells are "0").</li>
+        <li><strong>Insert Upper Triangular Matrix</strong> - Replaces the matrix values with those of an upper triangular matrix (all cells above or on the main diagonal are "1", others are "0").</li>
+        <li><strong>Insert Lower Triangular Matrix</strong> - Replaces the matrix values with those of a lower triangular matrix (all cells below or on the main diagonal are "1", others are "0").</li>
+    </ul>
+
+    <h3 id="matrix-rank">Matrix Rank</h3>
+    <p>Below the matrix table is a rank counter, which updates after clicking the "Find Matrix Rank" button. The initial value is "0".</p>
+
+    <h2 id="operations">Operations Section</h2>
+    <ul>
+        <li><strong>Addition</strong> - Computes the sum of Matrix A and Matrix B.</li>
+        <li><strong>Subtraction</strong> - Subtracts Matrix B from Matrix A.</li>
+        <li><strong>Multiplication</strong> - Multiplies Matrix A by Matrix B.</li>
+    </ul>
+    <p>The program prevents users from adding or subtracting non-square matrices or multiplying matrices that do not meet multiplication conditions.</p>
+    <ul>
+        <li><strong>Clear</strong> - Replaces the values of all matrices with zero.</li>
+        <li><strong>Insert Random Values</strong> - Inserts random values into Matrix A and Matrix B.</li>
+    </ul>
+
+    <h2 id="header">Header Section</h2>
+    <p>Using the <strong>X</strong> counter, you can specify a number that sets the size of a square matrix for both Matrix A and Matrix B. To apply the size change, click the button to the left of the counter.</p>
+
+    <h2 id="app-context-menu">Application Context Menu</h2>
+    <p>Right-clicking on the application window displays a context menu with the following options:</p>
+    <ul>
+        <li><strong>Copy 3 Matrices</strong> - Copies the values of all three matrices to the clipboard in CSV format.</li>
+        <li><strong>Paste 3 Matrices</strong> - Pastes values from the clipboard into Matrix A, Matrix B, and Matrix C, respectively, in either CSV or TSV format.</li>
+        <li><strong>Clear Matrices</strong> - Sets all matrix values to zero.</li>
+        <li><strong>Swap Matrices</strong> - Swaps the positions of Matrix A and Matrix B.</li>
+    </ul>
+</body>
+</html>

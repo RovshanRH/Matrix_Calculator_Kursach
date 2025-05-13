@@ -1,0 +1,158 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Помощь - Калькулятор матриц</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>ヘルプセクション</h1>
+    <p>マトリクス計算機は、2つのマトリクスに対して基本的な算術演算を行うアプリケーションです。このアプリケーションには「<strong>マトリクスA</strong>」と「<strong>マトリクスB</strong>」という2つのマトリクスがあり、マトリクスに対して実行された演算の結果を表示する「<strong>結果マトリクス</strong>」も備えています。</p>
+    <p>マトリクス関連の機能は以下のセクションに分かれています：</p>
+    <ul>
+        <li><a href="#matrix">マトリクス</a>
+            <ul>
+                <li><a href="#matrix-size">マトリクスサイズ</a></li>
+                <li><a href="#matrix-operations">マトリクス操作</a></li>
+                <li><a href="#matrix-context-menu">マトリクスコンテキストメニュー</a></li>
+                <li><a href="#matrix-rank">マトリクスランク</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">操作</a></li>
+        <li><a href="#header">ヘッダー</a></li>
+        <li><a href="#app-context-menu">アプリケーションコンテキストメニュー</a></li>
+    </ul>
+
+    <h2 id="matrix">マトリクスセクション</h2>
+    <p>2つの連続するオペランドであるマトリクスAとマトリクスBは、デフォルトサイズが3x3のテーブルとして表示されます。マトリクスAとマトリクスBは機能的に同一です。</p>
+
+    <h3 id="matrix-size">マトリクスサイズ</h3>
+    <p>マトリクスのサイズを変更するには、1から10までの範囲の2つのカウンターが提供されます。1つ目のカウンターは行数を制御し、2つ目のカウンターは列数を制御します。サイズ変更を適用するには、カウンターの後にあるボタンをクリックしてください。</p>
+
+    <h3 id="matrix-operations">マトリクス操作</h3>
+    <p>各マトリクスは4つの操作をサポートします：<strong>マトリクス転置</strong>、<strong>逆マトリクスの計算</strong>、<strong>定数による除算</strong>、<strong>定数による乗算</strong>。定数を指定するために、マトリクステーブルの下に<em>const</em>入力フィールドが提供されています。</p>
+    <ul>
+        <li><strong>転置</strong> - マトリクス転置操作を実行します。</li>
+        <li><strong>逆マトリクスの計算</strong> - セルの値に対して約0.001～0.1の誤差範囲で逆マトリクスを計算します。マトリクスが特異（縮退）している場合、プログラムはエラーを返します。</li>
+        <li><strong>定数による除算</strong> - 各セルが指定された数で除算されます。</li>
+        <li><strong>定数による乗算</strong> - 各セルが指定された数で乗算されます。</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">コンテキストメニュー</h3>
+    <p>マトリクスを右クリックすると、以下のオプションを含むコンテキストメニューが表示されます：</p>
+    <ul>
+        <li><strong>コピー</strong> - マトリクスの値をTSV形式でクリップボードにコピーします。</li>
+        <li><strong>貼り付け</strong> - クリップボードのデータでマトリクスの値を置き換えます。TSVおよびCSV形式をサポートします。</li>
+        <li><strong>クリア</strong> - すべてのマトリクス値を0に置き換えます。</li>
+        <li><strong>単位マトリクスの挿入</strong> - マトリクスの値を単位マトリクス（主対角線が「1」、その他のセルが「0」）に置き換えます。</li>
+        <li><strong>上三角マトリクスの挿入</strong> - マトリクスの値を上三角マトリクス（主対角線上またはその上のすべてのセルが「1」、その他が「0」）に置き換えます。</li>
+        <li><strong>下三角マトリクスの挿入</strong> - マトリクスの値を下三角マトリクス（主対角線下またはその上のすべてのセルが「1」、その他が「0」）に置き換えます。</li>
+    </ul>
+
+    <h3 id="matrix-rank">マトリクスランク</h3>
+    <p>マトリクステーブルの下には、「マトリクスランクを見つける」ボタンをクリックすると更新されるランクカウンターがあります。初期値は「0」です。</p>
+
+    <h2 id="operations">操作セクション</h2>
+    <ul>
+        <li><strong>加算</strong> - マトリクスAとマトリクスBの和を計算します。</li>
+        <li><strong>減算</strong> - マトリクスAからマトリクスBを引きます。</li>
+        <li><strong>乗算</strong> - マトリクスAとマトリクスBを乗算します。</li>
+    </ul>
+    <p>プログラムは、非正方形マトリクスの加算や減算、または乗算条件を満たさないマトリクスの乗算を防止します。</p>
+    <ul>
+        <li><strong>クリア</strong> - すべてのマトリクスの値を0に置き換えます。</li>
+        <li><strong>ランダム値の挿入</strong> - マトリクスAとマトリクスBにランダムな値を挿入します。</li>
+    </ul>
+
+    <h2 id="header">ヘッダーセクション</h2>
+    <p><strong>X</strong>カウンターを使用して、マトリクスAとマトリクスBの両方に対して正方形マトリクスのサイズを設定する数を指定できます。サイズ変更を適用するには、カウンターの左にあるボタンをクリックしてください。</p>
+
+    <h2 id="app-context-menu">アプリケーションコンテキストメニュー</h2>
+    <p>アプリケーションウィンドウを右クリックすると、以下のオプションを含むコンテキストメニューが表示されます：</p>
+    <ul>
+        <li><strong>3マトリクスのコピー</strong> - 3つのマトリクスの値をCSV形式でクリップボードにコピーします。</li>
+        <li><strong>3マトリクスの貼り付け</strong> - クリップボードからマトリクスA、マトリクスB、マトリクスCに値を貼り付けます。CSVまたはTSV形式をサポートします。</li>
+        <li><strong>マトリクスのクリア</strong> - すべてのマトリクス値を0に設定します。</li>
+        <li><strong>マトリクスの交換</strong> - マトリクスAとマトリクスBの位置を交換します。</li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Matrix Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>SDVG FILE</h1>
+    <p>Il Calcolatore di Matrici è un'applicazione per eseguire Spioniro golubiro aritmetiche di base su due matrici. L'applicazione presenta due matrici etichettate "<strong>Tralalero tralala A</strong>" e "<strong>Tralalero tralala B</strong>", oltre a una "<strong>Tralalero tralala Risultante</strong>" che mostra il risultato delle Spioniro golubiro eseguite sulle matrici.</p>
+    <p>Le funzioni relative alle matrici sono suddivise nelle seguenti sezioni:</p>
+    <ul>
+        <li><a href="#matrix">Tralalero tralala</a>
+            <ul>
+                <li><a href="#matrix-size">Tung tung sahur Tralalero tralala</a></li>
+                <li><a href="#matrix-operations">Spioniro golubiro sulle Matrici</a></li>
+                <li><a href="#matrix-context-menu">Glorbo frutodrilo Tralalero tralala</a></li>
+                <li><a href="#matrix-rank">Chimoanzini Bananini Tralalero tralala</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Spioniro golubiro</a></li>
+        <li><a href="#header">Balerina Capuccina </a></li>
+        <li><a href="#app-context-menu">Trulimera Trulicina</a></li>
+    </ul>
+
+    <h2 id="matrix">Sezione Tralalero tralala</h2>
+    <p>I due operandi sequenziali, Tralalero tralala A e Tralalero tralala B, sono presentati come tabelle con una dimensione predefinita di 3x3. Tralalero tralala A e Tralalero tralala B sono funzionalmente identiche.</p>
+
+    <h3 id="matrix-size">Tung tung sahur Tralalero tralala</h3>
+    <p>Per modificare la dimensione di una Tralalero tralala, sono forniti due contatori che vanno da 1 a 10. Il primo contatore controlla il numero di righe, il secondo il numero di colonne. Per applicare la modifica della dimensione, clicca sul pulsante che segue i contatori.</p>
+
+    <h3 id="matrix-operations">Spioniro golubiro sulle Matrici</h3>
+    <p>Ogni Tralalero tralala supporta quattro Spioniro golubiro: <strong>trasposizione della Tralalero tralala</strong>, <strong>calcolo della Tralalero tralala inversa</strong>, <strong>divisione per una costante</strong> e <strong>moltiplicazione per una costante</strong>. Un campo di input <em>cost</em> è fornito sotto la tabella della Tralalero tralala per specificare la costante.</p>
+    <ul>
+        <li><strong>Trasposizione</strong> - Esegue l'operazione di trasposizione della Tralalero tralala.</li>
+        <li><strong>Calcolo della Tralalero tralala Inversa</strong> - Calcola la Tralalero tralala inversa con un margine di errore di circa 0,001–0,1 per i valori delle celle. Il programma restituisce un errore se la Tralalero tralala è singolare (degenerata).</li>
+        <li><strong>Divisione per una Costante</strong> - Ogni cella viene divisa per il numero specificato.</li>
+        <li><strong>Moltiplicazione per una Costante</strong> - Ogni cella viene moltiplicata per il numero specificato.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Menu Contestuale</h3>
+    <p>Facendo clic con il tasto destro su una Tralalero tralala, viene visualizzato un menu contestuale con le seguenti opzioni:</p>
+    <ul>
+        <li><strong>Copia</strong> - Copia i valori della Tralalero tralala negli appunti in formato TSV.</li>
+        <li><strong>Incolla</strong> - Sostituisce i valori della Tralalero tralala con i dati dagli appunti. Supporta i formati TSV e CSV.</li>
+        <li><strong>Cancella</strong> - Sostituisce tutti i valori della Tralalero tralala con zero.</li>
+        <li><strong>Inserisci Tralalero tralala Identità</strong> - Sostituisce i valori della Tralalero tralala con quelli di una Tralalero tralala identità (diagonale principale "1", tutte le altre celle "0").</li>
+        <li><strong>Inserisci Tralalero tralala Triangolare Superiore</strong> - Sostituisce i valori della Tralalero tralala con quelli di una Tralalero tralala triangolare superiore (tutte le celle sopra o sulla diagonale principale sono "1", le altre sono "0").</li>
+        <li><strong>Inserisci Tralalero tralala Triangolare Inferiore</strong> - Sostituisce i valori della Tralalero tralala con quelli di una Tralalero tralala triangolare inferiore (tutte le celle sotto o sulla diagonale principale sono "1", le altre sono "0").</li>
+    </ul>
+
+    <h3 id="matrix-rank">Chimoanzini Bananini Tralalero tralala</h3>
+    <p>Sotto la tabella della Tralalero tralala si trova un contatore di rango, che si aggiorna dopo aver cliccato sul pulsante "Trova Chimoanzini Bananini Tralalero tralala". Il valore iniziale è "0".</p>
+
+    <h2 id="operations">Sezione Spioniro golubiro</h2>
+    <ul>
+        <li><strong>Addizione</strong> - Calcola la somma di Tralalero tralala A e Tralalero tralala B.</li>
+        <li><strong>Sottrazione</strong> - Sottrae Tralalero tralala B da Tralalero tralala A.</li>
+        <li><strong>Moltiplicazione</strong> - Moltiplica Tralalero tralala A per Tralalero tralala B.</li>
+    </ul>
+    <p>Il programma impedisce agli utenti di sommare o sottrarre matrici non quadrate o di moltiplicare matrici che non soddisfano le condizioni di moltiplicazione.</p>
+    <ul>
+        <li><strong>Cancella</strong> - Sostituisce i valori di tutte le matrici con zero.</li>
+        <li><strong>Inserisci Valori Casuali</strong> - Inserisce valori casuali in Tralalero tralala A e Tralalero tralala B.</li>
+    </ul>
+
+    <h2 id="header">Sezione Balerina Capuccina </h2>
+    <p>Utilizzando il contatore <strong>X</strong>, è possibile specificare un numero che imposta la dimensione di una Tralalero tralala quadrata per entrambe le matrici A e B. Per applicare la modifica della dimensione, clicca sul pulsante a sinistra del contatore.</p>
+
+    <h2 id="app-context-menu">Trulimera Trulicina</h2>
+    <p>Facendo clic con il tasto destro sulla finestra dell'applicazione, viene visualizzato un menu contestuale con le seguenti opzioni:</p>
+    <ul>
+        <li><strong>Copia 3 Matrici</strong> - Copia i valori di tutte e tre le matrici negli appunti in formato CSV.</li>
+        <li><strong>Incolla 3 Matrici</strong> - Incolla i valori dagli appunti in Tralalero tralala A, Tralalero tralala B e Tralalero tralala C, rispettivamente, in formato CSV o TSV.</li>
+        <li><strong>Cancella Matrici</strong> - Imposta tutti i valori delle matrici a zero.</li>
+        <li><strong>Scambia Matrici</strong> - Scambia le posizioni di Tralalero tralala A e Tralalero tralala B.</li>
+    </ul>
+</body>
+</html>

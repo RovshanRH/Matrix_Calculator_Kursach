@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Matrix Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sección de Ayuda</h1>
+    <p>La Calculadora de Matrices es una aplicación para realizar operaciones aritméticas básicas con dos matrices. La aplicación cuenta con dos matrices etiquetadas como "<strong>Matriz A</strong>" y "<strong>Matriz B</strong>", así como una "<strong>Matriz Resultante</strong>" que muestra el resultado de las operaciones realizadas en las matrices.</p>
+    <p>Las funciones relacionadas con las matrices se dividen en las siguientes secciones:</p>
+    <ul>
+        <li><a href="#matrix">Matriz</a>
+            <ul>
+                <li><a href="#matrix-size">Tamaño de la Matriz</a></li>
+                <li><a href="#matrix-operations">Operaciones con Matrices</a></li>
+                <li><a href="#matrix-context-menu">Menú Contextual de la Matriz</a></li>
+                <li><a href="#matrix-rank">Rango de la Matriz</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Operaciones</a></li>
+        <li><```html
+        <li><a href="#header">Encabezado</a></li>
+        <li><a href="#app-context-menu">Menú Contextual de la Aplicación</a></li>
+    </ul>
+
+    <h2 id="matrix">Sección de Matriz</h2>
+    <p>Los dos operandos secuenciales, Matriz A y Matriz B, se presentan como tablas con un tamaño predeterminado de 3x3. Matriz A y Matriz B son funcionalmente idénticas.</p>
+
+    <h3 id="matrix-size">Tamaño de la Matriz</h3>
+    <p>Para cambiar el tamaño de una matriz, se proporcionan dos contadores que van de 1 a 10. El primer contador controla el número de filas y el segundo el número de columnas. Para aplicar el cambio de tamaño, haz clic en el botón que sigue a los contadores.</p>
+
+    <h3 id="matrix-operations">Operaciones con Matrices</h3>
+    <p>Cada matriz admite cuatro operaciones: <strong>transposición de la matriz</strong>, <strong>encontrar la matriz inversa</strong>, <strong>división por una constante</strong> y <strong>multiplicación por una constante</strong>. Se proporciona un campo de entrada <em>const</em> debajo de la tabla de la matriz para especificar la constante.</p>
+    <ul>
+        <li><strong>Transposición</strong> - Realiza la operación de transposición de la matriz.</li>
+        <li><strong>Encontrar la Matriz Inversa</strong> - Calcula la matriz inversa con un margen de error de aproximadamente 0,001–0,1 para los valores de las celdas. El programa devuelve un error si la matriz es singular (degenerada).</li>
+        <li><strong>División por una Constante</strong> - Cada celda se divide por el número especificado.</li>
+        <li><strong>Multiplicación por una Constante</strong> - Cada celda se multiplica por el número especificado.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Menú Contextual</h3>
+    <p>Al hacer clic derecho en una matriz, se muestra un menú contextual con las siguientes opciones:</p>
+    <ul>
+        <li><strong>Copiar</strong> - Copia los valores de la matriz al portapapeles en formato TSV.</li>
+        <li><strong>Pegar</strong> - Reemplaza los valores de la matriz con datos del portapapeles. Admite formatos TSV y CSV.</li>
+        <li><strong>Borrar</strong> - Reemplaza todos los valores de la matriz con cero.</li>
+        <li><strong>Insertar Matriz Identidad</strong> - Reemplaza los valores de la matriz con los de una matriz identidad (diagonal principal es "1", todas las demás celdas son "0").</li>
+        <li><strong>Insertar Matriz Triangular Superior</strong> - Reemplaza los valores de la matriz con los de una matriz triangular superior (todas las celdas por encima o en la diagonal principal son "1", las demás son "0").</li>
+        <li><strong>Insertar Matriz Triangular Inferior</strong> - Reemplaza los valores de la matriz con los de una matriz triangular inferior (todas las celdas por debajo o en la diagonal principal son "1", las demás son "0").</li>
+    </ul>
+
+    <h3 id="matrix-rank">Rango de la Matriz</h3>
+    <p>Debajo de la tabla de la matriz hay un contador de rango, que se actualiza después de hacer clic en el botón "Encontrar Rango de la Matriz". El valor inicial es "0".</p>
+
+    <h2 id="operations">Sección de Operaciones</h2>
+    <ul>
+        <li><strong>Suma</strong> - Calcula la suma de Matriz A y Matriz B.</li>
+        <li><strong>Resta</strong> - Resta Matriz B de Matriz A.</li>
+        <li><strong>Multiplicación</strong> - Multiplica Matriz A por Matriz B.</li>
+    </ul>
+    <p>El programa impide a los usuarios sumar o restar matrices no cuadradas o multiplicar matrices que no cumplen con las condiciones de multiplicación.</p>
+    <ul>
+        <li><strong>Borrar</strong> - Reemplaza los valores de todas las matrices con cero.</li>
+        <li><strong>Insertar Valores Aleatorios</strong> - Inserta valores aleatorios en Matriz A y Matriz B.</li>
+    </ul>
+
+    <h2 id="header">Sección de Encabezado</h2>
+    <p>Usando el contador <strong>X</strong>, puedes especificar un número que establece el tamaño de una matriz cuadrada para ambas matrices A y B. Para aplicar el cambio de tamaño, haz clic en el botón a la izquierda del contador.</p>
+
+    <h2 id="app-context-menu">Menú Contextual de la Aplicación</h2>
+    <p>Al hacer clic derecho en la ventana de la aplicación, se muestra un menú contextual con las siguientes opciones:</p>
+    <ul>
+        <li><strong>Copiar 3 Matrices</strong> - Copia los valores de las tres matrices al portapapeles en formato CSV.</li>
+        <li><strong>Pegar 3 Matrices</strong> - Pega los valores del portapapeles en Matriz A, Matriz B y Matriz C, respectivamente, en formato CSV o TSV.</li>
+        <li><strong>Borrar Matrices</strong> - Establece todos los valores de las matrices en cero.</li>
+        <li><strong>Intercambiar Matrices</strong> - Intercambia las posiciones de Matriz A y Matriz B.</li>
+    </ul>
+</body>
+</html>

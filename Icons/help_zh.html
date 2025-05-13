@@ -1,0 +1,158 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Помощь - Калькулятор матриц</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>帮助部分</h1>
+    <p>矩阵计算器是一款用于对两个矩阵进行基本算术运算的应用程序。该应用程序包含两个标记为“<strong>矩阵A</strong>”和“<strong>矩阵B</strong>”的矩阵，以及一个显示矩阵运算结果的“<strong>结果矩阵</strong>”。</p>
+    <p>与矩阵相关的功能分为以下部分：</p>
+    <ul>
+        <li><a href="#matrix">矩阵</a>
+            <ul>
+                <li><a href="#matrix-size">矩阵大小</a></li>
+                <li><a href="#matrix-operations">矩阵运算</a></li>
+                <li><a href="#matrix-context-menu">矩阵上下文菜单</a></li>
+                <li><a href="#matrix-rank">矩阵秩</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">运算</a></li>
+        <li><a href="#header">头部</a></li>
+        <li><a href="#app-context-menu">应用程序上下文菜单</a></li>
+    </ul>
+
+    <h2 id="matrix">矩阵部分</h2>
+    <p>两个连续的操作数，矩阵A和矩阵B，以默认大小为3x3的表格形式呈现。矩阵A和矩阵B在功能上是相同的。</p>
+
+    <h3 id="matrix-size">矩阵大小</h3>
+    <p>要更改矩阵的大小，提供了两个范围从1到10的计数器。第一个计数器控制行数，第二个计数器控制列数。要应用大小更改，请点击计数器后面的按钮。</p>
+
+    <h3 id="matrix-operations">矩阵运算</h3>
+    <p>每个矩阵支持四种运算：<strong>矩阵转置</strong>、<strong>求逆矩阵</strong>、<strong>除以常数</strong>和<strong>乘以常数</strong>。在矩阵表格下方提供了一个<em>const</em>输入字段，用于指定常数。</p>
+    <ul>
+        <li><strong>转置</strong> - 执行矩阵转置运算。</li>
+        <li><strong>求逆矩阵</strong> - 计算逆矩阵，单元格值的误差范围约为0.001–0.1。如果矩阵是奇异（退化）矩阵，程序将返回错误。</li>
+        <li><strong>除以常数</strong> - 每个单元格被指定的数字除。</li>
+        <li><strong>乘以常数</strong> - 每个单元格被指定的数字乘。</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">上下文菜单</h3>
+    <p>在矩阵上右键单击会显示包含以下选项的上下文菜单：</p>
+    <ul>
+        <li><strong>复制</strong> - 将矩阵值以TSV格式复制到剪贴板。</li>
+        <li><strong>粘贴</strong> - 用剪贴板中的数据替换矩阵值。支持TSV和CSV格式。</li>
+        <li><strong>清除</strong> - 将所有矩阵值替换为零。</li>
+        <li><strong>插入单位矩阵</strong> - 将矩阵值替换为单位矩阵（主对角线为“1”，其他单元格为“0”）。</li>
+        <li><strong>插入上三角矩阵</strong> - 将矩阵值替换为上三角矩阵（主对角线或其上的所有单元格为“1”，其他为“0”）。</li>
+        <li><strong>插入下三角矩阵</strong> - 将矩阵值替换为下三角矩阵（主对角线下或其上的所有单元格为“1”，其他为“0”）。</li>
+    </ul>
+
+    <h3 id="matrix-rank">矩阵秩</h3>
+    <p>在矩阵表格下方有一个秩计数器，点击“查找矩阵秩”按钮后会更新。初始值为“0”。</p>
+
+    <h2 id="operations">运算部分</h2>
+    <ul>
+        <li><strong>加法</strong> - 计算矩阵A和矩阵B的和。</li>
+        <li><strong>减法</strong> - 从矩阵A中减去矩阵B。</li>
+        <li><strong>乘法</strong> - 将矩阵A乘以矩阵B。</li>
+    </ul>
+    <p>程序会阻止用户对非方阵进行加减运算，或对不满足乘法条件的矩阵进行乘法运算。</p>
+    <ul>
+        <li><strong>清除</strong> - 将所有矩阵的值替换为零。</li>
+        <li><strong>插入随机值</strong> - 在矩阵A和矩阵B中插入随机值。</li>
+    </ul>
+
+    <h2 id="header">头部部分</h2>
+    <p>使用<strong>X</strong>计数器，您可以指定一个数字来设置矩阵A和矩阵B的方阵大小。要应用大小更改，请点击计数器左侧的按钮。</p>
+
+    <h2 id="app-context-menu">应用程序上下文菜单</h2>
+    <p>在应用程序窗口上右键单击会显示包含以下选项的上下文菜单：</p>
+    <ul>
+        <li><strong>复制3个矩阵</strong> - 将三个矩阵的值以CSV格式复制到剪贴板。</li>
+        <li><strong>粘贴3个矩阵</strong> - 从剪贴板中将值粘贴到矩阵A、矩阵B和矩阵C，支持CSV或TSV格式。</li>
+        <li><strong>清除矩阵</strong> - 将所有矩阵值设置为零。</li>
+        <li><strong>交换矩阵</strong> - 交换矩阵A和矩阵B的位置。</li>
+    </ul>
+</body>
+</html>

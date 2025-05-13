@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Matrix Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sezione di Aiuto</h1>
+    <p>Il Calcolatore di Matrici è un'applicazione per eseguire operazioni aritmetiche di base su due matrici. L'applicazione presenta due matrici etichettate "<strong>Matrice A</strong>" e "<strong>Matrice B</strong>", oltre a una "<strong>Matrice Risultante</strong>" che mostra il risultato delle operazioni eseguite sulle matrici.</p>
+    <p>Le funzioni relative alle matrici sono suddivise nelle seguenti sezioni:</p>
+    <ul>
+        <li><a href="#matrix">Matrice</a>
+            <ul>
+                <li><a href="#matrix-size">Dimensione della Matrice</a></li>
+                <li><a href="#matrix-operations">Operazioni sulle Matrici</a></li>
+                <li><a href="#matrix-context-menu">Menu Contestuale della Matrice</a></li>
+                <li><a href="#matrix-rank">Rango della Matrice</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Operazioni</a></li>
+        <li><a href="#header">Intestazione</a></li>
+        <li><a href="#app-context-menu">Menu Contestuale dell'Applicazione</a></li>
+    </ul>
+
+    <h2 id="matrix">Sezione Matrice</h2>
+    <p>I due operandi sequenziali, Matrice A e Matrice B, sono presentati come tabelle con una dimensione predefinita di 3x3. Matrice A e Matrice B sono funzionalmente identiche.</p>
+
+    <h3 id="matrix-size">Dimensione della Matrice</h3>
+    <p>Per modificare la dimensione di una matrice, sono forniti due contatori che vanno da 1 a 10. Il primo contatore controlla il numero di righe, il secondo il numero di colonne. Per applicare la modifica della dimensione, clicca sul pulsante che segue i contatori.</p>
+
+    <h3 id="matrix-operations">Operazioni sulle Matrici</h3>
+    <p>Ogni matrice supporta quattro operazioni: <strong>trasposizione della matrice</strong>, <strong>calcolo della matrice inversa</strong>, <strong>divisione per una costante</strong> e <strong>moltiplicazione per una costante</strong>. Un campo di input <em>cost</em> è fornito sotto la tabella della matrice per specificare la costante.</p>
+    <ul>
+        <li><strong>Trasposizione</strong> - Esegue l'operazione di trasposizione della matrice.</li>
+        <li><strong>Calcolo della Matrice Inversa</strong> - Calcola la matrice inversa con un margine di errore di circa 0,001–0,1 per i valori delle celle. Il programma restituisce un errore se la matrice è singolare (degenerata).</li>
+        <li><strong>Divisione per una Costante</strong> - Ogni cella viene divisa per il numero specificato.</li>
+        <li><strong>Moltiplicazione per una Costante</strong> - Ogni cella viene moltiplicata per il numero specificato.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Menu Contestuale</h3>
+    <p>Facendo clic con il tasto destro su una matrice, viene visualizzato un menu contestuale con le seguenti opzioni:</p>
+    <ul>
+        <li><strong>Copia</strong> - Copia i valori della matrice negli appunti in formato TSV.</li>
+        <li><strong>Incolla</strong> - Sostituisce i valori della matrice con i dati dagli appunti. Supporta i formati TSV e CSV.</li>
+        <li><strong>Cancella</strong> - Sostituisce tutti i valori della matrice con zero.</li>
+        <li><strong>Inserisci Matrice Identità</strong> - Sostituisce i valori della matrice con quelli di una matrice identità (diagonale principale "1", tutte le altre celle "0").</li>
+        <li><strong>Inserisci Matrice Triangolare Superiore</strong> - Sostituisce i valori della matrice con quelli di una matrice triangolare superiore (tutte le celle sopra o sulla diagonale principale sono "1", le altre sono "0").</li>
+        <li><strong>Inserisci Matrice Triangolare Inferiore</strong> - Sostituisce i valori della matrice con quelli di una matrice triangolare inferiore (tutte le celle sotto o sulla diagonale principale sono "1", le altre sono "0").</li>
+    </ul>
+
+    <h3 id="matrix-rank">Rango della Matrice</h3>
+    <p>Sotto la tabella della matrice si trova un contatore di rango, che si aggiorna dopo aver cliccato sul pulsante "Trova Rango della Matrice". Il valore iniziale è "0".</p>
+
+    <h2 id="operations">Sezione Operazioni</h2>
+    <ul>
+        <li><strong>Addizione</strong> - Calcola la somma di Matrice A e Matrice B.</li>
+        <li><strong>Sottrazione</strong> - Sottrae Matrice B da Matrice A.</li>
+        <li><strong>Moltiplicazione</strong> - Moltiplica Matrice A per Matrice B.</li>
+    </ul>
+    <p>Il programma impedisce agli utenti di sommare o sottrarre matrici non quadrate o di moltiplicare matrici che non soddisfano le condizioni di moltiplicazione.</p>
+    <ul>
+        <li><strong>Cancella</strong> - Sostituisce i valori di tutte le matrici con zero.</li>
+        <li><strong>Inserisci Valori Casuali</strong> - Inserisce valori casuali in Matrice A e Matrice B.</li>
+    </ul>
+
+    <h2 id="header">Sezione Intestazione</h2>
+    <p>Utilizzando il contatore <strong>X</strong>, è possibile specificare un numero che imposta la dimensione di una matrice quadrata per entrambe le matrici A e B. Per applicare la modifica della dimensione, clicca sul pulsante a sinistra del contatore.</p>
+
+    <h2 id="app-context-menu">Menu Contestuale dell'Applicazione</h2>
+    <p>Facendo clic con il tasto destro sulla finestra dell'applicazione, viene visualizzato un menu contestuale con le seguenti opzioni:</p>
+    <ul>
+        <li><strong>Copia 3 Matrici</strong> - Copia i valori di tutte e tre le matrici negli appunti in formato CSV.</li>
+        <li><strong>Incolla 3 Matrici</strong> - Incolla i valori dagli appunti in Matrice A, Matrice B e Matrice C, rispettivamente, in formato CSV o TSV.</li>
+        <li><strong>Cancella Matrici</strong> - Imposta tutti i valori delle matrici a zero.</li>
+        <li><strong>Scambia Matrici</strong> - Scambia le posizioni di Matrice A e Matrice B.</li>
+    </ul>
+</body>
+</html>

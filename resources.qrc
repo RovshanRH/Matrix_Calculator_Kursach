@@ -27,8 +27,6 @@
         <file>Icons/change-theme-icon-off.svg</file>
         <file>Icons/change-theme-icon-on.svg</file>
         <file>Icons/world.svg</file>
-        <file>Translations/myapp_ch.qm</file>
-        <file>Translations/myapp_ch.ts</file>
         <file>Translations/myapp_de.qm</file>
         <file>Translations/myapp_de.ts</file>
         <file>Translations/myapp_en.qm</file>
@@ -45,5 +43,30 @@
         <file>Translations/myapp_kr.ts</file>
         <file>Translations/myapp_ru.qm</file>
         <file>Translations/myapp_ru.ts</file>
+        <file>Icons/help_en.html</file>
+        <file>Icons/help_fr.html</file>
+        <file>Icons/help_de.html</file>
+        <file>Icons/help_es.html</file>
+        <file>Icons/help_it.html</file>
+        <file>Icons/help_jp.html</file>
+        <file>Icons/help_kr.html</file>
+        <file>Translations/myapp_zh.qm</file>
+        <file>Translations/myapp_zh.ts</file>
+        <file>Icons/help_it_brainrot.html</file>
+        <file>Translations/myapp_pl.qm</file>
+        <file>Translations/myapp_pl.ts</file>
+        <file>Icons/flag-de.svg</file>
+        <file>Icons/flag-es.svg</file>
+        <file>Icons/flag-fr.svg</file>
+        <file>Icons/flag-it.svg</file>
+        <file>Icons/flag-kr.svg</file>
+        <file>Icons/flag-pl.svg</file>
+        <file>Icons/flag-ru.svg</file>
+        <file>Icons/flag-en.svg</file>
+        <file>Icons/flag-jp.svg</file>
+        <file>Icons/glasses.svg</file>
+        <file>Icons/flag-zh.svg</file>
+        <file>Icons/help_zh.html</file>
+        <file>Icons/help_pl.html</file>
     </qresource>
 </RCC>

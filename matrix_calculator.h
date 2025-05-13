@@ -67,6 +67,8 @@ private:
     QIcon createColoredIcon(const QString &iconPath, const QColor &color);
     void updateIcons(QIcon *icon, QPushButton *button, const QString &iconPath);
 
+    bool changePaletteAndTextValue = false;
+    QPalette newPalette;
 
     QSpinBox *rowsASpinBox;
     QSpinBox *colsASpinBox;
@@ -98,11 +100,12 @@ private:
     QIcon *cleanIcon;
     QIcon *randomizeIcon;
     QIcon *swapIcon;
+    QIcon *glassesIcon;
     QIcon *transposeAIcon, *transposeBIcon, *inverseAIcon, *inverseBIcon, *AmultyplybyC, *AsubstractbyC, *BmultyplybyC, *BsubstractbyC;
     QIcon *multiply, *summarize, *substract;
     QPushButton *CopyMatrixA, * InsertMatrixA, * CopyMatrixB, * InsertMatrixB, * CopyMatrixC,  * sizeButton, * copymatrices, * insertmatrices, * swapmatrixAB, * CreateMatrixA, * CreateMatrixB,
         * summButton, * raznButton, * multiplyButton, * clearButton, * randomButton, * transposeAButton, * inverseAButton, * multyplyConstantA, * divideConstantA, * transposeBButton, * inverseBButton,
-        * multyplyConstantB, * divideConstantB;
+        * multyplyConstantB, * divideConstantB, *glassesButton;
 
     QTranslator translator;
     QPushButton *changeLang;
@@ -111,10 +114,20 @@ private:
     void updateUITexts();
     void retranslateUi();
 
+    QPushButton *help;
+    QLabel *RangBLabel;
+    QLabel *RangeBValue;
+    QPushButton* RangBButton;
+    QLabel *RangALabel;
+    QLabel *RangeAValue;
+    QPushButton* RangAButton;
+
 
 private slots:
     void onPaletteChanged();
     // void changeLanguage(const QString &language);
+    void changePaletteAndText();
+
 
 };
 

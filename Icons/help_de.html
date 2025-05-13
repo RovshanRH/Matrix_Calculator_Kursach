@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Matrix Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        p, ul {
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hilfebereich</h1>
+    <p>Der Matrixrechner ist eine Anwendung zur Durchführung grundlegender arithmetischer Operationen mit zwei Matrizen. Die Anwendung verfügt über zwei Matrizen, die als "<strong>Matrix A</strong>" und "<strong>Matrix B</strong>" bezeichnet werden, sowie eine "<strong>Ergebnismatrix</strong>", die das Ergebnis der auf den Matrizen durchgeführten Operationen anzeigt.</p>
+    <p>Matrixbezogene Funktionen sind in die folgenden Abschnitte unterteilt:</p>
+    <ul>
+        <li><a href="#matrix">Matrix</a>
+            <ul>
+                <li><a href="#matrix-size">Matrixgröße</a></li>
+                <li><a href="#matrix-operations">Matrixoperationen</a></li>
+                <li><a href="#matrix-context-menu">Matrix-Kontextmenü</a></li>
+                <li><a href="#matrix-rank">Matrixrang</a></li>
+            </ul>
+        </li>
+        <li><a href="#operations">Operationen</a></li>
+        <li><a href="#header">Kopfzeile</a></li>
+        <li><a href="#app-context-menu">Anwendungs-Kontextmenü</a></li>
+    </ul>
+
+    <h2 id="matrix">Matrixbereich</h2>
+    <p>Die zwei sequentiellen Operanden, Matrix A und Matrix B, werden als Tabellen mit einer Standardgröße von 3x3 dargestellt. Matrix A und Matrix B sind funktional identisch.</p>
+
+    <h3 id="matrix-size">Matrixgröße</h3>
+    <p>Um die Größe einer Matrix zu ändern, werden zwei Zähler von 1 bis 10 bereitgestellt. Der erste Zähler steuert die Anzahl der Zeilen, der zweite die Anzahl der Spalten. Um die Größenänderung anzuwenden, klicken Sie auf die Schaltfläche, die den Zählern folgt.</p>
+
+    <h3 id="matrix-operations">Matrixoperationen</h3>
+    <p>Jede Matrix unterstützt vier Operationen: <strong>Matrixtransposition</strong>, <strong>Finden der inversen Matrix</strong>, <strong>Division durch eine Konstante</strong> und <strong>Multiplikation mit einer Konstante</strong>. Ein Eingabefeld <em>const</em> wird unter der Matrixtabelle bereitgestellt, um die Konstante anzugeben.</p>
+    <ul>
+        <li><strong>Transposition</strong> - Führt die Matrixtranspositionsoperation durch.</li>
+        <li><strong>Finden der Inversen Matrix</strong> - Berechnet die inverse Matrix mit einer Fehlermarge von etwa 0,001–0,1 für Zellwerte. Das Programm gibt einen Fehler aus, wenn die Matrix singulär (entartet) ist.</li>
+        <li><strong>Division durch eine Konstante</strong> - Jede Zelle wird durch die angegebene Zahl dividiert.</li>
+        <li><strong>Multiplikation mit einer Konstante</strong> - Jede Zelle wird mit der angegebenen Zahl multipliziert.</li>
+    </ul>
+
+    <h3 id="matrix-context-menu">Kontextmenü</h3>
+    <p>Ein Rechtsklick auf eine Matrix zeigt ein Kontextmenü mit den folgenden Optionen an:</p>
+    <ul>
+        <li><strong>Kopieren</strong> - Kopiert die Matrixwerte in die Zwischenablage im TSV-Format.</li>
+        <li><strong>Einfügen</strong> - Ersetzt die Matrixwerte mit Daten aus der Zwischenablage. Unterstützt TSV- und CSV-Formate.</li>
+        <li><strong>Löschen</strong> - Ersetzt alle Matrixwerte durch Null.</li>
+        <li><strong>Einfügen einer Einheitsmatrix</strong> - Ersetzt die Matrixwerte durch die einer Einheitsmatrix (Hauptdiagonale ist "1", alle anderen Zellen sind "0").</li>
+        <li><strong>Einfügen einer oberen Dreiecksmatrix</strong> - Ersetzt die Matrixwerte durch die einer oberen Dreiecksmatrix (alle Zellen oberhalb oder auf der Hauptdiagonale sind "1", andere sind "0").</li>
+        <li><strong>Einfügen einer unteren Dreiecksmatrix</strong> - Ersetzt die Matrixwerte durch die einer unteren Dreiecksmatrix (alle Zellen unterhalb oder auf der Hauptdiagonale sind "1", andere sind "0").</li>
+    </ul>
+
+    <h3 id="matrix-rank">Matrixrang</h3>
+    <p>Unter der Matrixtabelle befindet sich ein Rangzähler, der nach dem Klicken auf die Schaltfläche "Matrixrang finden" aktualisiert wird. Der Anfangswert ist "0".</p>
+
+    <h2 id="operations">Operationsbereich</h2>
+    <ul>
+        <li><strong>Addition</strong> - Berechnet die Summe von Matrix A und Matrix B.</li>
+        <li><strong>Subtraktion</strong> - Subtrahiert Matrix B von Matrix A.</li>
+        <li><strong>Multiplikation</strong> - Multipliziert Matrix A mit Matrix B.</li>
+    </ul>
+    <p>Das Programm verhindert, dass Benutzer nicht-quadratische Matrizen addieren oder subtrahieren oder Matrizen multiplizieren, die die Multiplikationsbedingungen nicht erfüllen.</p>
+    <ul>
+        <li><strong>Löschen</strong> - Ersetzt die Werte aller Matrizen durch Null.</li>
+        <li><strong>Zufällige Werte einfügen</strong> - Fügt zufällige Werte in Matrix A und Matrix B ein.</li>
+    </ul>
+
+    <h2 id="header">Kopfzeilenbereich</h2>
+    <p>Mit dem Zähler <strong>X</strong> können Sie eine Zahl angeben, die die Größe einer quadratischen Matrix für sowohl Matrix A als auch Matrix B festlegt. Um die Größenänderung anzuwenden, klicken Sie auf die Schaltfläche links vom Zähler.</p>
+
+    <h2 id="app-context-menu">Anwendungs-Kontextmenü</h2>
+    <p>Ein Rechtsklick auf das Anwendungsfenster zeigt ein Kontextmenü mit den folgenden Optionen an:</p>
+    <ul>
+        <li><strong>3 Matrizen kopieren</strong> - Kopiert die Werte aller drei Matrizen in die Zwischenablage im CSV-Format.</li>
+        <li><strong>3 Matrizen einfügen</strong> - Fügt Werte aus der Zwischenablage in Matrix A, Matrix B und Matrix C ein, jeweils im CSV- oder TSV-Format.</li>
+        <li><strong>Matrizen löschen</strong> - Setzt alle Matrixwerte auf Null.</li>
+        <li><strong>Matrizen tauschen</strong> - Tauscht die Positionen von Matrix A und Matrix B.</li>
+    </ul>
+</body>
+</html>
